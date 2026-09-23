@@ -24,7 +24,6 @@ h1,h2,h3,.display{font-family:'Archivo Black',sans-serif; line-height:.95; lette
 a{color:inherit; text-decoration:none;}
 canvas{display:block;}
 
-/* grain de conexão visual entre todas as seções */
 #grain{
   position:fixed; inset:0; z-index:800; pointer-events:none; opacity:.05;
   mix-blend-mode:overlay;
@@ -33,7 +32,6 @@ canvas{display:block;}
 }
 @keyframes grainShift{0%{transform:translate(0,0)}50%{transform:translate(-1px,1px)}100%{transform:translate(1px,-1px)}}
 
-/* trilho de progresso — a "linha do tempo" que costura tudo */
 .rail{
   position:fixed; left:0; top:0; bottom:0; width:3px; z-index:900;
   background:var(--line); pointer-events:none;
@@ -46,7 +44,6 @@ canvas{display:block;}
 }
 @media(max-width:640px){.rail{width:2px;}}
 
-/* ============ CURSOR ============ */
 #cursor{
   position:fixed; width:14px; height:14px; border:1px solid var(--red);
   border-radius:50%; pointer-events:none; z-index:9000;
@@ -55,7 +52,6 @@ canvas{display:block;}
 }
 @media(hover:none){#cursor{display:none;} body{cursor:auto;}}
 
-/* ============ BOOT ============ */
 #boot{
   position:fixed; inset:0; z-index:3000; background:#000;
   display:flex; align-items:center; justify-content:center;
@@ -87,7 +83,6 @@ canvas{display:block;}
   transition:right .1s linear;
 }
 
-/* ============ SHATTER — transição rápida, sem tela branca ============ */
 #shatter{position:fixed; inset:0; z-index:3100; pointer-events:none; display:none;}
 #shatter.on{display:block;}
 .shard{
@@ -104,7 +99,6 @@ canvas{display:block;}
   opacity:0;
 }
 
-/* ============ NAV ============ */
 nav{
   position:fixed; top:0; left:0; right:0; z-index:500;
   display:flex; justify-content:space-between; align-items:center; gap:16px;
@@ -133,7 +127,6 @@ section{position:relative; z-index:1; padding:110px 22px 110px 34px; max-width:1
 }
 .eyebrow.in{opacity:1; transform:translateX(0);}
 
-/* ============ HERO ============ */
 #hero{
   min-height:100svh; display:flex; flex-direction:column;
   justify-content:center; padding-top:140px;
@@ -162,10 +155,8 @@ section{position:relative; z-index:1; padding:110px 22px 110px 34px; max-width:1
 }
 @keyframes pulse{0%,100%{opacity:.35}50%{opacity:1}}
 
-/* linhas de força — parallax geométrico atrás do hero */
 #heroLines{position:absolute; inset:0; z-index:-1; opacity:.5;}
 
-/* ============ TIMELINE VERTICAL ============ */
 #origem{padding-bottom:40px;}
 .tl-v{position:relative; margin-top:80px; padding-left:52px; padding-bottom:40px;}
 .tl-v::before{
@@ -197,7 +188,6 @@ section{position:relative; z-index:1; padding:110px 22px 110px 34px; max-width:1
 .tl-entry h3{font-size:clamp(15px,1.6vw,19px); text-transform:uppercase; letter-spacing:.02em; margin-bottom:12px; color:var(--paper);}
 .tl-entry p{color:var(--steel); max-width:560px; line-height:1.78; font-size:15px;}
 
-/* ============ MANIFESTO ============ */
 #manifesto{min-height:88vh; display:flex; align-items:center; justify-content:center; text-align:center; flex-direction:column;}
 .words{display:flex; flex-wrap:wrap; justify-content:center; gap:6px 18px; margin-top:34px;}
 .words span{
@@ -209,7 +199,6 @@ section{position:relative; z-index:1; padding:110px 22px 110px 34px; max-width:1
 .words span:hover{color:var(--red); transform:scale(1.14) skewX(-8deg);}
 .words span:nth-child(even):hover{color:var(--yellow);}
 
-/* ============ CARACTERÍSTICAS ============ */
 .grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:1px; background:var(--line); margin-top:40px; border:1px solid var(--line);}
 .cell{background:var(--bg); padding:32px 22px; min-height:200px; display:flex; flex-direction:column; justify-content:space-between; transition:background .25s, color .25s, transform .25s;}
 .cell:hover{background:var(--red); color:#000; transform:translateY(-4px);}
@@ -219,7 +208,6 @@ section{position:relative; z-index:1; padding:110px 22px 110px 34px; max-width:1
 .cell p{font-size:13px; color:var(--steel); margin-top:12px; line-height:1.6;}
 .cell:hover p{color:rgba(0,0,0,.75);}
 
-/* ============ ARTISTAS ============ */
 .artists{display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:22px; margin-top:50px;}
 .artist-card{perspective:1600px; cursor:pointer; aspect-ratio:3/4; outline:none; position:relative; -webkit-tap-highlight-color:transparent;}
 .artist-inner{position:relative; width:100%; height:100%; transform-style:preserve-3d; transition:transform 1s cubic-bezier(.45,.05,.2,1);}
@@ -247,13 +235,11 @@ section{position:relative; z-index:1; padding:110px 22px 110px 34px; max-width:1
 .artist-back .work-desc{padding:0 18px 22px; font-size:12.5px; color:var(--steel); line-height:1.6; position:relative; z-index:4;}
 .artist-back .flip-hint{color:var(--yellow); border-color:rgba(242,255,0,.3);}
 
-/* ============ VELOCIDADE ============ */
 #velocity{min-height:100svh; display:flex; align-items:center; justify-content:center; flex-direction:column; text-align:center;}
 #vnum{font-family:'Archivo Black',sans-serif; font-size:clamp(56px,15vw,200px); color:var(--red); font-variant-numeric:tabular-nums; line-height:.85; text-shadow:0 0 80px rgba(255,51,0,.3);}
 #velocity .cap{color:var(--steel); font-size:14px; max-width:420px; margin-top:26px; line-height:1.7;}
 #velocity h3{font-size:clamp(18px,3.6vw,36px); margin-top:40px; text-transform:uppercase;}
 
-/* ============ RUÍDO ============ */
 .pads{display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:32px;}
 @media(max-width:520px){.pads{grid-template-columns:repeat(2,1fr);}}
 .pad{border:1px solid var(--line); padding:24px 10px; text-align:center; background:none; color:var(--paper); font-family:'Space Grotesk',sans-serif; font-size:12px; letter-spacing:.12em; cursor:pointer; transition:.18s; text-transform:uppercase; -webkit-tap-highlight-color:transparent;}
@@ -261,7 +247,6 @@ section{position:relative; z-index:1; padding:110px 22px 110px 34px; max-width:1
 .pad.active{background:var(--yellow); color:#000; border-color:var(--yellow);}
 #noise-vis{width:100%; height:90px; margin-top:26px; border:1px solid var(--line);}
 
-/* ============ GUERRA ============ */
 #guerra{background:#000; border-top:1px solid var(--line); border-bottom:1px solid var(--line); max-width:none; padding-left:22px; padding-right:22px;}
 #guerra .inner{max-width:1120px; margin:0 auto;}
 .glitch{font-family:'Archivo Black',sans-serif; font-size:clamp(26px,6.4vw,68px); position:relative; color:var(--paper); text-transform:uppercase; line-height:1;}
@@ -276,7 +261,6 @@ section{position:relative; z-index:1; padding:110px 22px 110px 34px; max-width:1
 #guerra p{color:var(--steel); max-width:600px; margin-top:24px; font-size:15px; line-height:1.75;}
 .warn{margin-top:32px; border-left:2px solid var(--red); padding-left:18px; color:var(--paper); font-size:14px; line-height:1.7; max-width:600px;}
 
-/* ============ BRASIL ============ */
 .br-grid{display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--line); margin-top:44px; border:1px solid var(--line);}
 @media(max-width:700px){.br-grid{grid-template-columns:1fr;}}
 .br-cell{background:var(--bg); padding:30px 24px; transition:background .25s;}
@@ -285,7 +269,6 @@ section{position:relative; z-index:1; padding:110px 22px 110px 34px; max-width:1
 .br-cell h3{font-size:19px; margin-top:14px; text-transform:uppercase;}
 .br-cell p{font-size:13.5px; color:var(--steel); margin-top:12px; line-height:1.7;}
 
-/* ============ PRESENTE ============ */
 .pairs{display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--line); margin-top:44px; border:1px solid var(--line);}
 @media(max-width:640px){.pairs{grid-template-columns:1fr;}}
 .pair{display:contents;}
@@ -329,9 +312,8 @@ footer b{color:var(--red); font-family:'Archivo Black',sans-serif;}
     <a href="#origem">origem</a>
     <a href="#manifesto">ideias</a>
     <a href="#caracteristicas">características</a>
-    <a href="#artistas">artistas</a>
-    <a href="#ruido">ruído</a>
-    <a href="#guerra">guerra</a>
+    <a href="#artistas">nomes</a>
+    <a href="#guerra">política</a>
     <a href="#brasil">brasil</a>
   </div>
   <div class="hud" id="hud">
@@ -347,108 +329,144 @@ footer b{color:var(--red); font-family:'Archivo Black',sans-serif;}
     A arte que<br>queria <em>ultrapassar</em><br>o presente
   </h1>
   <p class="sub">
-    Em 20 de fevereiro de 1909, Filippo Tommaso Marinetti publicou o <em>Manifesto
-    Futurista</em> no jornal francês <em>Le Figaro</em>. Não era uma proposta estética:
-    era uma declaração de guerra ao passado. Esta página não é um resumo — é uma
-    tentativa de se comportar como o próprio movimento.
+    Um percurso em seis partes pelo movimento que quis destruir o passado
+    e inventar o futuro: <b>origem</b>, <b>ideias</b>, <b>características</b>,
+    <b>nomes</b>, <b>contexto político</b> e <b>o eco no Brasil</b>.
+    Não é um resumo — é uma tentativa de se comportar como o próprio Futurismo.
   </p>
   <div class="meta">
     <div><b>1909</b>Manifesto em Paris</div>
-    <div><b>8</b>Nomes centrais</div>
+    <div><b>6</b>Tópicos principais</div>
     <div><b>1ª</b>Vanguarda europeia</div>
     <div><b>1922</b>Eco no Brasil</div>
   </div>
   <div class="scroll-hint">↓ desça — o tempo vem junto</div>
 </section>
 
+<!-- ============ 01 — ORIGEM ============ -->
 <section id="origem">
   <div class="eyebrow">01 — Origem</div>
-  <h2 class="display" style="font-size:clamp(28px,5vw,56px); text-transform:uppercase;">Desça e o tempo<br>vem com você</h2>
-  <p style="color:var(--steel); max-width:600px; margin-top:20px; font-size:15px; line-height:1.75;">
-    O Futurismo nasceu num contexto de tensão política entre as grandes potências
-    europeias, de industrialização acelerada e de fé cega no progresso técnico.
-    A linha abaixo desce — como o tempo — e é a mesma linha que corre na borda da tela.
-    Cada ano aparece quando você chega nele.
+  <h2 class="display" style="font-size:clamp(28px,5vw,56px); text-transform:uppercase;">De onde surgiu<br>o futurismo</h2>
+  <p style="color:var(--steel); max-width:620px; margin-top:20px; font-size:15px; line-height:1.78;">
+    O Futurismo surgiu oficialmente em <b style="color:var(--paper)">1909, na Itália</b>.
+    O marco inicial foi a publicação da <b style="color:var(--paper)">“Fundação e Manifesto
+    do Futurismo”</b>, escrita por <b style="color:var(--paper)">Filippo Tommaso
+    Marinetti</b> e publicada no jornal francês <em>Le Figaro</em>, em
+    <b style="color:var(--paper)">20 de fevereiro de 1909</b>. O movimento fez parte
+    das <b style="color:var(--paper)">vanguardas europeias</b> e buscava romper com
+    os modelos artísticos tradicionais, propondo novas formas de criação.
+    Concentrou-se principalmente na Itália.
   </p>
   <div class="tl-v" id="tlV"></div>
 </section>
 
+<!-- ============ 02 — PRINCIPAIS IDEIAS ============ -->
 <section id="manifesto">
   <div class="eyebrow">02 — Principais ideias</div>
   <h2 class="display" style="font-size:clamp(26px,4.6vw,48px); text-transform:uppercase;">Palavras em liberdade</h2>
   <div class="words" id="words">
+    <span>Rompimento</span><span>Futuro</span><span>Modernidade</span>
     <span>Velocidade</span><span>Movimento</span><span>Máquina</span>
-    <span>Cidade</span><span>Energia</span><span>Ruptura</span>
-    <span>Futuro</span><span>Guerra</span>
+    <span>Tecnologia</span><span>Verso livre</span>
   </div>
-  <p style="color:var(--steel); max-width:540px; margin-top:44px; font-size:14px; line-height:1.8;">
-    Passe o mouse. Cada palavra é uma ideia-força do manifesto — e a última delas
-    é a que o movimento não conseguiu controlar. Ela volta lá na frente.
+  <p style="color:var(--steel); max-width:600px; margin-top:44px; font-size:14.5px; line-height:1.85;">
+    Passe o mouse. Cada palavra é uma ideia-força do movimento: o <b style="color:var(--paper)">rompimento
+    com o passado</b> e com as tradições, a valorização do <b style="color:var(--paper)">futuro
+    e da modernidade</b>, o fascínio pela <b style="color:var(--paper)">velocidade</b>,
+    <b style="color:var(--paper)">movimento</b> e <b style="color:var(--paper)">aceleração</b>,
+    a celebração das <b style="color:var(--paper)">máquinas</b>, dos automóveis, das indústrias
+    e das novas <b style="color:var(--paper)">tecnologias</b>. Na literatura, isso se traduz
+    na busca por <b style="color:var(--paper)">renovação radical</b>, no uso do
+    <b style="color:var(--paper)">verso livre</b> e, depois, nas
+    <b style="color:var(--paper)">“palavras em liberdade”</b>.
   </p>
 </section>
 
+<!-- ============ 03 — CARACTERÍSTICAS ============ -->
 <section id="caracteristicas">
   <div class="eyebrow">03 — Características</div>
   <h2 class="display" style="font-size:clamp(26px,4.6vw,48px); text-transform:uppercase;">Como o futurismo<br>se parece</h2>
   <div class="grid" id="charGrid"></div>
+  <p style="color:var(--steel); max-width:640px; margin-top:36px; font-size:14.5px; line-height:1.8;">
+    O Futurismo influenciou diversas áreas além da pintura — em especial a
+    <b style="color:var(--paper)">literatura</b>, a <b style="color:var(--paper)">arquitetura</b>,
+    a <b style="color:var(--paper)">música</b> e o <b style="color:var(--paper)">design</b>.
+    A busca pela sensação de movimento levava os artistas a <b style="color:var(--paper)">repetir
+    formas e linhas</b>, produzindo uma estética de fragmentação, tensão e aceleração.
+  </p>
 </section>
 
+<!-- ============ 04 — PRINCIPAIS NOMES ============ -->
 <section id="artistas">
   <div class="eyebrow">04 — Principais nomes</div>
   <h2 class="display" style="font-size:clamp(26px,4.6vw,48px); text-transform:uppercase;">Os que assinaram<br>o futuro</h2>
-  <p style="color:var(--steel); max-width:580px; margin-top:18px; font-size:14.5px; line-height:1.75;">
-    Clique em cada card: ele gira e revela uma obra do artista. Vire de novo para voltar ao retrato.
+  <p style="color:var(--steel); max-width:620px; margin-top:18px; font-size:14.5px; line-height:1.75;">
+    O movimento teve em <b style="color:var(--paper)">Filippo Tommaso Marinetti</b>
+    seu fundador: autor do Manifesto de 1909 e principal responsável pela divulgação
+    inicial. Ao seu redor reuniram-se pintores, escultores, arquitetos e músicos —
+    clique em cada card para virar e ver uma obra do artista.
   </p>
   <div class="artists" id="artistGrid"></div>
 </section>
 
+<!-- ============ INTERLÚDIO — LINGUAGEM ============ -->
 <section id="velocity">
-  <div class="eyebrow">05 — Linguagem</div>
+  <div class="eyebrow">— Linguagem</div>
   <div id="vnum">0837</div>
   <div class="cap">Role a página. A velocidade não é ilustração do tema — ela é a linguagem.</div>
   <h3>Velocidade não é apenas um tema.<br>É a própria linguagem.</h3>
 </section>
 
+<!-- ============ 04 (cont.) — RUSSOLO E O RUÍDO ============ -->
 <section id="ruido">
-  <div class="eyebrow">06 — Música</div>
+  <div class="eyebrow">04 — Principais nomes · Russolo e o ruído</div>
   <h2 class="display" style="font-size:clamp(24px,4.4vw,46px); text-transform:uppercase;">Luigi Russolo e a arte do ruído</h2>
   <p style="color:var(--steel); max-width:620px; margin-top:18px; font-size:14.5px; line-height:1.75;">
-    Em <em>A Arte dos Ruídos</em> (1913), Russolo argumentou que o ouvido moderno
-    já não se contentava com melodia — a cidade industrial produzia sua própria
-    música. Ele construiu os <em>intonarumori</em>, máquinas de ruído. Toque nos botões
-    e combine mais de um ao mesmo tempo.
+    Em <em>A Arte dos Ruídos</em> (1913), Luigi Russolo argumentou que o ouvido
+    moderno já não se contentava com a melodia — a cidade industrial produzia
+    sua própria música. Ele construiu os <em>intonarumori</em>, máquinas de
+    ruído. Toque nos botões e combine mais de um ao mesmo tempo.
   </p>
   <div class="pads" id="pads"></div>
   <canvas id="noise-vis"></canvas>
 </section>
 
+<!-- ============ 05 — CONTEXTO POLÍTICO ============ -->
 <section id="guerra">
   <div class="inner">
-    <div class="eyebrow">07 — Contexto político</div>
+    <div class="eyebrow">05 — Contexto político</div>
     <div class="glitch" id="glitchText">Velocidade, máquina, energia — também guerra</div>
     <p>
-      O manifesto de 1909 declarava a guerra “a única higiene do mundo” e exaltava
-      o desprezo pela mulher, o patriotismo e a destruição. O movimento celebrou a
-      tecnologia sem antever seu uso para a destruição em massa.
+      O Futurismo italiano possuía elementos de <b style="color:var(--paper)">exaltação
+      da guerra</b>, <b style="color:var(--paper)">agressividade</b> e
+      <b style="color:var(--paper)">nacionalismo</b>. Já no manifesto de 1909, a guerra
+      era tratada como “a única higiene do mundo”, e o movimento celebrava a tecnologia
+      sem antever seu uso para a destruição em massa.
     </p>
     <div class="warn">
-      <b>Entusiasmo e catástrofe nasceram do mesmo impulso.</b><br>
-      Boccioni e Sant’Elia morreram em treinamento militar em 1916. Marinetti
-      aproximou-se do fascismo e ajudou a redigir o Manifesto Fascista de 1919.
-      A Primeira Guerra mostrou que o Futurismo estava em consonância com seu
-      tempo — inclusive no que ele tinha de mais violento.
+      <b>Uma leitura histórica e contextualizada.</b><br>
+      Marinetti e parte dos futuristas italianos posteriormente se aproximaram do
+      <b>fascismo italiano</b>, o que tornou o movimento politicamente controverso.
+      É importante lembrar que essa dimensão política <b>não deve ser confundida
+      automaticamente com todas as manifestações artísticas</b> do movimento: trata-se
+      de um aspecto do contexto histórico — e não de uma equivalência entre a
+      estética futurista e a ideologia fascista. Boccioni e Sant’Elia, por exemplo,
+      morreram em treinamento militar em 1916, antes que essa aproximação se
+      consolidasse.
     </div>
   </div>
 </section>
 
+<!-- ============ 06 — FUTURISMO NO BRASIL ============ -->
 <section id="brasil">
-  <div class="eyebrow">08 — E como foi no Brasil</div>
+  <div class="eyebrow">06 — Futurismo no Brasil</div>
   <h2 class="display" style="font-size:clamp(26px,4.6vw,48px); text-transform:uppercase;">O futurismo<br>atravessa o Atlântico</h2>
   <div class="br-grid" id="brGrid"></div>
 </section>
 
+<!-- ============ FECHAMENTO — 1909 × AGORA ============ -->
 <section id="presente">
-  <div class="eyebrow">09 — 1909 × agora</div>
+  <div class="eyebrow">— 1909 × agora</div>
   <h2 class="display" style="font-size:clamp(26px,4.6vw,48px); text-transform:uppercase;">Mesmo impulso,<br>outras máquinas</h2>
   <div class="pairs" id="pairs"></div>
 </section>
@@ -471,7 +489,7 @@ function mulberry32(a){
   };
 }
 
-/* ---------- shatter (rápido, sem tela branca) ---------- */
+/* ---------- shatter ---------- */
 function shatter({cols=7, rows=5, dur=800}={}) {
   const layer = $('#shatter');
   if (!layer) return;
@@ -503,7 +521,7 @@ function shatter({cols=7, rows=5, dur=800}={}) {
   setTimeout(()=>{ layer.classList.remove('on'); layer.innerHTML=''; }, dur+500);
 }
 
-/* ---------- boot: contagem mais lenta, transição rápida e sem flash branco ---------- */
+/* ---------- boot ---------- */
 (function boot(){
   const bootEl=$('#boot'), yearEl=$('#bootYear'), barEl=$('#bootBar'), labelEl=$('#bootLabel'), cv=$('#bootCv'), ctx=cv.getContext('2d');
   let W,H,lines=[];
@@ -512,7 +530,7 @@ function shatter({cols=7, rows=5, dur=800}={}) {
   const maxR=()=>Math.hypot(W,H)/2;
   for(let i=0;i<170;i++) lines.push({a:Math.random()*Math.PI*2, r:Math.random()*maxR(), len:40+Math.random()*220, sp:2+Math.random()*9, w:Math.random()<.15?2:1, col:Math.random()<.18?'255,51,0':'237,237,228'});
 
-  const DUR = reduce ? 200 : 4300; /* contagem mais lenta */
+  const DUR = reduce ? 200 : 4300;
   const t0 = performance.now();
   let done=false;
   const labels=[[0,'Inicializando salto temporal'],[0.38,'Recalculando linha do tempo'],[0.68,'Destino: Milão · Itália'],[0.90,'Impacto iminente']];
@@ -537,7 +555,6 @@ function shatter({cols=7, rows=5, dur=800}={}) {
     else if(!done){done=true; finish();}
   }
 
-  /* chegou na data → a apresentação começa imediatamente, sem tela branca */
   function finish(){
     bootEl.classList.add('done');
     shatter({cols:7, rows:5, dur:800});
@@ -547,7 +564,7 @@ function shatter({cols=7, rows=5, dur=800}={}) {
   setTimeout(()=>{ if(!bootEl.classList.contains('done')) bootEl.classList.add('done'); }, DUR+3000);
 })();
 
-/* ---------- cursor + velocidade do mouse ---------- */
+/* ---------- cursor ---------- */
 (function cursor(){
   const cur=$('#cursor'), speedEl=$('#speed');
   let lx=innerWidth/2, ly=innerHeight/2;
@@ -561,7 +578,7 @@ function shatter({cols=7, rows=5, dur=800}={}) {
   });
 })();
 
-/* ---------- fundo de partículas ---------- */
+/* ---------- fundo ---------- */
 (function background(){
   const bg=$('#bg'), ctx=bg.getContext('2d');
   let W,H,pts=[],vel=0;
@@ -582,7 +599,7 @@ function shatter({cols=7, rows=5, dur=800}={}) {
   loop();
 })();
 
-/* ---------- linhas de força do hero (parallax de mouse) ---------- */
+/* ---------- linhas do hero ---------- */
 (function heroParallax(){
   const svg=$('#heroLines'), h1=$('#heroH1');
   let frags=[];
@@ -600,7 +617,7 @@ function shatter({cols=7, rows=5, dur=800}={}) {
   });
 })();
 
-/* ---------- HUD ano + trilho de progresso conectando tudo ---------- */
+/* ---------- HUD ---------- */
 (function hud(){
   const yearEl=$('#hudYear'), rail=$('#railFill'), hudEl=$('#hud');
   function update(){
@@ -615,15 +632,15 @@ function shatter({cols=7, rows=5, dur=800}={}) {
   update();
 })();
 
-/* ---------- timeline vertical ---------- */
+/* ---------- 01 ORIGEM · timeline ---------- */
 (function timeline(){
   const data=[
-    ['1909','Manifesto em Paris','Marinetti publica o Manifesto Futurista no jornal francês Le Figaro. É a certidão de nascimento de uma vanguarda que quer destruir o passado.'],
+    ['1909','Fundação e Manifesto','Marinetti publica a “Fundação e Manifesto do Futurismo” no jornal francês Le Figaro, em 20 de fevereiro. É a certidão de nascimento da vanguarda italiana.'],
     ['1910','Manifesto dos Pintores','Boccioni, Balla, Carrà, Russolo e Severini assinam o Manifesto dos Pintores Futuristas e transferem para a tela a estética da velocidade.'],
-    ['1912','Formas Únicas','Boccioni esculpe "Formas Únicas de Continuidade no Espaço" — a figura humana atravessando o ar como um corpo-máquina em movimento.'],
-    ['1913','A Arte dos Ruídos','Russolo publica "A Arte dos Ruídos" e constrói os intonarumori: máquinas que transformam o barulho industrial em música.'],
-    ['1914','Arquitetura Futurista','Antonio Sant’Elia lança o manifesto da Arquitetura Futurista e desenha a "Città Nuova": arranha-céus, estações, usinas, elevadores.'],
-    ['1915','Guerra','A Itália entra na Primeira Guerra. Muitos futuristas vão ao front como voluntários — a guerra era, para eles, a "única higiene do mundo".'],
+    ['1912','Formas Únicas','Boccioni esculpe “Formas Únicas de Continuidade no Espaço” — a figura humana atravessando o ar como um corpo-máquina em movimento.'],
+    ['1913','A Arte dos Ruídos','Russolo publica “A Arte dos Ruídos” e constrói os intonarumori: máquinas que transformam o barulho industrial em música.'],
+    ['1914','Arquitetura Futurista','Antonio Sant’Elia lança o manifesto da Arquitetura Futurista e desenha a “Città Nuova”: arranha-céus, estações, usinas, elevadores.'],
+    ['1915','Guerra','A Itália entra na Primeira Guerra. Muitos futuristas vão ao front como voluntários — a guerra era, para eles, a “única higiene do mundo”.'],
     ['1916','Fim de um núcleo','Boccioni e Sant’Elia morrem em treinamento militar. O núcleo original do movimento se dissolve.'],
     ['1919','Deriva política','Marinetti participa da fundação dos Fasci di Combattimento com Mussolini. O movimento que queria ultrapassar o presente se entrega a uma das piores políticas do século.'],
   ];
@@ -640,15 +657,15 @@ function shatter({cols=7, rows=5, dur=800}={}) {
   revealables.forEach(el=>io.observe(el));
 })();
 
-/* ---------- características ---------- */
+/* ---------- 03 CARACTERÍSTICAS ---------- */
 (function characteristics(){
   const items=[
-    ['01','Rompimento com o passado','A "destruição do passado" é o gesto fundador: museus, academias e tradição tratados como peso morto.'],
-    ['02','Velocidade e movimento','O automóvel, o aeroplano e a cidade elétrica tornam-se a nova beleza — mais belos que a Vitória de Samotrácia.'],
-    ['03','Máquina e tecnologia','Indústria, aço, energia elétrica e ruído urbano entram na obra como matéria-prima estética.'],
-    ['04','Movimento na pintura','Formas repetidas, linhas de força e corpos fragmentados: a tela tenta capturar o deslocamento, não o instante.'],
-    ['05','Palavras em liberdade','Na literatura, a sintaxe é destruída: verbos no infinito, substantivos justapostos, tipografia como imagem.'],
-    ['06','Interdisciplinaridade','Pintura, escultura, arquitetura, música, design, moda, teatro e publicidade — tudo era território futurista.'],
+    ['01','Velocidade e aceleração','O automóvel, o aeroplano e a cidade elétrica tornam-se a nova beleza — mais belos que a Vitória de Samotrácia.'],
+    ['02','Movimento e repetição','Formas repetidas, linhas de força e corpos fragmentados: a tela tenta capturar o deslocamento, não o instante.'],
+    ['03','Máquinas e tecnologia','Indústria, aço, energia elétrica e ruído urbano entram na obra como matéria-prima estética.'],
+    ['04','Industrialização e modernidade','A cidade moderna — com suas fábricas, avenidas e multidões — é tratada como tema e como forma.'],
+    ['05','Ruptura com o passado','A “destruição do passado” é o gesto fundador: museus, academias e tradição tratados como peso morto.'],
+    ['06','Experimentação artística','Palavras em liberdade na literatura, verso livre na poesia, novas técnicas na pintura, escultura, música e design.'],
   ];
   const grid=$('#charGrid');
   items.forEach(([n,t,d])=>{
@@ -658,996 +675,202 @@ function shatter({cols=7, rows=5, dur=800}={}) {
   });
 })();
 
-/* ---------- artistas ---------- */
-/* ---------- artistas (pixel art em alta resolução) ---------- */
+/* ---------- 04 PRINCIPAIS NOMES · cards pixel art ---------- */
 (function pixelArtists(){
-  const GW = 120, GH = 156;              // resolução dobrada
-  const rgb = (a, f=1) => `rgb(${Math.min(255,Math.round(a[0]*f))},${Math.min(255,Math.round(a[1]*f))},${Math.min(255,Math.round(a[2]*f))})`;
-  const mix = (a, b, t) => [a[0]+(b[0]-a[0])*t, a[1]+(b[1]-a[1])*t, a[2]+(b[2]-a[2])*t];
+  const GW = 130, GH = 170;
 
-  /* ----- paleta ----- */
-  const P = {
-    skinA:[228,183,150], skinB:[210,160,125], skinC:[175,130,100], skinD:[140,98,72],
-    hairDark:[38,26,20], hairBrown:[78,52,34], hairAuburn:[110,60,35], hairGray:[170,165,158], hairBlack:[20,14,10],
-    eyeWhite:[238,236,230], irisBrown:[78,48,30], irisDark:[30,20,15], pupil:[8,6,5],
-    lips:[150,85,80], lipsDark:[110,55,55],
-    shirt:[235,232,224], collarShadow:[190,186,178],
-    suitBlack:[18,18,22], suitDark:[28,28,34], suitNavy:[32,36,52], suitBrown:[58,38,26],
-    tieRed:[178,26,22], tieBlack:[14,14,18],
-    bg:[[20,20,26],[36,16,14],[16,20,30],[24,20,16]],
+  const ARQUIVOS = {
+    'Filippo Tommaso Marinetti':  { retrato:'pixel/marinetti.png', obra:'pixel/zangtumb.png'  },
+    'Umberto Boccioni':           { retrato:'pixel/boccioni.png',  obra:'pixel/unique.png'    },
+    'Giacomo Balla':              { retrato:'pixel/balla.png',     obra:'pixel/dog.png'       },
+    'Carlo Carrà':                { retrato:'pixel/carra.png',     obra:'pixel/funeral.png'   },
+    'Gino Severini':              { retrato:'pixel/severini.png',  obra:'pixel/tabarin.png'   },
+    'Luigi Russolo':              { retrato:'pixel/russolo.png',   obra:'pixel/rebellion.png' },
+    'Antonio Sant’Elia':          { retrato:'pixel/santelia.png',  obra:'pixel/citta.png'     },
+    'Francesco Balilla Pratella': { retrato:'pixel/pratella.png',  obra:'pixel/music.png'     },
   };
-  const pickBg = (seed) => P.bg[Math.floor(mulberry32(seed)()*P.bg.length)];
 
-  /* ----- helpers de desenho ----- */
-  function makeBuffer(){
-    const b = new Array(GW*GH).fill(null);
-    return {
-      b,
-      set(x,y,c){
-        x=Math.round(x); y=Math.round(y);
-        if(x<0||x>=GW||y<0||y>=GH||!c) return;
-        b[y*GW+x]=c;
-      },
-      get(x,y){
-        if(x<0||x>=GW||y<0||y>=GH) return null;
-        return b[y*GW+x];
-      },
-      ellipse(cx,cy,rx,ry,c,jitter=0){
-        for(let y=Math.floor(cy-ry-1); y<=Math.ceil(cy+ry+1); y++){
-          for(let x=Math.floor(cx-rx-1); x<=Math.ceil(cx+rx+1); x++){
-            const dx=(x-cx)/rx, dy=(y-cy)/ry;
-            const d=Math.sqrt(dx*dx+dy*dy);
-            if(d<=1){
-              if(jitter && d>0.85 && Math.random()<jitter) continue;
-              this.set(x,y,c);
-            }
+  function loadParticles(url, step = 1){
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+      img.onload = () => {
+        const cv = document.createElement('canvas');
+        cv.width = GW; cv.height = GH;
+        const ctx = cv.getContext('2d', { willReadFrequently: true });
+        ctx.imageSmoothingEnabled = false;
+        ctx.drawImage(img, 0, 0, GW, GH);
+        const data = ctx.getImageData(0, 0, GW, GH).data;
+        const pts = [];
+        for (let y = 0; y < GH; y += step) {
+          for (let x = 0; x < GW; x += step) {
+            const i = (y * GW + x) * 4;
+            const a = data[i + 3];
+            if (a < 20) continue;
+            const r = data[i], g = data[i + 1], b = data[i + 2];
+            pts.push({ gx:x, gy:y, c:`rgb(${r},${g},${b})`, s:step });
           }
         }
-      },
-      rect(x0,y0,x1,y1,c){
-        for(let y=Math.floor(y0);y<=Math.floor(y1);y++)
-          for(let x=Math.floor(x0);x<=Math.floor(x1);x++)
-            this.set(x,y,c);
-      },
-      line(x0,y0,x1,y1,c,w=1){
-        const dx=x1-x0, dy=y1-y0, steps=Math.max(Math.abs(dx),Math.abs(dy));
-        for(let i=0;i<=steps;i++){
-          const x=x0+dx*i/steps, y=y0+dy*i/steps;
-          for(let ox=-w;ox<=w;ox++) for(let oy=-w;oy<=w;oy++)
-            if(ox*ox+oy*oy<=w*w) this.set(x+ox,y+oy,c);
-        }
-      },
-    };
+        resolve(pts);
+      };
+      img.onerror = () => reject(new Error('falha ao carregar ' + url));
+      img.src = url;
+    });
   }
 
-  /* ============================================================
-     RETRATOS (bustos detalhados)
-     ============================================================ */
-  function buildPortrait(cfg){
-    const rnd = mulberry32(cfg.seed);
-    const ctx = makeBuffer();
-
-    /* fundo com grão sutil e leve vinheta */
-    const bg = cfg.bgColor || pickBg(cfg.seed);
-    for(let y=0;y<GH;y++) for(let x=0;x<GW;x++){
-      const vx=(x-GW/2)/(GW/2), vy=(y-GH/2)/(GH/2);
-      const v=1-Math.min(1,Math.hypot(vx,vy)*0.7);
-      const n=(rnd()-0.5)*10;
-      ctx.set(x,y, rgb([bg[0]+n,bg[1]+n,bg[2]+n], 0.8+v*0.4));
-    }
-    /* linha diagonal de fundo (estética futurista) */
-    for(let i=0;i<3;i++){
-      const x0=rnd()*GW, y0=rnd()*GH;
-      const x1=x0+(rnd()-0.5)*GW*1.6, y1=y0+(rnd()-0.5)*GH*1.6;
-      const col = i===0 ? [255,51,0] : (i===1 ? [242,255,0] : [237,237,228]);
-      for(let t=0;t<1;t+=0.005){
-        const x=x0+(x1-x0)*t, y=y0+(y1-y0)*t;
-        if(rnd()<0.55) ctx.set(x,y, rgb(col, 0.06+rnd()*0.1));
-      }
-    }
-
-    const cx = GW/2;
-
-    /* ---- ombros e terno ---- */
-    const suit = cfg.suit || P.suitDark;
-    const shoulderY = GH*0.72;
-    for(let y=shoulderY; y<GH; y++){
-      const t = (y-shoulderY)/(GH-shoulderY);
-      const half = GW*(0.30 + t*0.16);
-      for(let x=Math.floor(cx-half); x<=Math.ceil(cx+half); x++){
-        const edge = Math.abs(x-cx)/half;
-        const light = 1 - edge*0.35 + (rnd()-0.5)*0.06;
-        ctx.set(x,y, rgb(suit, light));
-      }
-    }
-    /* lapelas */
-    ctx.line(cx-6, shoulderY, cx-22, GH, rgb(suit, 0.55), 1);
-    ctx.line(cx+6, shoulderY, cx+22, GH, rgb(suit, 0.55), 1);
-    /* camisa V */
-    for(let y=shoulderY+4; y<GH; y++){
-      const t=(y-shoulderY-4)/(GH-shoulderY-4);
-      const w=4+t*13;
-      for(let x=Math.floor(cx-w); x<=Math.ceil(cx+w); x++){
-        const edge=Math.abs(x-cx)/w;
-        const light = 1 - edge*0.2 + (rnd()-0.5)*0.05;
-        ctx.set(x,y, rgb(P.shirt, light));
-      }
-    }
-    /* gravata */
-    if(cfg.tie){
-      const tie = cfg.tieColor || P.tieRed;
-      for(let y=shoulderY+8; y<GH-2; y++){
-        const t=(y-shoulderY-8)/(GH-shoulderY-8);
-        const w=3+t*5;
-        for(let x=Math.floor(cx-w); x<=Math.ceil(cx+w); x++){
-          const edge=Math.abs(x-cx)/w;
-          ctx.set(x,y, rgb(tie, 1-edge*0.3));
-        }
-      }
-    }
-
-    /* ---- pescoço ---- */
-    const neckTop = GH*0.58, neckBottom = shoulderY+2;
-    for(let y=neckTop; y<=neckBottom; y++){
-      const t=(y-neckTop)/(neckBottom-neckTop);
-      const w = 9 + t*3;
-      for(let x=Math.floor(cx-w); x<=Math.ceil(cx+w); x++){
-        const dx=Math.abs(x-cx)/w;
-        const sideShade = 1-Math.pow(dx,2)*0.4;
-        const n=(rnd()-0.5)*0.06;
-        ctx.set(x,y, rgb(cfg.skin || P.skinA, sideShade+n));
-      }
-    }
-    /* sombra sob o queixo */
-    for(let x=Math.floor(cx-8); x<=Math.ceil(cx+8); x++){
-      ctx.set(x, neckTop, rgb(cfg.skinC || P.skinC, 0.7));
-      ctx.set(x, neckTop+1, rgb(cfg.skinB || P.skinB, 0.85));
-    }
-
-    /* ---- cabeça ---- */
-    const headCX = cx, headCY = GH*0.36;
-    const headRX = GW*0.22, headRY = GH*0.24;
-    for(let y=Math.floor(headCY-headRY); y<=Math.ceil(headCY+headRY); y++){
-      for(let x=Math.floor(headCX-headRX); x<=Math.ceil(headCX+headRX); x++){
-        const dx=(x-headCX)/headRX, dy=(y-headCY)/headRY;
-        if(dx*dx+dy*dy<=1){
-          /* iluminação: luz no alto-esquerda */
-          const light = 1 - (dx*0.35 + dy*0.10) + (rnd()-0.5)*0.05;
-          /* bochecha rosada */
-          const bx = (x-(headCX-headRX*0.5))/(headRX*0.35);
-          const by = (y-(headCY+headRY*0.35))/(headRY*0.28);
-          const blush = Math.max(0, 1-Math.hypot(bx,by)) * 0.35;
-          const base = cfg.skin || P.skinA;
-          ctx.set(x,y, rgb([
-            base[0]*(1+blush*0.12),
-            base[1]*(1-blush*0.10),
-            base[2]*(1-blush*0.14),
-          ], light));
-        }
-      }
-    }
-    /* sombra do maxilar */
-    for(let x=Math.floor(headCX-headRX*0.8); x<=Math.ceil(headCX+headRX*0.8); x++){
-      const yb = headCY + headRY*0.9;
-      ctx.set(x, yb, rgb(cfg.skinC || P.skinC, 0.85));
-    }
-
-    /* ---- cabelo (estilos) ---- */
-    const hair = cfg.hairColor || P.hairDark;
-    const style = cfg.hair || 'short';
-    const hy = headCY - headRY;
-    if(style==='full' || style==='short' || style==='swept' || style==='side'){
-      const topY = hy + (style==='full'? -2 : 2);
-      const topR = headRX * (style==='full'? 1.06 : 1.02);
-      for(let y=Math.floor(topY-2); y<=Math.floor(headCY+headRY*0.05); y++){
-        for(let x=Math.floor(headCX-topR); x<=Math.ceil(headCX+topR); x++){
-          const dx=(x-headCX)/topR, dy=(y-topY)/ (headRY*0.6);
-          const d=Math.sqrt(dx*dx+dy*dy);
-          if(d<=1.06){
-            if(y>hy+headRY*0.4 && rnd()<0.6) continue;
-            const light = 1-(dx*0.3+dy*0.15)+(rnd()-0.5)*0.08;
-            ctx.set(x,y, rgb(hair, light));
-          }
-        }
-      }
-    }
-    if(style==='bald' || style==='side'){
-      /* testa alta */
-      const hairlineY = headCY - headRY*0.55;
-      for(let y=Math.floor(headCY-headRY); y<hairlineY; y++){
-        for(let x=Math.floor(headCX-headRX); x<=Math.ceil(headCX+headRX); x++){
-          ctx.set(x,y, rgb(cfg.skin || P.skinA, 0.95+(rnd()-0.5)*0.04));
-        }
-      }
-      if(style==='side'){
-        /* franja lateral */
-        for(let y=Math.floor(hairlineY); y<=Math.floor(headCY-headRY*0.2); y++){
-          for(let x=Math.floor(headCX-headRX); x<=Math.floor(headCX+headRX*0.1); x++){
-            if(rnd()<0.85) ctx.set(x,y, rgb(hair, 0.75+rnd()*0.2));
-          }
-        }
-      }
-    }
-    if(style==='gray'){
-      /* cabelo grisalho dos mais velhos */
-      for(let y=Math.floor(hy-2); y<=Math.floor(headCY-headRY*0.1); y++){
-        for(let x=Math.floor(headCX-headRX*1.05); x<=Math.ceil(headCX+headRX*1.05); x++){
-          const dx=(x-headCX)/(headRX*1.05), dy=(y-hy)/(headRY*0.7);
-          if(dx*dx+dy*dy<=1.06 && rnd()<0.92){
-            ctx.set(x,y, rgb(P.hairGray, 0.85+rnd()*0.2));
-          }
-        }
-      }
-    }
-
-    /* ---- orelhas ---- */
-    const earY = headCY + 2;
-    for(const side of [-1,1]){
-      const ex = headCX + side*headRX*0.98;
-      for(let y=Math.floor(earY-6); y<=Math.floor(earY+6); y++)
-        for(let x=Math.floor(ex-3); x<=Math.ceil(ex+3); x++){
-          const dx=(x-ex)/3.5, dy=(y-earY)/6.5;
-          if(dx*dx+dy*dy<=1){
-            ctx.set(x,y, rgb(cfg.skin || P.skinA, 0.9 - Math.abs(dx)*0.3));
-          }
-        }
-    }
-
-    /* ---- sobrancelhas ---- */
-    const browY = headCY - headRY*0.32;
-    for(const side of [-1,1]){
-      const bx = headCX + side*headRX*0.42;
-      const tilt = cfg.browTilt || 0;
-      for(let i=-5;i<=5;i++){
-        const x = bx+i;
-        const y = browY + tilt*(i/5) + Math.abs(i)*0.06;
-        ctx.set(x,y, rgb(cfg.hairColor || P.hairDark, 0.8));
-        ctx.set(x,y+1, rgb(cfg.hairColor || P.hairDark, 0.65));
-      }
-    }
-
-    /* ---- olhos ---- */
-    const eyeY = headCY - headRY*0.13;
-    const eyeGap = headRX*0.42;
-    for(const side of [-1,1]){
-      const ex = headCX + side*eyeGap;
-      /* branco */
-      for(let y=eyeY-3; y<=eyeY+3; y++){
-        for(let x=ex-5; x<=ex+5; x++){
-          const dx=(x-ex)/5.5, dy=(y-eyeY)/3.5;
-          if(dx*dx+dy*dy<=1){
-            ctx.set(x,y, rgb(P.eyeWhite, 0.95+rnd()*0.05));
-          }
-        }
-      }
-      /* íris */
-      const irisR = 2.4;
-      const irisCol = cfg.iris || P.irisBrown;
-      for(let y=Math.floor(eyeY-irisR-1); y<=Math.ceil(eyeY+irisR+1); y++)
-        for(let x=Math.floor(ex-irisR-1); x<=Math.ceil(ex+irisR+1); x++){
-          const d=Math.hypot(x-ex, y-eyeY);
-          if(d<=irisR) ctx.set(x,y, rgb(irisCol, 1-(d/irisR)*0.4));
-          else if(d<=irisR+0.7 && rnd()<0.5) ctx.set(x,y, rgb(P.eyeWhite, 0.8));
-        }
-      /* pupila */
-      ctx.set(ex, eyeY, rgb(P.pupil));
-      ctx.set(ex, eyeY-1, rgb(P.pupil));
-      ctx.set(ex, eyeY+1, rgb(P.pupil));
-      /* brilho */
-      ctx.set(ex-1, eyeY-2, rgb([255,255,255]));
-      /* linha da pálpebra */
-      for(let x=Math.floor(ex-5); x<=Math.ceil(ex+5); x++){
-        const dy=Math.sqrt(Math.max(0,1-((x-ex)/5.5)**2))*3.5;
-        ctx.set(x, eyeY-dy-0.5, rgb(cfg.hairColor || P.hairDark, 0.85));
-      }
-      /* bolsa/cansaço (artistas mais velhos) */
-      if(cfg.tired){
-        for(let x=Math.floor(ex-5); x<=Math.ceil(ex+5); x++){
-          const dy=Math.sqrt(Math.max(0,1-((x-ex)/5.5)**2))*3.5;
-          ctx.set(x, eyeY+dy+1, rgb(cfg.skinD || P.skinD, 0.75));
-        }
-      }
-    }
-
-    /* ---- nariz ---- */
-    const noseY = headCY + headRY*0.08;
-    /* sombra lateral */
-    for(let y=Math.floor(eyeY+3); y<=Math.floor(noseY+6); y++){
-      const t = (y-eyeY-3)/(noseY+6-eyeY-3);
-      const w = 1 + t*2.5;
-      const x = headCX - side_offset(cfg);
-      ctx.set(x-1, y, rgb(cfg.skinC || P.skinC, 0.7));
-      ctx.set(x, y, rgb(cfg.skinB || P.skinB, 0.85));
-    }
-    /* narinas */
-    ctx.set(headCX-3, noseY+6, rgb(cfg.skinD || P.skinD, 0.9));
-    ctx.set(headCX-2, noseY+6, rgb(cfg.skinD || P.skinD, 0.9));
-    ctx.set(headCX+2, noseY+6, rgb(cfg.skinD || P.skinD, 0.9));
-    ctx.set(headCX+3, noseY+6, rgb(cfg.skinD || P.skinD, 0.9));
-    /* base do nariz */
-    for(let x=Math.floor(headCX-3); x<=Math.ceil(headCX+3); x++){
-      ctx.set(x, noseY+7, rgb(cfg.skinC || P.skinC, 0.85));
-    }
-
-    /* ---- boca ---- */
-    const mouthY = headCY + headRY*0.45;
-    const mouthW = headRX*0.35;
-    for(let x=Math.floor(headCX-mouthW); x<=Math.ceil(headCX+mouthW); x++){
-      const t = (x-(headCX-mouthW))/(mouthW*2);
-      const curve = Math.sin(t*Math.PI)*1.2;
-      ctx.set(x, mouthY+curve, rgb(P.lipsDark, 0.85));
-      ctx.set(x, mouthY+1+curve, rgb(P.lips, 0.9));
-    }
-    /* lábio inferior */
-    for(let x=Math.floor(headCX-mouthW*0.85); x<=Math.ceil(headCX+mouthW*0.85); x++){
-      ctx.set(x, mouthY+3, rgb(P.lips, 0.85));
-    }
-
-    /* ---- bigode ---- */
-    if(cfg.mustache){
-      const mColor = cfg.mustacheColor || cfg.hairColor || P.hairDark;
-      const mY = mouthY - 3;
-      const mW = cfg.mustacheW || headRX*0.42;
-      for(let x=Math.floor(headCX-mW); x<=Math.ceil(headCX+mW); x++){
-        const t=(x-(headCX-mW))/(mW*2);
-        const thickness = cfg.mustacheThick === 'big'
-          ? 2 + Math.sin(t*Math.PI)*3
-          : 1 + Math.sin(t*Math.PI)*2;
-        for(let y=Math.floor(mY-thickness/2); y<=Math.ceil(mY+thickness/2); y++){
-          if((Math.abs(x-headCX)<1) || Math.sin(t*Math.PI)>0.25 || rnd()<0.6)
-            ctx.set(x, y, rgb(mColor, 0.85+rnd()*0.15));
-        }
-      }
-      /* pontas para baixo em bigodes maiores */
-      if(cfg.mustache === 'handlebar'){
-        for(const side of [-1,1]){
-          const tipX = headCX + side*(mW+2);
-          const tipY = mY + 2;
-          ctx.set(tipX, tipY, rgb(mColor, 0.9));
-          ctx.set(tipX + side, tipY+1, rgb(mColor, 0.9));
-        }
-      }
-    }
-
-    /* ---- barba ---- */
-    if(cfg.beard){
-      const bColor = cfg.hairColor || P.hairDark;
-      const bY0 = headCY + headRY*0.45;
-      const bY1 = headCY + headRY*1.05;
-      for(let y=Math.floor(bY0); y<=Math.ceil(bY1); y++){
-        const t=(y-bY0)/(bY1-bY0);
-        const w = headRX*(0.55 + t*0.35);
-        for(let x=Math.floor(headCX-w); x<=Math.ceil(headCX+w); x++){
-          const dx=(x-headCX)/w;
-          if(dx*dx + ((y-headCY-headRY*0.55)/(headRY*0.6))**2 <= 1.15){
-            /* poupa a boca */
-            if(y<mouthY+5 && Math.abs(x-headCX)<mouthW) continue;
-            if(rnd()<0.82) ctx.set(x,y, rgb(bColor, 0.75+rnd()*0.25));
-          }
-        }
-      }
-    }
-
-    /* ---- converter para partículas (1px = 1 partícula) ---- */
-    const particles = [];
-    for(let y=0;y<GH;y++) for(let x=0;x<GW;x++){
-      const c = ctx.b[y*GW+x];
-      if(c) particles.push({gx:x, gy:y, c, s:1});
-    }
-    return particles;
-  }
-
-  /* pequeno offset facial para variar expressão */
-  function side_offset(cfg){
-    return cfg.noseOffset ?? 0;
-  }
-
-  /* ============================================================
-     OBRAS (cada pintura reconhecível)
-     ============================================================ */
-  function buildArtwork(kind, seed){
-    const rnd = mulberry32(seed);
-    const ctx = makeBuffer();
-
-    /* ------- helpers específicos ------- */
-    const fillBg = (col) => {
-      for(let y=0;y<GH;y++) for(let x=0;x<GW;x++)
-        ctx.set(x,y, rgb(col, 0.9+(rnd()-0.5)*0.1));
-    };
-
-    /* ============ 1. ZANG TUMB TUMB (Marinetti) ============ */
-    if(kind==='zangtumb'){
-      fillBg([230,224,212]);
-      /* blocos tipográficos em linhas */
-      const lines = 18;
-      for(let l=0;l<lines;l++){
-        const y = 6 + l * 8;
-        const rowH = 3 + Math.floor(rnd()*3);
-        let x = 3 + Math.floor(rnd()*3);
-        while(x < GW-6){
-          const w = 3 + Math.floor(rnd()*9);
-          const col = rnd()<0.28 ? [180,26,22]
-                   : rnd()<0.5 ? [20,18,22]
-                   : [50,45,42];
-          for(let yy=y; yy<y+rowH; yy++)
-            for(let xx=x; xx<x+w; xx++)
-              if(yy<GH && xx<GW) ctx.set(xx,yy, rgb(col));
-          x += w + 1 + Math.floor(rnd()*2);
-        }
-      }
-      /* "ZANG TUMB TUMB" diagonal em vermelho */
-      for(let l=0;l<3;l++){
-        const y = GH*0.36 + l*10;
-        for(let x=10+l*4; x<GW-8; x++){
-          if(rnd()<0.85) ctx.set(x, y, rgb([180,26,22], 0.85+rnd()*0.15));
-          ctx.set(x, y+1, rgb([180,26,22], 0.9));
-        }
-      }
-      /* explosões sonoras */
-      for(let i=0;i<12;i++){
-        const cx=rnd()*GW, cy=rnd()*GH, r=2+rnd()*8;
-        const col = rnd()<0.6?[180,26,22]:[20,18,22];
-        for(let y=cy-r; y<=cy+r; y++) for(let x=cx-r; x<=cx+r; x++){
-          const d=Math.hypot(x-cx,y-cy);
-          if(d<r && rnd()<0.7) ctx.set(x,y, rgb(col, 0.7+rnd()*0.3));
-        }
-      }
-    }
-
-    /* ============ 2. FORMAS ÚNICAS (Boccioni) ============ */
-    else if(kind==='unique'){
-      /* fundo neutro quente */
-      fillBg([82,72,60]);
-      /* vinheta */
-      for(let y=0;y<GH;y++) for(let x=0;x<GW;x++){
-        const d=Math.hypot((x-GW/2)/(GW/2),(y-GH/2)/(GH/2));
-        if(d>0.9 && rnd()<0.4) ctx.set(x,y, rgb([40,32,24], 0.9));
-      }
-      /* figura humana avançando (silhueta musculosa) */
-      const bronze=[160,105,55], bronzeHi=[210,150,80], bronzeSh=[90,55,28];
-      /* tronco e coxas - forma principal inclinada para frente */
-      for(let y=Math.floor(GH*0.28); y<GH*0.92; y++){
-        const t=(y-GH*0.28)/(GH*0.64);
-        const cx = GW*0.5 + (t-0.15)*GW*0.22;
-        const w = 6 + Math.sin(t*Math.PI)*16;
-        for(let x=Math.floor(cx-w); x<=Math.ceil(cx+w); x++){
-          const dx=(x-cx)/w;
-          const light = 1-Math.abs(dx)*0.6 + (rnd()-0.5)*0.08;
-          ctx.set(x,y, rgb(light>0.7?bronzeHi:bronze, light));
-        }
-      }
-      /* cabeça */
-      const headX = GW*0.44, headY = GH*0.24;
-      for(let y=Math.floor(headY-9); y<=Math.ceil(headY+9); y++)
-        for(let x=Math.floor(headX-7); x<=Math.ceil(headX+7); x++){
-          const d=Math.hypot((x-headX)/7,(y-headY)/9);
-          if(d<=1) ctx.set(x,y, rgb(bronzeHi, 1-d*0.4));
-        }
-      /* perna estendida à frente */
-      ctx.line(GW*0.58, GH*0.62, GW*0.86, GH*0.98, rgb(bronze, 0.9), 4);
-      ctx.line(GW*0.58, GH*0.62, GW*0.86, GH*0.98, rgb(bronzeHi, 1), 1);
-      /* braço estendido */
-      ctx.line(GW*0.4, GH*0.42, GW*0.14, GH*0.28, rgb(bronze, 0.9), 3);
-      /* sombra rastejante */
-      for(let y=Math.floor(GH*0.9); y<GH; y++)
-        for(let x=0;x<GW;x++)
-          if(rnd()<0.5) ctx.set(x,y, rgb([30,22,16], 0.7+rnd()*0.3));
-      /* linhas de força ao fundo */
-      for(let i=0;i<10;i++){
-        const y=rnd()*GH;
-        ctx.line(0,y,GW*0.4,y+(rnd()-0.5)*20, rgb([180,120,60], 0.25), 1);
-      }
-    }
-
-    /* ============ 3. DINAMISMO DE UM CÃO (Balla) ============ */
-    else if(kind==='dog'){
-      fillBg([228,208,180]);
-      /* piso */
-      for(let y=Math.floor(GH*0.78); y<GH; y++)
-        for(let x=0;x<GW;x++)
-          ctx.set(x,y, rgb([190,150,115], 0.75+rnd()*0.15));
-      /* muitas patas (sensação de movimento) */
-      const dogBody = {cx:GW*0.5, cy:GH*0.62};
-      for(let i=0;i<10;i++){
-        const t=i/9;
-        const offX = -18 + t*36;
-        const legX = dogBody.cx + offX;
-        const baseY = dogBody.cy + 18;
-        for(let y=baseY; y<Math.floor(GH*0.82); y++){
-          const wobble = Math.sin(y*0.4 + i)*1.2;
-          for(let w=-1;w<=1;w++){
-            ctx.set(legX + wobble + w, y, rgb([40,26,18], 0.9));
-          }
-        }
-      }
-      /* corpo do cão (dachshund) */
-      const bodyY = dogBody.cy;
-      for(let y=bodyY-6; y<=bodyY+6; y++){
-        const t=(y-(bodyY-6))/12;
-        const half = 18 * Math.sin(t*Math.PI);
-        for(let x=dogBody.cx-half; x<=dogBody.cx+half; x++){
-          const dx=Math.abs(x-dogBody.cx)/half;
-          const light = 1-Math.pow(dx,2)*0.4;
-          ctx.set(x,y, rgb([40,26,18], light));
-        }
-      }
-      /* cabeça */
-      const hx = dogBody.cx - 22;
-      for(let y=bodyY-14; y<=bodyY-2; y++)
-        for(let x=hx-7; x<=hx+7; x++){
-          const d=Math.hypot((x-hx)/7,(y-(bodyY-8))/7);
-          if(d<=1) ctx.set(x,y, rgb([40,26,18], 0.85+ (1-d)*0.15));
-        }
-      /* focinho */
-      for(let x=hx-14; x<=hx-5; x++)
-        for(let y=bodyY-9; y<=bodyY-5; y++)
-          ctx.set(x,y, rgb([35,22,15], 0.9));
-      /* olho */
-      ctx.set(hx-3, bodyY-9, rgb([255,255,255]));
-      ctx.set(hx-3, bodyY-9, rgb([255,255,255]));
-      ctx.set(hx-2, bodyY-9, rgb([20,15,10]));
-      /* orelha caída */
-      for(let y=bodyY-14; y<=bodyY-2; y++)
-        for(let x=hx-8; x<=hx-3; x++)
-          if(rnd()<0.85) ctx.set(x,y, rgb([28,18,12], 0.85));
-      /* rabo em movimento */
-      for(let i=0;i<8;i++){
-        const t=i/7;
-        const tx = dogBody.cx + 18 + t*18;
-        const ty = bodyY - 8 + Math.sin(t*Math.PI)*8;
-        ctx.set(tx, ty, rgb([40,26,18], 0.85));
-        ctx.set(tx, ty+1, rgb([40,26,18], 0.85));
-      }
-      /* coleira */
-      ctx.line(hx+2, bodyY-4, hx+6, bodyY+4, rgb([178,26,22], 1), 1);
-      /* mão segurando a coleira */
-      for(let y=bodyY+6; y<GH*0.7; y++)
-        for(let x=GW*0.42; x<GW*0.46; x++)
-          ctx.set(x,y, rgb([228,183,150], 0.85));
-    }
-
-    /* ============ 4. FUNERAL DO ANARQUISTA GALLI (Carrà) ============ */
-    else if(kind==='funeral'){
-      fillBg([24,18,16]);
-      /* bandeiras vermelhas */
-      for(const bx of [GW*0.18, GW*0.32, GW*0.55, GW*0.72]){
-        const by = GH*(0.15+rnd()*0.2);
-        /* mastro */
-        for(let y=by; y<GH*0.75; y++)
-          ctx.set(bx, y, rgb([210,200,180], 0.7));
-        /* bandeira vermelha */
-        for(let y=by; y<by+16; y++){
-          const t=(y-by)/16;
-          const w = 10 + t*6;
-          for(let x=bx+1; x<bx+1+w; x++){
-            if(rnd()<0.9) ctx.set(x,y, rgb([170,22,18], 0.8+rnd()*0.2));
-          }
-        }
-      }
-      /* multidão — blocos angulares */
-      const crowdRows = 10;
-      for(let r=0;r<crowdRows;r++){
-        const y = GH*0.55 + r*8;
-        const density = 0.6;
-        for(let x=0;x<GW;x+=1){
-          if(rnd()<density){
-            const h = 6 + rnd()*14;
-            for(let yy=y; yy<y+h; yy++){
-              const col = rnd()<0.25 ? [170,22,18] : (rnd()<0.5?[40,30,28]:[15,12,12]);
-              ctx.set(x,yy, rgb(col, 0.7+rnd()*0.3));
-            }
-          }
-        }
-      }
-      /* diagonais de força (choque) */
-      for(let i=0;i<20;i++){
-        const x0=rnd()*GW, y0=rnd()*GH*0.5;
-        const x1=x0+(rnd()-0.5)*60, y1=y0+30+rnd()*40;
-        for(let t=0;t<1;t+=0.01){
-          const x=x0+(x1-x0)*t, y=y0+(y1-y0)*t;
-          if(rnd()<0.5) ctx.set(x,y, rgb([255,90,60], 0.15+rnd()*0.2));
-        }
-      }
-    }
-
-    /* ============ 5. HIERÓGLIFO DINÂMICO DO BAL TABARIN (Severini) ============ */
-    else if(kind==='tabarin'){
-      fillBg([28,22,40]);
-      /* forma central — dançarina */
-      const cx=GW*0.5, cy=GH*0.55;
-      /* saia colorida */
-      for(let y=Math.floor(cy); y<cy+40; y++){
-        const t=(y-cy)/40;
-        const w = 8 + t*24;
-        for(let x=Math.floor(cx-w); x<=Math.ceil(cx+w); x++){
-          const dx=(x-cx)/w;
-          const ang = Math.atan2(y-cy, x-cx);
-          const seg = Math.floor(((ang+Math.PI)/(Math.PI*2))*12);
-          const palette = [[255,200,40],[220,40,90],[40,140,220],[255,255,255],[255,120,40]];
-          const col = palette[((seg%palette.length)+palette.length)%palette.length];
-          ctx.set(x,y, rgb(col, 1-Math.abs(dx)*0.4));
-        }
-      }
-      /* tronco */
-      for(let y=Math.floor(cy)-22; y<cy+2; y++)
-        for(let x=Math.floor(cx-6); x<=Math.ceil(cx+6); x++){
-          const dx=Math.abs(x-cx)/6;
-          ctx.set(x,y, rgb([255,200,180], 1-dx*0.3));
-        }
-      /* cabeça */
-      for(let y=Math.floor(cy-34); y<=Math.ceil(cy-24); y++)
-        for(let x=Math.floor(cx-5); x<=Math.ceil(cx+5); x++){
-          const d=Math.hypot((x-cx)/5,(y-(cy-29))/6);
-          if(d<=1) ctx.set(x,y, rgb([255,205,180], 1-d*0.2));
-        }
-      /* cabelo escuro */
-      for(let y=Math.floor(cy-36); y<=Math.ceil(cy-30); y++)
-        for(let x=Math.floor(cx-6); x<=Math.ceil(cx+6); x++)
-          ctx.set(x,y, rgb([30,20,26], 0.9));
-      /* braços levantados */
-      ctx.line(cx-4, cy-18, cx-18, cy-34, rgb([255,200,180], 1), 2);
-      ctx.line(cx+4, cy-18, cx+18, cy-34, rgb([255,200,180], 1), 2);
-      /* fragmentos cubistas ao fundo */
-      for(let i=0;i<20;i++){
-        const x=rnd()*GW, y=rnd()*GH, w=6+rnd()*16, h=6+rnd()*16;
-        const palette = [[255,200,40],[220,40,90],[40,140,220],[255,255,255]];
-        const col = palette[Math.floor(rnd()*palette.length)];
-        for(let yy=y; yy<y+h && yy<GH; yy++)
-          for(let xx=x; xx<x+w && xx<GW; xx++)
-            if(rnd()<0.6) ctx.set(xx,yy, rgb(col, 0.4+rnd()*0.4));
-      }
-    }
-
-    /* ============ 6. A REBELIÃO (Russolo) ============ */
-    else if(kind==='rebellion'){
-      fillBg([18,12,12]);
-      /* massa vermelha central */
-      for(let i=0;i<220;i++){
-        const cx = GW*0.5 + (rnd()-0.5)*GW*0.8;
-        const cy = GH*0.55 + (rnd()-0.5)*GH*0.6;
-        const w = 3+rnd()*10, h = 3+rnd()*10;
-        const col = rnd()<0.75 ? [180,25,20] : [255,120,60];
-        for(let y=cy-h; y<cy+h; y++)
-          for(let x=cx-w; x<cx+w; x++)
-            if(rnd()<0.7) ctx.set(x,y, rgb(col, 0.6+rnd()*0.4));
-      }
-      /* lanças / punhos erguidos */
-      for(let i=0;i<18;i++){
-        const x = GW*(0.1 + rnd()*0.8);
-        const y = GH*(0.4 + rnd()*0.4);
-        for(let k=0;k<20;k++){
-          const yy = y - k;
-          if(yy<0) break;
-          const xx = x + (k*(rnd()-0.5)*0.6);
-          ctx.set(xx, yy, rgb([30,20,18], 0.85));
-        }
-      }
-      /* explosões amarelas */
-      for(let i=0;i<20;i++){
-        const cx=rnd()*GW, cy=rnd()*GH, r=1+rnd()*3;
-        for(let y=cy-r; y<=cy+r; y++)
-          for(let x=cx-r; x<=cx+r; x++)
-            if(Math.hypot(x-cx,y-cy)<=r && rnd()<0.8) ctx.set(x,y, rgb([255,230,90], 0.8+rnd()*0.2));
-      }
-    }
-
-    /* ============ 7. CITTÀ NUOVA (Sant'Elia) ============ */
-    else if(kind==='citta'){
-      /* céu em gradiente */
-      for(let y=0;y<GH;y++){
-        const t = y/GH;
-        const col = mix([30,42,68],[120,130,150],t);
-        for(let x=0;x<GW;x++) ctx.set(x,y, rgb(col, 0.95+(rnd()-0.5)*0.08));
-      }
-      /* edifícios verticais */
-      const buildings = [];
-      for(let i=0;i<14;i++){
-        const bx = rnd()*GW;
-        const bw = 4 + rnd()*8;
-        const bh = GH*(0.35 + rnd()*0.55);
-        const by = GH - bh;
-        const tone = 0.75 + rnd()*0.3;
-        const col = mix([40,55,80],[130,140,160], tone);
-        buildings.push({bx,by,bw,bh,col});
-        for(let y=Math.floor(by); y<GH; y++)
-          for(let x=Math.floor(bx); x<bx+bw; x++){
-            if(x<0||x>=GW) continue;
-            const edge=Math.abs(x-(bx+bw/2))/(bw/2);
-            ctx.set(x,y, rgb(col, 1-edge*0.35));
-          }
-        /* janelas */
-        for(let y=Math.floor(by+6); y<GH-3; y+=5)
-          for(let x=Math.floor(bx+2); x<bx+bw-2; x+=3)
-            if(rnd()<0.7) ctx.set(x,y, rgb([242,255,0], 0.6+rnd()*0.4));
-      }
-      /* pontes diagonais e vias */
-      for(let i=0;i<5;i++){
-        const y0 = GH*(0.35+rnd()*0.3);
-        const y1 = GH*(0.35+rnd()*0.3);
-        ctx.line(0,y0, GW, y1, rgb([200,205,215], 0.5), 1);
-      }
-      /* elevador / estrutura à frente */
-      ctx.line(GW*0.3, GH, GW*0.3, GH*0.6, rgb([180,190,205], 0.9), 2);
-      ctx.line(GW*0.7, GH, GW*0.7, GH*0.6, rgb([180,190,205], 0.9), 2);
-      for(let i=0;i<3;i++){
-        const y = GH*0.6 + i*8;
-        ctx.line(GW*0.3, y, GW*0.7, y, rgb([180,190,205], 0.85), 1);
-      }
-    }
-
-    /* ============ 8. MANIFESTO DOS MÚSICOS (Pratella) ============ */
-    else if(kind==='music'){
-      fillBg([238,232,220]);
-      /* pauta musical */
-      for(let st=0; st<3; st++){
-        const y0 = 20 + st*40;
-        for(let i=0;i<5;i++){
-          const y = y0 + i*3;
-          for(let x=6; x<GW-6; x++){
-            ctx.set(x,y, rgb([30,26,24], 0.85));
-          }
-        }
-        /* claves e notas */
-        for(let n=0;n<7;n++){
-          const x = 10 + n*14 + st*3;
-          if(x>GW-8) break;
-          const y = y0 + Math.floor(rnd()*5)*3;
-          /* cabeça da nota */
-          for(let yy=y-2; yy<=y+2; yy++)
-            for(let xx=x-2; xx<=x+2; xx++){
-              const d=Math.hypot((xx-x)/2.4,(yy-y)/1.8);
-              if(d<=1) ctx.set(xx,yy, rgb([20,18,16], 0.95));
-            }
-          /* haste */
-          for(let yy=y; yy>=y-10; yy--) ctx.set(x+2, yy, rgb([20,18,16], 0.95));
-        }
-      }
-      /* ondas sonoras futuristas */
-      for(let i=0;i<8;i++){
-        const cy = 20 + i*17;
-        for(let x=0;x<GW;x++){
-          const y = cy + Math.sin(x*0.25+i)*2;
-          if(rnd()<0.85) ctx.set(x, y, rgb([180,26,22], 0.7+rnd()*0.3));
-        }
-      }
-      /* carimbo vermelho "FUTURISTA" */
-      for(let i=0;i<6;i++){
-        const x = 4 + i*18;
-        for(let y=GH-14; y<GH-6; y++)
-          for(let xx=x; xx<x+14; xx++)
-            if(rnd()<0.6) ctx.set(xx, y, rgb([180,26,22], 0.8));
-      }
-    }
-
-    /* ---- converter ---- */
-    const particles = [];
-    for(let y=0;y<GH;y++) for(let x=0;x<GW;x++){
-      const c = ctx.b[y*GW+x];
-      if(c) particles.push({gx:x, gy:y, c, s:1});
-    }
-    return particles;
-  }
-
-  /* ============================================================
-     PixelArt renderer (mesma lógica, aceita qualquer nº de pts)
-     ============================================================ */
-  class PixelArt{
+  class PixelArt {
     constructor(canvas, particles){
-      this.ctx=canvas.getContext('2d');
-      this.particles=particles.map(p=>({...p}));
-      this.playing=false; this.settled=false; this.t0=0; this._raf=null;
-      this.mx=-999; this.my=-999;
-      canvas.width=GW; canvas.height=GH;
-      canvas.addEventListener('mousemove', e=>{
-        const r=canvas.getBoundingClientRect();
-        this.mx=(e.clientX-r.left)/r.width*GW;
-        this.my=(e.clientY-r.top)/r.height*GH;
+      this.ctx = canvas.getContext('2d');
+      this.particles = particles.map(p => ({...p}));
+      this.playing = false; this.settled = false; this.t0 = 0; this._raf = null;
+      this.mx = -999; this.my = -999;
+      canvas.width = GW; canvas.height = GH;
+      canvas.addEventListener('mousemove', e => {
+        const r = canvas.getBoundingClientRect();
+        this.mx = (e.clientX - r.left) / r.width * GW;
+        this.my = (e.clientY - r.top) / r.height * GH;
       });
-      canvas.addEventListener('mouseleave', ()=>{ this.mx=-999; this.my=-999; });
+      canvas.addEventListener('mouseleave', () => { this.mx = -999; this.my = -999; });
     }
     play(){
-      this.t0=performance.now(); this.playing=true; this.settled=false;
-      const ang0=Math.random()*Math.PI*2;
-      this.particles.forEach((p,i)=>{
-        const ang=ang0+i*0.09, dist=GW*1.6+Math.random()*GW;
-        p.sx=GW/2+Math.cos(ang)*dist;
-        p.sy=GH/2+Math.sin(ang)*dist;
-        p.delay=Math.random()*380;
+      this.t0 = performance.now(); this.playing = true; this.settled = false;
+      const ang0 = Math.random() * Math.PI * 2;
+      this.particles.forEach((p, i) => {
+        const ang = ang0 + i * 0.09, dist = GW * 1.6 + Math.random() * GW;
+        p.sx = GW/2 + Math.cos(ang) * dist;
+        p.sy = GH/2 + Math.sin(ang) * dist;
+        p.delay = Math.random() * 380;
       });
-      if(!this._raf) this.loop();
+      if (!this._raf) this.loop();
     }
     loop(now){
-      this._raf=requestAnimationFrame(t=>this.loop(t));
-      now=now||performance.now();
-      const ctx=this.ctx, dur=1000;
-      ctx.clearRect(0,0,GW,GH);
-      let allDone=true;
-      for(const p of this.particles){
-        let x,y;
-        if(this.playing){
-          const el=now-this.t0-p.delay;
-          if(el<0){ x=p.sx; y=p.sy; allDone=false; }
-          else{
-            const t=Math.min(1, el/dur);
-            if(t<1) allDone=false;
-            const e=1-Math.pow(1-t,3);
-            x=p.sx+(p.gx-p.sx)*e;
-            y=p.sy+(p.gy-p.sy)*e;
-            if(t<0.85){
-              ctx.fillStyle='rgba(255,51,0,.3)';
-              ctx.fillRect(x-1,y,p.s,p.s);
-              ctx.fillStyle='rgba(0,234,255,.25)';
-              ctx.fillRect(x+1,y,p.s,p.s);
+      this._raf = requestAnimationFrame(t => this.loop(t));
+      now = now || performance.now();
+      const ctx = this.ctx, dur = 1000;
+      ctx.clearRect(0, 0, GW, GH);
+      let allDone = true;
+      for (const p of this.particles){
+        let x, y;
+        if (this.playing){
+          const el = now - this.t0 - p.delay;
+          if (el < 0){ x = p.sx; y = p.sy; allDone = false; }
+          else {
+            const t = Math.min(1, el / dur);
+            if (t < 1) allDone = false;
+            const e = 1 - Math.pow(1 - t, 3);
+            x = p.sx + (p.gx - p.sx) * e;
+            y = p.sy + (p.gy - p.sy) * e;
+            if (t < 0.85){
+              ctx.fillStyle = 'rgba(255,51,0,.3)';
+              ctx.fillRect(x - 1, y, p.s, p.s);
+              ctx.fillStyle = 'rgba(0,234,255,.25)';
+              ctx.fillRect(x + 1, y, p.s, p.s);
             }
           }
-        } else { x=p.gx; y=p.gy; }
-        if(this.mx>-500){
-          const dx=x-this.mx, dy=y-this.my, d=Math.hypot(dx,dy);
-          if(d<8 && d>0.01){
-            const f=(8-d)/8*2;
-            x+=dx/d*f; y+=dy/d*f;
+        } else { x = p.gx; y = p.gy; }
+        if (this.mx > -500){
+          const dx = x - this.mx, dy = y - this.my, d = Math.hypot(dx, dy);
+          if (d < 8 && d > 0.01){
+            const f = (8 - d) / 8 * 2;
+            x += dx / d * f; y += dy / d * f;
           }
         }
-        ctx.fillStyle=p.c;
-        ctx.fillRect(x,y,p.s,p.s);
+        ctx.fillStyle = p.c;
+        ctx.fillRect(x, y, p.s, p.s);
       }
-      if(this.playing && allDone){ this.playing=false; this.settled=true; }
+      if (this.playing && allDone){ this.playing = false; this.settled = true; }
     }
   }
 
-  /* ============================================================
-     Definição dos artistas (retrato + obra)
-     ============================================================ */
   const artists = [
-    {
-      n:'Filippo Tommaso Marinetti', y:'1876 — 1944',
-      portrait:{
-        seed:101, hair:'swept', hairColor:P.hairDark, iris:P.irisDark,
-        mustache:'handlebar', mustacheThick:'big', browTilt:-0.15,
-        suit:P.suitBlack, tie:true, tieColor:P.tieBlack,
-        bgColor:[30,16,14], skin:P.skinB,
-      },
-      artwork:'zangtumb',
+    { n:'Filippo Tommaso Marinetti', y:'1876 — 1944',
       workTitle:'Zang Tumb Tumb', workYear:'1914',
-      workDesc:'Livro de "palavras em liberdade": a tipografia explode na página e o som da guerra vira estrutura.'
-    },
-    {
-      n:'Umberto Boccioni', y:'1882 — 1916',
-      portrait:{
-        seed:202, hair:'short', hairColor:P.hairDark, iris:P.irisBrown,
-        mustache:'handlebar', mustacheThick:'big', browTilt:-0.1,
-        suit:P.suitDark, tie:true, tieColor:[60,20,20],
-        bgColor:[36,22,18], skin:P.skinA,
-      },
-      artwork:'unique',
+      workDesc:'Livro de "palavras em liberdade": a tipografia explode na página e o som da guerra vira estrutura.' },
+    { n:'Umberto Boccioni', y:'1882 — 1916',
       workTitle:'Formas Únicas de Continuidade no Espaço', workYear:'1913',
-      workDesc:'A figura humana atravessando o ar — corpo e movimento fundidos em uma única massa adiantada para o futuro.'
-    },
-    {
-      n:'Giacomo Balla', y:'1871 — 1958',
-      portrait:{
-        seed:303, hair:'gray', hairColor:P.hairGray, iris:P.irisDark,
-        beard:'full', browTilt:-0.05,
-        suit:P.suitDark, tie:true, tieColor:P.tieRed,
-        bgColor:[20,22,32], skin:P.skinB, tired:true,
-      },
-      artwork:'dog',
+      workDesc:'A figura humana atravessando o ar — corpo e movimento fundidos em uma única massa adiantada para o futuro.' },
+    { n:'Giacomo Balla', y:'1871 — 1958',
       workTitle:'Dinamismo de um cão na coleira', workYear:'1912',
-      workDesc:'Patas e coleira multiplicadas em dezenas de posições: a pintura tenta desenhar o deslocamento, não o instante.'
-    },
-    {
-      n:'Carlo Carrà', y:'1881 — 1966',
-      portrait:{
-        seed:404, hair:'short', hairColor:P.hairBrown, iris:P.irisBrown,
-        mustache:'handlebar', mustacheW:16, browTilt:-0.12,
-        suit:P.suitBrown, tie:true, tieColor:[40,30,20],
-        bgColor:[26,18,16], skin:P.skinA,
-      },
-      artwork:'funeral',
+      workDesc:'Patas e coleira multiplicadas em dezenas de posições: a pintura tenta desenhar o deslocamento, não o instante.' },
+    { n:'Carlo Carrà', y:'1881 — 1966',
       workTitle:'O Funeral do Anarquista Galli', workYear:'1911',
-      workDesc:'A multidão em choque com a polícia vira linhas de força. Política, violência e movimento na mesma tela.'
-    },
-    {
-      n:'Gino Severini', y:'1883 — 1966',
-      portrait:{
-        seed:505, hair:'side', hairColor:P.hairDark, iris:P.irisDark,
-        browTilt:-0.08, suit:P.suitDark, tie:true, tieColor:P.tieRed,
-        bgColor:[20,16,28], skin:P.skinA,
-      },
-      artwork:'tabarin',
+      workDesc:'A multidão em choque com a polícia vira linhas de força. Política, violência e movimento na mesma tela.' },
+    { n:'Gino Severini', y:'1883 — 1966',
       workTitle:'Hieróglifo Dinâmico do Bal Tabarin', workYear:'1912',
-      workDesc:'Luz, dança e cidade noturna atravessam a tela em fragmentos — o Futurismo em diálogo com Paris.'
-    },
-    {
-      n:'Luigi Russolo', y:'1885 — 1947',
-      portrait:{
-        seed:606, hair:'short', hairColor:P.hairDark, iris:P.irisDark,
-        mustache:'handlebar', browTilt:-0.25,
-        suit:P.suitBlack, tie:true, tieColor:[80,20,20],
-        bgColor:[40,14,12], skin:P.skinB,
-      },
-      artwork:'rebellion',
+      workDesc:'Luz, dança e cidade noturna atravessam a tela em fragmentos — o Futurismo em diálogo com Paris.' },
+    { n:'Luigi Russolo', y:'1885 — 1947',
       workTitle:'A Rebelião (La Rivolta)', workYear:'1911',
-      workDesc:'Antes de inventar os intonarumori, Russolo pintou a cidade como uma massa elétrica em revolta.'
-    },
-    {
-      n:'Antonio Sant’Elia', y:'1888 — 1916',
-      portrait:{
-        seed:707, hair:'side', hairColor:P.hairDark, iris:P.irisBrown,
-        mustache:'thin', browTilt:-0.1, suit:P.suitNavy,
-        tie:true, tieColor:[20,20,26], bgColor:[20,24,34], skin:P.skinA,
-      },
-      artwork:'citta',
+      workDesc:'Antes de inventar os intonarumori, Russolo pintou a cidade como uma massa elétrica em revolta.' },
+    { n:'Antonio Sant’Elia', y:'1888 — 1916',
       workTitle:'Città Nuova (Cidade Nova)', workYear:'1914',
-      workDesc:'Arranha-céus, estações, usinas e elevadores: a arquitetura futurista como máquina urbana.'
-    },
-    {
-      n:'Francesco Balilla Pratella', y:'1880 — 1955',
-      portrait:{
-        seed:808, hair:'side', hairColor:P.hairDark, iris:P.irisDark,
-        mustache:'handlebar', mustacheW:14, browTilt:-0.08,
-        suit:P.suitDark, tie:true, tieColor:[10,10,14],
-        bgColor:[22,20,18], skin:P.skinB,
-      },
-      artwork:'music',
+      workDesc:'Arranha-céus, estações, usinas e elevadores: a arquitetura futurista como máquina urbana.' },
+    { n:'Francesco Balilla Pratella', y:'1880 — 1955',
       workTitle:'Manifesto dos Músicos Futuristas', workYear:'1911',
-      workDesc:'Pratella pede uma música que abandone a melodia tradicional e incorpore o ruído do mundo industrial.'
-    },
+      workDesc:'Pratella pede uma música que abandone a melodia tradicional e incorpore o ruído do mundo industrial.' },
   ];
 
-  /* ---- montar os cards ---- */
   const grid = document.querySelector('#artistGrid');
-  artists.forEach((a, i) => {
-    const card = document.createElement('article');
-    card.className = 'artist-card';
-    card.setAttribute('tabindex', '0');
-    card.setAttribute('role', 'button');
-    card.setAttribute('aria-label', `Virar card de ${a.n}`);
-    card.innerHTML = `
-      <div class="artist-inner">
-        <div class="artist-face artist-front">
-          <div class="flip-hint">clique → obra</div>
-          <div class="frame"><canvas class="pix" data-side="front"></canvas></div>
-          <div class="caption"><div class="an">${a.n}</div><div class="ay">${a.y}</div></div>
-        </div>
-        <div class="artist-face artist-back">
-          <div class="flip-hint">← voltar</div>
-          <div class="work"><canvas class="pix" data-side="back"></canvas></div>
-          <div class="work-info">
-            <div class="work-title">${a.workTitle}</div>
-            <div class="work-year">${a.workYear}</div>
+
+  (async () => {
+    for (const a of artists){
+      const card = document.createElement('article');
+      card.className = 'artist-card';
+      card.setAttribute('tabindex', '0');
+      card.setAttribute('role', 'button');
+      card.setAttribute('aria-label', `Virar card de ${a.n}`);
+      card.innerHTML = `
+        <div class="artist-inner">
+          <div class="artist-face artist-front">
+            <div class="flip-hint">clique → obra</div>
+            <div class="frame"><canvas class="pix" data-side="front"></canvas></div>
+            <div class="caption"><div class="an">${a.n}</div><div class="ay">${a.y}</div></div>
           </div>
-          <div class="work-desc">${a.workDesc}</div>
-        </div>
-      </div>`;
-    grid.appendChild(card);
+          <div class="artist-face artist-back">
+            <div class="flip-hint">← voltar</div>
+            <div class="work"><canvas class="pix" data-side="back"></canvas></div>
+            <div class="work-info">
+              <div class="work-title">${a.workTitle}</div>
+              <div class="work-year">${a.workYear}</div>
+            </div>
+            <div class="work-desc">${a.workDesc}</div>
+          </div>
+        </div>`;
+      grid.appendChild(card);
 
-    const frontPts = buildPortrait({ ...a.portrait, seed: a.portrait.seed });
-    const backPts  = buildArtwork(a.artwork, a.portrait.seed + 999);
+      const arquivos = ARQUIVOS[a.n];
+      let frontPts = [], backPts = [];
+      try {
+        [frontPts, backPts] = await Promise.all([
+          loadParticles(arquivos.retrato, 2),
+          loadParticles(arquivos.obra, 2)
+        ]);
+      } catch (err){
+        console.warn('Falha ao carregar pixel art de', a.n, err);
+      }
 
-    const frontArt = new PixelArt(card.querySelector('[data-side="front"]'), frontPts);
-    const backArt  = new PixelArt(card.querySelector('[data-side="back"]'),  backPts);
+      const frontArt = new PixelArt(card.querySelector('[data-side="front"]'), frontPts);
+      const backArt  = new PixelArt(card.querySelector('[data-side="back"]'),  backPts);
 
-    const io = new IntersectionObserver(entries => {
-      entries.forEach(e => {
-        if (e.isIntersecting) { frontArt.play(); io.disconnect(); }
+      const io = new IntersectionObserver(entries => {
+        entries.forEach(e => { if (e.isIntersecting){ frontArt.play(); io.disconnect(); } });
+      }, { threshold: .3 });
+      io.observe(card);
+
+      let flipped = false;
+      const flip = () => {
+        flipped = !flipped;
+        card.classList.toggle('flipped', flipped);
+        flipped ? backArt.play() : frontArt.play();
+      };
+      card.addEventListener('click', flip);
+      card.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); flip(); }
       });
-    }, { threshold: .3 });
-    io.observe(card);
-
-    let flipped = false;
-    const flip = () => {
-      flipped = !flipped;
-      card.classList.toggle('flipped', flipped);
-      flipped ? backArt.play() : frontArt.play();
-    };
-    card.addEventListener('click', flip);
-    card.addEventListener('keydown', e => {
-      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); flip(); }
-    });
-  });
+    }
+  })();
 })();
-/* ---------- velocidade (scroll) ---------- */
+
+/* ---------- velocidade ---------- */
 (function velocity(){
   const vnum=$('#vnum');
   addEventListener('scroll',()=>{
@@ -1658,7 +881,7 @@ function shatter({cols=7, rows=5, dur=800}={}) {
   },{passive:true});
 })();
 
-/* ---------- ruído (web audio) ---------- */
+/* ---------- ruído ---------- */
 (function noise(){
   const AC=window.AudioContext||window.webkitAudioContext;
   if(!AC) return;
@@ -1728,7 +951,7 @@ function shatter({cols=7, rows=5, dur=800}={}) {
   draw();
 })();
 
-/* ---------- guerra: glitch + shatter ao entrar ---------- */
+/* ---------- 05 CONTEXTO POLÍTICO · glitch ---------- */
 (function war(){
   const text=$('#glitchText'), sec=$('#guerra');
   let fired=false;
@@ -1741,15 +964,15 @@ function shatter({cols=7, rows=5, dur=800}={}) {
   io.observe(sec);
 })();
 
-/* ---------- brasil ---------- */
+/* ---------- 06 FUTURISMO NO BRASIL ---------- */
 (function brasil(){
   const data=[
-    ['1917','Anita Malfatti','A exposição de Anita Malfatti em São Paulo é atacada por Monteiro Lobato — e se torna o estopim do Modernismo brasileiro.'],
-    ['1922','Semana de Arte Moderna','O Futurismo já chega ao Brasil como rótulo acusatório: chamar um artista de "futurista" era um insulto. Ainda assim, sua energia de ruptura alimenta a Semana.'],
-    ['1924','Manifesto Pau-Brasil','Oswald de Andrade propõe uma antropofagia cultural: devorar a vanguarda europeia e transformá-la em algo próprio.'],
-    ['1926','Marinetti em São Paulo','O próprio Marinetti visita o Brasil e faz conferências. Sua presença divide opiniões e liga o movimento ao debate local sobre modernização.'],
-    ['Legado','Liberdade de criação','A importância do Futurismo para a arte brasileira está na sua perspectiva radical de quebra com a tradição.'],
-    ['Crítica','Ruptura sem cópia','O Modernismo brasileiro absorveu a velocidade e a ruptura futuristas, mas recusou o culto à guerra e o nacionalismo agressivo europeu.'],
+    ['Influência, não cópia','Oswald de Andrade viaja à Europa (1912)','O Futurismo não foi simplesmente reproduzido no Brasil. Suas ideias e sua estética influenciaram os modernistas brasileiros: Oswald de Andrade viajou à Europa em 1912 e retornou tocado pelas vanguardas, contribuindo para divulgar essas ideias.'],
+    ['1922','Semana de Arte Moderna','A energia futurista — provocação, ruptura, renovação — alimenta o ambiente artístico que levou à Semana de Arte Moderna de 1922. A estética serviu como referência de choque e experimentação.'],
+    ['Ruptura com a tradição','Provocação e renovação','Os modernistas brasileiros usaram o Futurismo como referência de provocação e renovação artística: romper com o academismo e afirmar a liberdade de criação.'],
+    ['Recusa ideológica','Modernistas não aderiram ao fascismo','Os modernistas brasileiros não aceitaram integralmente a ideologia política dos futuristas italianos. O culto à guerra e o nacionalismo agressivo foram recusados, ainda que a estética de ruptura tenha sido aproveitada.'],
+    ['1926','Marinetti em São Paulo','Quando Marinetti visitou o Brasil em 1926, sua associação com o fascismo italiano já era conhecida — o que contribuiu para o distanciamento de alguns intelectuais brasileiros, como Mário de Andrade.'],
+    ['Legado','Liberdade de criação','A importância do Futurismo para a arte brasileira está na sua perspectiva radical de quebra com a tradição e na consequente valorização da liberdade de criação.'],
   ];
   const grid=$('#brGrid');
   data.forEach(([tag,title,body])=>{
@@ -1759,7 +982,7 @@ function shatter({cols=7, rows=5, dur=800}={}) {
   });
 })();
 
-/* ---------- presente ---------- */
+/* ---------- fechamento ---------- */
 (function present(){
   const pairs=[
     ['1909','Aeroplano — velocidade como espetáculo público'],
