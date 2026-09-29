@@ -630,9 +630,7 @@ footer b{color:var(--red); font-family:'Archivo Black',sans-serif;}
 
   <div class="cinema">
     <div class="cinema-frame">
-      <!-- SUBSTITUA O src ABAIXO PELA SUA IMAGEM BASE64 ORIGINAL
-           (do seu arquivo atual: <img src="data:image/jpeg;base64,..." alt="...">) -->
-      <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 300'><rect width='200' height='300' fill='%231a1a2e'/><text x='100' y='150' fill='%2300eaff' font-family='monospace' font-size='14' text-anchor='middle'>CYBERPUNK</text></svg>" alt="Cartaz de Cyberpunk: Edgerunners — David diante dos arranha-céus de Night City">
+      <img src="cyberpunk.png" alt="Cartaz de Cyberpunk: Edgerunners — David diante dos arranha-céus de Night City">
     </div>
     <div class="cinema-info">
       <div class="vp-tag" style="color:#00eaff">Cinema · Cyberpunk</div>
@@ -693,9 +691,7 @@ footer b{color:var(--red); font-family:'Archivo Black',sans-serif;}
 
   <div class="bm-hero">
     <div class="bm-cover">
-      <!-- COLOQUE A CAPA OFICIAL EM "blackmirror.jpg" (mesma pasta deste arquivo).
-           Enquanto ela não existir, aparece uma capa provisória. -->
-      <img id="bmCover" src="blackmirror.jpg" alt="Capa oficial de Black Mirror">
+      <img id="bmCover" src="blackmirror.png" alt="Capa oficial de Black Mirror">
     </div>
     <div class="bm-info">
       <div class="vp-tag" style="color:var(--cyan)">Série · Charlie Brooker · Netflix</div>
@@ -1302,7 +1298,7 @@ function shatter({cols=7, rows=5, dur=800}={}) {
     grid.appendChild(el);
   });
 
-  // Se "blackmirror.jpg" não existir, mostra uma capa provisória no lugar
+  // Se "blackmirror.png" não existir, mostra uma capa provisória no lugar
   const img=$('#bmCover');
   if(!img) return;
   const svg=`<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 450'><rect width='300' height='450' fill='#050508'/><path d='M150 225 L40 0 M150 225 L300 80 M150 225 L210 450 M150 225 L0 340 M150 225 L120 450' stroke='#00eaff' stroke-opacity='.4' fill='none'/><text x='150' y='215' fill='#edede4' font-family='Arial Black,Arial,sans-serif' font-size='34' text-anchor='middle'>BLACK</text><text x='150' y='255' fill='#00eaff' font-family='Arial Black,Arial,sans-serif' font-size='34' text-anchor='middle'>MIRROR</text></svg>`;
