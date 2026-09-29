@@ -167,7 +167,7 @@ section{position:relative; z-index:1; padding:110px 22px 110px 34px; max-width:1
 }
 @media(max-width:640px){.tl-v{padding-left:36px;} .tl-v::before{left:8px;}}
 .tl-entry{
-  position:relative; padding-bottom:86px;
+  position:relative; padding-bottom:70px;
   opacity:0; transform:translateY(70px);
   transition:opacity 1s cubic-bezier(.2,.75,.25,1), transform 1s cubic-bezier(.2,.75,.25,1);
 }
@@ -178,7 +178,7 @@ section{position:relative; z-index:1; padding:110px 22px 110px 34px; max-width:1
   background:var(--red); box-shadow:0 0 0 5px rgba(255,51,0,.14), 0 0 28px rgba(255,51,0,.75);
   transition:transform .4s, box-shadow .4s;
 }
-@media(max-width:640px){.tl-entry::before{left:-32px; top:18px; width:9px; height:9px;} .tl-entry{padding-bottom:70px;}}
+@media(max-width:640px){.tl-entry::before{left:-32px; top:18px; width:9px; height:9px;} .tl-entry{padding-bottom:56px;}}
 .tl-entry:hover::before{transform:scale(1.4); box-shadow:0 0 0 8px rgba(255,51,0,.08), 0 0 40px rgba(255,51,0,1);}
 .tl-entry .yr{
   font-family:'Archivo Black',sans-serif; font-size:clamp(52px,9vw,116px); color:var(--red);
@@ -186,7 +186,7 @@ section{position:relative; z-index:1; padding:110px 22px 110px 34px; max-width:1
   text-shadow:0 0 60px rgba(255,51,0,.25); display:block; font-variant-numeric:tabular-nums;
 }
 .tl-entry h3{font-size:clamp(15px,1.6vw,19px); text-transform:uppercase; letter-spacing:.02em; margin-bottom:12px; color:var(--paper);}
-.tl-entry p{color:var(--steel); max-width:560px; line-height:1.78; font-size:15px;}
+.tl-entry p{color:var(--steel); max-width:480px; line-height:1.6; font-size:15px;}
 
 #manifesto{min-height:88vh; display:flex; align-items:center; justify-content:center; text-align:center; flex-direction:column;}
 .words{display:flex; flex-wrap:wrap; justify-content:center; gap:6px 18px; margin-top:34px;}
@@ -276,6 +276,8 @@ section{position:relative; z-index:1; padding:110px 22px 110px 34px; max-width:1
 .pair > div:hover{background:#111116;}
 .pair .a{color:var(--red); font-size:11px; letter-spacing:.24em; font-family:'Archivo Black',sans-serif;}
 .pair .b{margin-top:10px; font-size:14.5px; line-height:1.6;}
+.closing{margin-top:56px; font-size:clamp(22px,4.4vw,46px); text-transform:uppercase; line-height:1;}
+.closing em{font-style:normal; color:var(--cyan); text-shadow:0 0 30px rgba(0,234,255,.35);}
 
 footer{padding:70px 22px 90px 34px; text-align:center; color:var(--steel); font-size:12px; letter-spacing:.1em; border-top:1px solid var(--line);}
 footer b{color:var(--red); font-family:'Archivo Black',sans-serif;}
@@ -303,7 +305,68 @@ footer b{color:var(--red); font-family:'Archivo Black',sans-serif;}
 .trailer-btn{display:inline-block; margin-top:24px; border:1px solid var(--cyan); color:var(--cyan); padding:12px 28px; font-size:12px; letter-spacing:.25em; text-transform:uppercase; transition:.2s;}
 .trailer-btn:hover{background:var(--cyan); color:#000; box-shadow:0 0 24px rgba(0,234,255,.4);}
 
-/* ============ 08 · CONVITE AO JOGO ============ */
+/* ============ TRANSIÇÃO · FUTURISMO × BLACK MIRROR ============ */
+#transicao{padding-bottom:70px;}
+.vs{display:grid; grid-template-columns:1fr auto 1fr; margin-top:48px; border:1px solid var(--line);}
+@media(max-width:760px){.vs{grid-template-columns:1fr;}}
+.vs-col{padding:36px 28px; background:var(--bg);}
+.vs-col.bm{background:#000;}
+.vs-col .lbl{font-size:10.5px; letter-spacing:.34em; text-transform:uppercase; color:var(--steel);}
+.vs-col h3{font-size:clamp(22px,3.6vw,38px); text-transform:uppercase; margin-top:10px;}
+.vs-col.fu h3{color:var(--red); text-shadow:0 0 30px rgba(255,51,0,.3);}
+.vs-col.bm h3{color:var(--cyan); text-shadow:0 0 30px rgba(0,234,255,.35);}
+.vs-col ul{list-style:none; margin-top:26px;}
+.vs-col li{
+  padding:13px 0; border-bottom:1px solid var(--line);
+  font-family:'Archivo Black',sans-serif; font-size:14px; text-transform:uppercase; letter-spacing:.02em;
+  opacity:0; transform:translateX(-18px);
+  transition:opacity .6s ease, transform .6s cubic-bezier(.2,.75,.25,1);
+  transition-delay:calc(var(--i) * .16s);
+}
+.vs-col.bm li{transform:translateX(18px);}
+.vs-col li::before{content:'→ '; color:var(--red);}
+.vs-col.bm li::before{color:var(--cyan);}
+.vs.in li{opacity:1; transform:none;}
+.vs-mid{
+  display:flex; align-items:center; justify-content:center; padding:0 16px;
+  font-family:'Archivo Black',sans-serif; font-size:11px; letter-spacing:.34em; text-transform:uppercase;
+  color:var(--steel); writing-mode:vertical-rl; background:var(--bg);
+  border-left:1px solid var(--line); border-right:1px solid var(--line);
+}
+@media(max-width:760px){.vs-mid{writing-mode:horizontal-tb; padding:14px; border:0; border-top:1px solid var(--line); border-bottom:1px solid var(--line);}}
+.vs-note{margin-top:28px; border-left:2px solid var(--cyan); padding-left:16px; color:var(--steel); font-size:13.5px; line-height:1.6; max-width:560px;}
+.vs-note b{color:var(--paper);}
+
+/* ============ 08 · BLACK MIRROR ============ */
+.bm-hero{display:grid; grid-template-columns:minmax(240px,420px) 1fr; gap:44px; margin-top:44px; align-items:center;}
+@media(max-width:760px){.bm-hero{grid-template-columns:1fr;}}
+.bm-cover{
+  position:relative; aspect-ratio:2/3; overflow:hidden; background:#000;
+  border:1px solid rgba(0,234,255,.35);
+  box-shadow:0 0 90px rgba(0,234,255,.2), 0 0 0 6px #000, 0 0 0 7px rgba(0,234,255,.15);
+}
+.bm-cover img{width:100%; height:100%; object-fit:cover; display:block; transition:transform .9s cubic-bezier(.2,.7,.3,1), filter .4s;}
+.bm-cover:hover img{transform:scale(1.05); filter:brightness(1.1) saturate(1.2);}
+.bm-cover::after{
+  content:''; position:absolute; inset:0; pointer-events:none;
+  background:repeating-linear-gradient(0deg, rgba(0,234,255,.05) 0 1px, transparent 1px 3px),
+             linear-gradient(to top, rgba(0,0,0,.5), transparent 40%);
+}
+.bm-info h3{font-size:clamp(36px,7.4vw,88px); text-transform:uppercase; margin-top:12px; text-shadow:3px 0 var(--red), -3px 0 var(--cyan);}
+.bm-q{font-family:'Archivo Black',sans-serif; font-size:clamp(16px,2.4vw,24px); line-height:1.25; margin-top:24px; text-transform:uppercase;}
+.bm-note{border-left:2px solid var(--cyan); padding-left:16px; color:var(--steel); font-size:13.5px; line-height:1.6; margin-top:22px; max-width:480px;}
+.bm-btn{
+  margin-top:30px; padding:18px 36px; font-family:'Archivo Black',sans-serif; font-size:14px;
+  background:var(--cyan); color:#000; box-shadow:0 0 34px rgba(0,234,255,.35);
+}
+.bm-btn:hover{background:var(--yellow); border-color:var(--yellow); box-shadow:0 0 50px rgba(242,255,0,.5); transform:scale(1.04);}
+.grid.bm .cell .num{color:var(--cyan);}
+.grid.bm .cell:hover{background:var(--cyan);}
+.grid.bm .cell:hover .num{color:#000;}
+.bm-sub{margin-top:64px; font-size:clamp(20px,3.4vw,34px); text-transform:uppercase;}
+.bm-sub em{font-style:normal; color:var(--cyan);}
+
+/* ============ 09 · CONVITE AO JOGO ============ */
 #jogo{padding-bottom:120px;}
 #jogo .game-lead{
   color:var(--steel); max-width:680px; margin-top:22px;
@@ -403,6 +466,7 @@ footer b{color:var(--red); font-family:'Archivo Black',sans-serif;}
   html{scroll-behavior:auto;}
   .artist-inner{transition:none;}
   .artist-card.flipped .artist-inner{transform:rotateY(180deg);}
+  .vs-col li{opacity:1; transform:none;}
 }
 </style>
 </head>
@@ -434,6 +498,7 @@ footer b{color:var(--red); font-family:'Archivo Black',sans-serif;}
     <a href="#guerra">política</a>
     <a href="#brasil">brasil</a>
     <a href="#variantes">retrofuturismos</a>
+    <a href="#blackmirror">black mirror</a>
     <a href="jogo.html" style="color:var(--red)">▶ jogar</a>
   </div>
   <div class="hud" id="hud">
@@ -449,15 +514,12 @@ footer b{color:var(--red); font-family:'Archivo Black',sans-serif;}
     A arte que<br>queria <em>ultrapassar</em><br>o presente
   </h1>
   <p class="sub">
-    Um percurso em oito partes pelo movimento que quis destruir o passado
-    e inventar o futuro: <b>origem</b>, <b>ideias</b>, <b>características</b>,
-    <b>nomes</b>, <b>contexto político</b>, <b>o eco no Brasil</b>, os <b>retro-futurismos</b>
-    e — no fim — <b>uma cidade jogável</b>. Não é um resumo: é uma tentativa
-    de se comportar como o próprio Futurismo.
+    O movimento que quis destruir o passado e inventar o futuro —
+    e a pergunta que ele não fez.
   </p>
   <div class="meta">
     <div><b>1909</b>Manifesto em Paris</div>
-    <div><b>8</b>Tópicos principais</div>
+    <div><b>9</b>Tópicos principais</div>
     <div><b>1ª</b>Vanguarda europeia</div>
     <div><b>1922</b>Eco no Brasil</div>
   </div>
@@ -468,15 +530,9 @@ footer b{color:var(--red); font-family:'Archivo Black',sans-serif;}
 <section id="origem">
   <div class="eyebrow">01 — Origem</div>
   <h2 class="display" style="font-size:clamp(28px,5vw,56px); text-transform:uppercase;">De onde surgiu<br>o futurismo</h2>
-  <p style="color:var(--steel); max-width:620px; margin-top:20px; font-size:15px; line-height:1.78;">
-    O Futurismo surgiu oficialmente em <b style="color:var(--paper)">1909, na Itália</b>.
-    O marco inicial foi a publicação da <b style="color:var(--paper)">“Fundação e Manifesto
-    do Futurismo”</b>, escrita por <b style="color:var(--paper)">Filippo Tommaso
-    Marinetti</b> e publicada no jornal francês <em>Le Figaro</em>, em
-    <b style="color:var(--paper)">20 de fevereiro de 1909</b>. O movimento fez parte
-    das <b style="color:var(--paper)">vanguardas europeias</b> e buscava romper com
-    os modelos artísticos tradicionais, propondo novas formas de criação.
-    Concentrou-se principalmente na Itália.
+  <p style="color:var(--steel); max-width:520px; margin-top:20px; font-size:15px; line-height:1.7;">
+    <b style="color:var(--paper)">20 de fevereiro de 1909.</b> Marinetti publica o manifesto
+    no <em>Le Figaro</em>. Uma vanguarda italiana contra o passado.
   </p>
   <div class="tl-v" id="tlV"></div>
 </section>
@@ -490,16 +546,9 @@ footer b{color:var(--red); font-family:'Archivo Black',sans-serif;}
     <span>Velocidade</span><span>Movimento</span><span>Máquina</span>
     <span>Tecnologia</span><span>Verso livre</span>
   </div>
-  <p style="color:var(--steel); max-width:600px; margin-top:44px; font-size:14.5px; line-height:1.85;">
-    Passe o mouse. Cada palavra é uma ideia-força do movimento: o <b style="color:var(--paper)">rompimento
-    com o passado</b> e com as tradições, a valorização do <b style="color:var(--paper)">futuro
-    e da modernidade</b>, o fascínio pela <b style="color:var(--paper)">velocidade</b>,
-    <b style="color:var(--paper)">movimento</b> e <b style="color:var(--paper)">aceleração</b>,
-    a celebração das <b style="color:var(--paper)">máquinas</b>, dos automóveis, das indústrias
-    e das novas <b style="color:var(--paper)">tecnologias</b>. Na literatura, isso se traduz
-    na busca por <b style="color:var(--paper)">renovação radical</b>, no uso do
-    <b style="color:var(--paper)">verso livre</b> e, depois, nas
-    <b style="color:var(--paper)">“palavras em liberdade”</b>.
+  <p style="color:var(--steel); max-width:520px; margin-top:44px; font-size:14.5px; line-height:1.7;">
+    Passe o mouse: cada palavra é uma ideia-força. <b style="color:var(--paper)">Romper com o passado</b>
+    e abraçar <b style="color:var(--paper)">velocidade, máquina e tecnologia</b>.
   </p>
 </section>
 
@@ -508,12 +557,9 @@ footer b{color:var(--red); font-family:'Archivo Black',sans-serif;}
   <div class="eyebrow">03 — Características</div>
   <h2 class="display" style="font-size:clamp(26px,4.6vw,48px); text-transform:uppercase;">Como o futurismo<br>se parece</h2>
   <div class="grid" id="charGrid"></div>
-  <p style="color:var(--steel); max-width:640px; margin-top:36px; font-size:14.5px; line-height:1.8;">
-    O Futurismo influenciou diversas áreas além da pintura — em especial a
-    <b style="color:var(--paper)">literatura</b>, a <b style="color:var(--paper)">arquitetura</b>,
-    a <b style="color:var(--paper)">música</b> e o <b style="color:var(--paper)">design</b>.
-    A busca pela sensação de movimento levava os artistas a <b style="color:var(--paper)">repetir
-    formas e linhas</b>, produzindo uma estética de fragmentação, tensão e aceleração.
+  <p style="color:var(--steel); max-width:520px; margin-top:36px; font-size:14.5px; line-height:1.7;">
+    Influenciou <b style="color:var(--paper)">literatura</b>, <b style="color:var(--paper)">arquitetura</b>,
+    <b style="color:var(--paper)">música</b> e <b style="color:var(--paper)">design</b>.
   </p>
 </section>
 
@@ -521,11 +567,9 @@ footer b{color:var(--red); font-family:'Archivo Black',sans-serif;}
 <section id="artistas">
   <div class="eyebrow">04 — Principais nomes</div>
   <h2 class="display" style="font-size:clamp(26px,4.6vw,48px); text-transform:uppercase;">Os que assinaram<br>o futuro</h2>
-  <p style="color:var(--steel); max-width:620px; margin-top:18px; font-size:14.5px; line-height:1.75;">
-    O movimento teve em <b style="color:var(--paper)">Filippo Tommaso Marinetti</b>
-    seu fundador: autor do Manifesto de 1909 e principal responsável pela divulgação
-    inicial. Ao seu redor reuniram-se pintores, escultores, arquitetos e músicos —
-    clique em cada card para virar e ver uma obra do artista.
+  <p style="color:var(--steel); max-width:520px; margin-top:18px; font-size:14.5px; line-height:1.7;">
+    Marinetti fundou o movimento; ao redor dele, pintores, escultores, arquitetos e músicos.
+    <b style="color:var(--paper)">Clique no card</b> para ver a obra.
   </p>
   <div class="artists" id="artistGrid"></div>
 </section>
@@ -534,7 +578,7 @@ footer b{color:var(--red); font-family:'Archivo Black',sans-serif;}
 <section id="velocity">
   <div class="eyebrow">— Linguagem</div>
   <div id="vnum">0837</div>
-  <div class="cap">Role a página. A velocidade não é ilustração do tema — ela é a linguagem.</div>
+  <div class="cap">Role a página. A velocidade não é ilustração — é linguagem.</div>
   <h3>Velocidade não é apenas um tema.<br>É a própria linguagem.</h3>
 </section>
 
@@ -542,11 +586,8 @@ footer b{color:var(--red); font-family:'Archivo Black',sans-serif;}
 <section id="ruido">
   <div class="eyebrow">04 — Principais nomes · Russolo e o ruído</div>
   <h2 class="display" style="font-size:clamp(24px,4.4vw,46px); text-transform:uppercase;">Luigi Russolo e a arte do ruído</h2>
-  <p style="color:var(--steel); max-width:620px; margin-top:18px; font-size:14.5px; line-height:1.75;">
-    Em <em>A Arte dos Ruídos</em> (1913), Luigi Russolo argumentou que o ouvido
-    moderno já não se contentava com a melodia — a cidade industrial produzia
-    sua própria música. Ele construiu os <em>intonarumori</em>, máquinas de
-    ruído. Toque nos botões e combine mais de um ao mesmo tempo.
+  <p style="color:var(--steel); max-width:520px; margin-top:18px; font-size:14.5px; line-height:1.7;">
+    1913: a cidade industrial ganhou sua própria música. Toque os botões e combine ruídos.
   </p>
   <div class="pads" id="pads"></div>
   <canvas id="noise-vis"></canvas>
@@ -558,22 +599,14 @@ footer b{color:var(--red); font-family:'Archivo Black',sans-serif;}
     <div class="eyebrow">05 — Contexto político</div>
     <div class="glitch" id="glitchText">Velocidade, máquina, energia — também guerra</div>
     <p>
-      O Futurismo italiano possuía elementos de <b style="color:var(--paper)">exaltação
-      da guerra</b>, <b style="color:var(--paper)">agressividade</b> e
-      <b style="color:var(--paper)">nacionalismo</b>. Já no manifesto de 1909, a guerra
-      era tratada como “a única higiene do mundo”, e o movimento celebrava a tecnologia
-      sem antever seu uso para a destruição em massa.
+      O Futurismo exaltou a <b style="color:var(--paper)">guerra</b>, a agressividade e o
+      nacionalismo — “a única higiene do mundo”. Celebrou a tecnologia sem prever
+      o que ela poderia destruir.
     </p>
     <div class="warn">
-      <b>Uma leitura histórica e contextualizada.</b><br>
-      Marinetti e parte dos futuristas italianos posteriormente se aproximaram do
-      <b>fascismo italiano</b>, o que tornou o movimento politicamente controverso.
-      É importante lembrar que essa dimensão política <b>não deve ser confundida
-      automaticamente com todas as manifestações artísticas</b> do movimento: trata-se
-      de um aspecto do contexto histórico — e não de uma equivalência entre a
-      estética futurista e a ideologia fascista. Boccioni e Sant’Elia, por exemplo,
-      morreram em treinamento militar em 1916, antes que essa aproximação se
-      consolidasse.
+      <b>Contexto histórico.</b><br>
+      Marinetti se aproximou do <b>fascismo</b>, o que tornou o movimento controverso.
+      Isso não se confunde com toda a produção artística futurista.
     </div>
   </div>
 </section>
@@ -589,11 +622,9 @@ footer b{color:var(--red); font-family:'Archivo Black',sans-serif;}
 <section id="variantes">
   <div class="eyebrow">07 — Variantes contemporâneas e culturais</div>
   <h2 class="display" style="font-size:clamp(26px,4.6vw,48px); text-transform:uppercase;">Retro-futurismos:<br>o futuro depois do futurismo</h2>
-  <p style="color:var(--steel); max-width:640px; margin-top:20px; font-size:14.5px; line-height:1.8;">
-    Com o passar das décadas, o conceito de <b style="color:var(--paper)">"futurismo"</b>
-    transbordou a vanguarda artística e gerou <b style="color:var(--paper)">subgêneros
-    estéticos e literários</b> na ficção científica e no design — futuros imaginados
-    a partir de máquinas reais ou sonhadas, cada um com sua própria crítica e esperança.
+  <p style="color:var(--steel); max-width:520px; margin-top:20px; font-size:14.5px; line-height:1.7;">
+    O conceito transbordou a vanguarda e gerou <b style="color:var(--paper)">futuros imaginados</b>
+    na ficção e no design.
   </p>
   <div class="vp-grid" id="vpGrid"></div>
 
@@ -608,37 +639,97 @@ footer b{color:var(--red); font-family:'Archivo Black',sans-serif;}
       <h3>Cyberpunk: Edgerunners</h3>
       <div class="cinema-meta">Série · 2022 · Netflix × CD PROJEKT RED × Studio Trigger · 10 episódios</div>
       <p>
-        Um garoto de rua decide se tornar um <b style="color:var(--paper)">edgerunner</b> —
-        um mercenário cyberpunk — para sobreviver em <b style="color:var(--paper)">Night City</b>,
-        uma cidade obcecada por tecnologia e modificação corporal. Quanto mais implantes,
-        mais forte — e mais perto da <em>cyberpsicose</em>.
+        Em <b style="color:var(--paper)">Night City</b>, um garoto vira <b style="color:var(--paper)">edgerunner</b>.
+        Quanto mais implantes, mais perto da <em>cyberpsicose</em>.
       </p>
       <p class="conn">
-        <b>A conexão com o futurismo:</b> Night City é a <em>Città Nuova</em> de Sant'Elia
-        levada às últimas consequências — arranha-céus, elevadores, a cidade-máquina.
-        Mas a máquina que os futuristas celebraram virou a própria prisão: a velocidade
-        de 1909 virou a velocidade dos dados, e o culto à guerra virou violência
-        corporativa cotidiana. A série pergunta o que o manifesto de 1909 não quis ver:
-        <b>e as pessoas que a máquina esmaga?</b>
+        <b>Conexão:</b> Night City é a <em>Città Nuova</em> levada ao limite — a máquina celebrada
+        virou prisão. <b>E as pessoas que a máquina esmaga?</b>
       </p>
       <a class="trailer-btn" href="https://www.youtube.com/watch?v=ax5YUmkWf_Y" target="_blank" rel="noopener">▶ assistir trailer oficial</a>
     </div>
   </div>
 </section>
 
-<!-- ============ 08 — CONVITE AO JOGO ============ -->
+<!-- ============ TRANSIÇÃO — FUTURISMO × BLACK MIRROR ============ -->
+<section id="transicao">
+  <div class="eyebrow">— Transição</div>
+  <h2 class="display" style="font-size:clamp(28px,5.2vw,60px); text-transform:uppercase;">Do entusiasmo<br>à pergunta</h2>
+  <div class="vs" id="vs">
+    <div class="vs-col fu">
+      <div class="lbl">1909 · otimismo</div>
+      <h3>Futurismo</h3>
+      <ul>
+        <li style="--i:0">Entusiasmo pelo futuro</li>
+        <li style="--i:1">Velocidade</li>
+        <li style="--i:2">Máquinas</li>
+        <li style="--i:3">Tecnologia</li>
+        <li style="--i:4">Progresso</li>
+      </ul>
+    </div>
+    <div class="vs-mid">e se…?</div>
+    <div class="vs-col bm">
+      <div class="lbl">hoje · reflexão</div>
+      <h3>Black Mirror</h3>
+      <ul>
+        <li style="--i:5">Consequências</li>
+        <li style="--i:6">Dependência tecnológica</li>
+        <li style="--i:7">Controle</li>
+        <li style="--i:8">Impactos sociais</li>
+        <li style="--i:9">Lado obscuro do progresso</li>
+      </ul>
+    </div>
+  </div>
+  <p class="vs-note">
+    <b>Black Mirror não faz parte do Futurismo.</b> Aparece aqui como
+    <b>contraponto contemporâneo</b>, para provocar uma reflexão sobre a visão de futuro de 1909.
+  </p>
+</section>
+
+<!-- ============ 08 — BLACK MIRROR ============ -->
+<section id="blackmirror">
+  <div class="eyebrow" style="color:var(--cyan)">08 — Contraponto · Black Mirror</div>
+  <h2 class="display" style="font-size:clamp(28px,5.2vw,60px); text-transform:uppercase;">O outro lado<br>do espelho</h2>
+
+  <div class="bm-hero">
+    <div class="bm-cover">
+      <!-- COLOQUE A CAPA OFICIAL EM "blackmirror.jpg" (mesma pasta deste arquivo).
+           Enquanto ela não existir, aparece uma capa provisória. -->
+      <img id="bmCover" src="blackmirror.jpg" alt="Capa oficial de Black Mirror">
+    </div>
+    <div class="bm-info">
+      <div class="vp-tag" style="color:var(--cyan)">Série · Charlie Brooker · Netflix</div>
+      <h3>Black<br>Mirror</h3>
+      <p class="bm-q">O que acontece quando buscamos o progresso sem pensar nas consequências?</p>
+      <p class="bm-note">
+        O Futurismo celebrava velocidade, máquinas e futuro. Black Mirror mostra o preço.
+      </p>
+      <a class="trailer-btn bm-btn" href="https://www.youtube.com/watch?v=k7uFcpF0pXk" target="_blank" rel="noopener">▶ ASSISTIR AO TRAILER</a>
+    </div>
+  </div>
+
+  <h3 class="display bm-sub">Consequências do <em>avanço</em></h3>
+  <div class="grid bm" id="bmGrid"></div>
+</section>
+
+<!-- ============ FECHAMENTO — 1909 × AGORA ============ -->
+<section id="presente">
+  <div class="eyebrow">— 1909 × agora</div>
+  <h2 class="display" style="font-size:clamp(26px,4.6vw,48px); text-transform:uppercase;">Mesmo impulso,<br>outras máquinas</h2>
+  <div class="pairs" id="pairs"></div>
+  <p class="display closing">O futuro não é só velocidade.<br>É <em>direção</em>.</p>
+</section>
+
+<!-- ============ 09 — CONVITE AO JOGO ============ -->
 <section id="jogo">
-  <div class="eyebrow">08 — Jogo · A Cidade do Amanhã</div>
+  <div class="eyebrow">09 — Jogo · A Cidade do Amanhã</div>
   <h2 class="display" style="font-size:clamp(28px,5.2vw,60px); text-transform:uppercase;">
     Você viu a história.<br>agora entre nela.
   </h2>
 
   <p class="game-lead">
-    Depois de percorrer a origem, as ideias, os nomes, o contexto político
-    e o eco brasileiro do Futurismo, chegou a hora de <b style="color:var(--paper)">atravessar
-    a Città Nuova</b>. Uma avenida com prédios, carros passando, hologramas e
-    artistas futuristas esperando resposta. Cada pergunta certa vira conhecimento
-    acumulado — e o trânsito obedece.
+    Atravesse a <b style="color:var(--paper)">Città Nuova</b>: responda, acumule
+    conhecimento — e o trânsito obedece.
   </p>
 
   <div class="game-preview">
@@ -666,13 +757,6 @@ footer b{color:var(--red); font-family:'Archivo Black',sans-serif;}
     <span><kbd>C</kbd>codex</span>
     <span><kbd>Esc</kbd>fechar</span>
   </div>
-</section>
-
-<!-- ============ FECHAMENTO — 1909 × AGORA ============ -->
-<section id="presente">
-  <div class="eyebrow">— 1909 × agora</div>
-  <h2 class="display" style="font-size:clamp(26px,4.6vw,48px); text-transform:uppercase;">Mesmo impulso,<br>outras máquinas</h2>
-  <div class="pairs" id="pairs"></div>
 </section>
 
 <footer>
@@ -823,13 +907,14 @@ function shatter({cols=7, rows=5, dur=800}={}) {
 
 /* ---------- HUD ---------- */
 (function hud(){
-  const yearEl=$('#hudYear'), rail=$('#railFill'), hudEl=$('#hud');
+  const yearEl=$('#hudYear'), rail=$('#railFill'), hudEl=$('#hud'), guerra=$('#guerra');
   function update(){
     const max=document.documentElement.scrollHeight-innerHeight;
     const p = max>0 ? Math.min(1,Math.max(0,scrollY/max)) : 0;
     yearEl.textContent = Math.round(1909+p*(2026-1909));
     rail.style.height = (p*100)+'%';
-    hudEl.classList.toggle('war-mode', p>0.62 && p<0.9);
+    const g=guerra.getBoundingClientRect();
+    hudEl.classList.toggle('war-mode', g.top<innerHeight*.5 && g.bottom>innerHeight*.5);
   }
   addEventListener('scroll',update,{passive:true});
   addEventListener('resize',update);
@@ -839,14 +924,14 @@ function shatter({cols=7, rows=5, dur=800}={}) {
 /* ---------- 01 ORIGEM · timeline ---------- */
 (function timeline(){
   const data=[
-    ['1909','Fundação e Manifesto','Marinetti publica a “Fundação e Manifesto do Futurismo” no jornal francês Le Figaro, em 20 de fevereiro. É a certidão de nascimento da vanguarda italiana.'],
-    ['1910','Manifesto dos Pintores','Boccioni, Balla, Carrà, Russolo e Severini assinam o Manifesto dos Pintores Futuristas e transferem para a tela a estética da velocidade.'],
-    ['1912','Formas Únicas','Boccioni esculpe “Formas Únicas de Continuidade no Espaço” — a figura humana atravessando o ar como um corpo-máquina em movimento.'],
-    ['1913','A Arte dos Ruídos','Russolo publica “A Arte dos Ruídos” e constrói os intonarumori: máquinas que transformam o barulho industrial em música.'],
-    ['1914','Arquitetura Futurista','Antonio Sant’Elia lança o manifesto da Arquitetura Futurista e desenha a “Città Nuova”: arranha-céus, estações, usinas, elevadores.'],
-    ['1915','Guerra','A Itália entra na Primeira Guerra. Muitos futuristas vão ao front como voluntários — a guerra era, para eles, a “única higiene do mundo”.'],
-    ['1916','Fim de um núcleo','Boccioni e Sant’Elia morrem em treinamento militar. O núcleo original do movimento se dissolve.'],
-    ['1919','Deriva política','Marinetti participa da fundação dos Fasci di Combattimento com Mussolini. O movimento que queria ultrapassar o presente se entrega a uma das piores políticas do século.'],
+    ['1909','Fundação e Manifesto','Marinetti publica o Manifesto no Le Figaro. Nasce a vanguarda.'],
+    ['1910','Manifesto dos Pintores','Boccioni, Balla, Carrà, Russolo e Severini levam a velocidade para a tela.'],
+    ['1912','Formas Únicas','Boccioni esculpe o corpo humano como máquina em movimento.'],
+    ['1913','A Arte dos Ruídos','Russolo transforma o barulho industrial em música.'],
+    ['1914','Arquitetura Futurista','Sant’Elia desenha a Città Nuova: arranha-céus, usinas, elevadores.'],
+    ['1915','Guerra','A Itália entra na Primeira Guerra. Futuristas vão como voluntários.'],
+    ['1916','Fim de um núcleo','Boccioni e Sant’Elia morrem em treinamento militar.'],
+    ['1919','Deriva política','Marinetti participa da fundação dos Fasci di Combattimento.'],
   ];
   const wrap=$('#tlV');
   data.forEach(([yr,title,body])=>{
@@ -854,7 +939,7 @@ function shatter({cols=7, rows=5, dur=800}={}) {
     el.innerHTML=`<div class="yr">${yr}</div><h3>${title}</h3><p>${body}</p>`;
     wrap.appendChild(el);
   });
-  const revealables = [...wrap.querySelectorAll('.tl-entry'), ...document.querySelectorAll('.eyebrow')];
+  const revealables = [...wrap.querySelectorAll('.tl-entry'), ...document.querySelectorAll('.eyebrow'), ...document.querySelectorAll('.vs')];
   const io=new IntersectionObserver(entries=>{
     entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
   },{threshold:.18, rootMargin:'0px 0px -12% 0px'});
@@ -864,12 +949,12 @@ function shatter({cols=7, rows=5, dur=800}={}) {
 /* ---------- 03 CARACTERÍSTICAS ---------- */
 (function characteristics(){
   const items=[
-    ['01','Velocidade e aceleração','O automóvel, o aeroplano e a cidade elétrica tornam-se a nova beleza — mais belos que a Vitória de Samotrácia.'],
-    ['02','Movimento e repetição','Formas repetidas, linhas de força e corpos fragmentados: a tela tenta capturar o deslocamento, não o instante.'],
-    ['03','Máquinas e tecnologia','Indústria, aço, energia elétrica e ruído urbano entram na obra como matéria-prima estética.'],
-    ['04','Industrialização e modernidade','A cidade moderna — com suas fábricas, avenidas e multidões — é tratada como tema e como forma.'],
-    ['05','Ruptura com o passado','A “destruição do passado” é o gesto fundador: museus, academias e tradição tratados como peso morto.'],
-    ['06','Experimentação artística','Palavras em liberdade na literatura, verso livre na poesia, novas técnicas na pintura, escultura, música e design.'],
+    ['01','Velocidade e aceleração','Automóvel, aeroplano, cidade elétrica: a nova beleza.'],
+    ['02','Movimento e repetição','Linhas de força: a tela captura o deslocamento, não o instante.'],
+    ['03','Máquinas e tecnologia','Aço, energia e ruído urbano viram matéria de arte.'],
+    ['04','Modernidade industrial','Fábricas, avenidas e multidões como tema e forma.'],
+    ['05','Ruptura com o passado','Museus e academias tratados como peso morto.'],
+    ['06','Experimentação','Palavras em liberdade, verso livre, novas formas.'],
   ];
   const grid=$('#charGrid');
   items.forEach(([n,t,d])=>{
@@ -989,28 +1074,28 @@ function shatter({cols=7, rows=5, dur=800}={}) {
   const artists = [
     { n:'Filippo Tommaso Marinetti', y:'1876 — 1944',
       workTitle:'Zang Tumb Tumb', workYear:'1914',
-      workDesc:'Livro de "palavras em liberdade": a tipografia explode na página e o som da guerra vira estrutura.' },
+      workDesc:'Palavras em liberdade: a tipografia explode na página.' },
     { n:'Umberto Boccioni', y:'1882 — 1916',
       workTitle:'Formas Únicas de Continuidade no Espaço', workYear:'1913',
-      workDesc:'A figura humana atravessando o ar — corpo e movimento fundidos em uma única massa adiantada para o futuro.' },
+      workDesc:'Um corpo atravessando o ar: movimento feito escultura.' },
     { n:'Giacomo Balla', y:'1871 — 1958',
       workTitle:'Dinamismo de um cão na coleira', workYear:'1912',
-      workDesc:'Patas e coleira multiplicadas em dezenas de posições: a pintura tenta desenhar o deslocamento, não o instante.' },
+      workDesc:'Patas multiplicadas: a pintura desenha o deslocamento.' },
     { n:'Carlo Carrà', y:'1881 — 1966',
       workTitle:'O Funeral do Anarquista Galli', workYear:'1911',
-      workDesc:'A multidão em choque com a polícia vira linhas de força. Política, violência e movimento na mesma tela.' },
+      workDesc:'A multidão em choque vira linhas de força.' },
     { n:'Gino Severini', y:'1883 — 1966',
       workTitle:'Hieróglifo Dinâmico do Bal Tabarin', workYear:'1912',
-      workDesc:'Luz, dança e cidade noturna atravessam a tela em fragmentos — o Futurismo em diálogo com Paris.' },
+      workDesc:'Luz, dança e cidade noturna em fragmentos.' },
     { n:'Luigi Russolo', y:'1885 — 1947',
       workTitle:'A Rebelião (La Rivolta)', workYear:'1911',
-      workDesc:'Antes de inventar os intonarumori, Russolo pintou a cidade como uma massa elétrica em revolta.' },
+      workDesc:'A cidade como massa elétrica em revolta.' },
     { n:'Antonio Sant’Elia', y:'1888 — 1916',
       workTitle:'Città Nuova (Cidade Nova)', workYear:'1914',
-      workDesc:'Arranha-céus, estações, usinas e elevadores: a arquitetura futurista como máquina urbana.' },
+      workDesc:'A cidade como máquina vertical.' },
     { n:'Francesco Balilla Pratella', y:'1880 — 1955',
       workTitle:'Manifesto dos Músicos Futuristas', workYear:'1911',
-      workDesc:'Pratella pede uma música que abandone a melodia tradicional e incorpore o ruído do mundo industrial.' },
+      workDesc:'Uma música que incorpora o ruído do mundo industrial.' },
   ];
 
   const grid = document.querySelector('#artistGrid');
@@ -1171,12 +1256,12 @@ function shatter({cols=7, rows=5, dur=800}={}) {
 /* ---------- 06 FUTURISMO NO BRASIL ---------- */
 (function brasil(){
   const data=[
-    ['Influência, não cópia','Oswald de Andrade viaja à Europa (1912)','O Futurismo não foi simplesmente reproduzido no Brasil. Suas ideias e sua estética influenciaram os modernistas brasileiros: Oswald de Andrade viajou à Europa em 1912 e retornou tocado pelas vanguardas, contribuindo para divulgar essas ideias.'],
-    ['1922','Semana de Arte Moderna','A energia futurista — provocação, ruptura, renovação — alimenta o ambiente artístico que levou à Semana de Arte Moderna de 1922. A estética serviu como referência de choque e experimentação.'],
-    ['Ruptura com a tradição','Provocação e renovação','Os modernistas brasileiros usaram o Futurismo como referência de provocação e renovação artística: romper com o academismo e afirmar a liberdade de criação.'],
-    ['Recusa ideológica','Modernistas não aderiram ao fascismo','Os modernistas brasileiros não aceitaram integralmente a ideologia política dos futuristas italianos. O culto à guerra e o nacionalismo agressivo foram recusados, ainda que a estética de ruptura tenha sido aproveitada.'],
-    ['1926','Marinetti em São Paulo','Quando Marinetti visitou o Brasil em 1926, sua associação com o fascismo italiano já era conhecida — o que contribuiu para o distanciamento de alguns intelectuais brasileiros, como Mário de Andrade.'],
-    ['Legado','Liberdade de criação','A importância do Futurismo para a arte brasileira está na sua perspectiva radical de quebra com a tradição e na consequente valorização da liberdade de criação.'],
+    ['Influência, não cópia','Oswald de Andrade (1912)','Viaja à Europa e volta tocado pelas vanguardas.'],
+    ['1922','Semana de Arte Moderna','A energia futurista alimenta a ruptura modernista.'],
+    ['Ruptura','Provocação e renovação','Contra o academismo, pela liberdade de criação.'],
+    ['Recusa ideológica','Sem fascismo','Estética aproveitada; culto à guerra recusado.'],
+    ['1926','Marinetti em São Paulo','Sua ligação com o fascismo já era conhecida e afastou intelectuais como Mário de Andrade.'],
+    ['Legado','Liberdade de criação','Romper com a tradição para criar livremente.'],
   ];
   const grid=$('#brGrid');
   data.forEach(([tag,title,body])=>{
@@ -1189,10 +1274,10 @@ function shatter({cols=7, rows=5, dur=800}={}) {
 /* ---------- 07 VARIANTES · retro-futurismos ---------- */
 (function variants(){
   const data=[
-    ['CYBERPUNK','Alta tecnologia, baixa qualidade de vida','#00eaff','Futuro distópico dominado por inteligência artificial, megacorporações e cibernética — o clássico "high tech, low life". A velocidade das máquinas virou a velocidade dos dados.','→ na tela: Cyberpunk: Edgerunners (2022)'],
-    ['AFROFUTURISMO','O futuro reescrito pela diáspora','#f2ff00','Combina ficção científica, fantasia, tecnologia e cosmologias não-ocidentais para criticar os dilemas atuais dos povos negros e reescrever o futuro sob a perspectiva da diáspora africana.'],
-    ['SOLARPUNK','Um futuro verde e possível','#7dff8a','Movimento ecológico e estético que projeta um futuro otimista: a humanidade resolveu a crise climática e vive em harmonia com a natureza, usando energias renováveis e biotecnologia.'],
-    ['STEAMPUNK & DIESELPUNK','Máquinas do passado, futuros alternativos','#d9a05b','Variantes de retrofuturismo ficcional baseadas em tecnologias que evoluíram além do seu tempo: máquinas a vapor do século XIX no Steampunk, e motores a diesel da primeira metade do século XX no Dieselpunk.'],
+    ['CYBERPUNK','Alta tecnologia, baixa qualidade de vida','#00eaff','IA, megacorporações e cibernética. A velocidade das máquinas virou a dos dados.','→ na tela: Cyberpunk: Edgerunners (2022)'],
+    ['AFROFUTURISMO','O futuro reescrito pela diáspora','#f2ff00','Ficção científica e cosmologias africanas reescrevem o futuro pela diáspora.'],
+    ['SOLARPUNK','Um futuro verde e possível','#7dff8a','Um futuro otimista: energia renovável, biotecnologia e harmonia com a natureza.'],
+    ['STEAMPUNK & DIESELPUNK','Máquinas do passado, futuros alternativos','#d9a05b','Tecnologias que evoluíram além do seu tempo: vapor (Steampunk) e diesel (Dieselpunk).'],
   ];
   const grid=$('#vpGrid');
   data.forEach(([tag,title,color,body,screen])=>{
@@ -1200,6 +1285,30 @@ function shatter({cols=7, rows=5, dur=800}={}) {
     el.innerHTML=`<div class="vp-tag" style="color:${color}">${tag}</div><h3>${title}</h3><p>${body}</p>${screen?`<div class="vp-screen">${screen}</div>`:''}`;
     grid.appendChild(el);
   });
+})();
+
+/* ---------- 08 BLACK MIRROR · consequências + capa provisória ---------- */
+(function blackMirror(){
+  const items=[
+    ['01','Dependência','A tela vira extensão do corpo.'],
+    ['02','Controle','Vigilância e algoritmos decidem por nós.'],
+    ['03','Impacto social','Atenção, reputação e relações viram métrica.'],
+    ['04','Lado obscuro','A velocidade sem freio cobra seu preço.'],
+  ];
+  const grid=$('#bmGrid');
+  items.forEach(([n,t,d])=>{
+    const el=document.createElement('div'); el.className='cell';
+    el.innerHTML=`<div class="num">${n}</div><div><h3>${t}</h3><p>${d}</p></div>`;
+    grid.appendChild(el);
+  });
+
+  // Se "blackmirror.jpg" não existir, mostra uma capa provisória no lugar
+  const img=$('#bmCover');
+  if(!img) return;
+  const svg=`<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 450'><rect width='300' height='450' fill='#050508'/><path d='M150 225 L40 0 M150 225 L300 80 M150 225 L210 450 M150 225 L0 340 M150 225 L120 450' stroke='#00eaff' stroke-opacity='.4' fill='none'/><text x='150' y='215' fill='#edede4' font-family='Arial Black,Arial,sans-serif' font-size='34' text-anchor='middle'>BLACK</text><text x='150' y='255' fill='#00eaff' font-family='Arial Black,Arial,sans-serif' font-size='34' text-anchor='middle'>MIRROR</text></svg>`;
+  const fallback=()=>{ img.src='data:image/svg+xml;utf8,'+encodeURIComponent(svg); };
+  img.addEventListener('error', fallback, {once:true});
+  if(img.complete && img.naturalWidth===0) fallback();
 })();
 
 /* ---------- fechamento ---------- */
@@ -1236,22 +1345,19 @@ function shatter({cols=7, rows=5, dur=800}={}) {
   });
 })();
 
-/* ---------- 08 · transição para o jogo ---------- */
+/* ---------- 09 · transição para o jogo ---------- */
 (function enterGame(){
   const link = document.getElementById('enterGame');
   if (!link) return;
 
   link.addEventListener('click', e => {
-    // se o usuário prefere menos movimento, deixa ir direto
     if (reduce) return;
 
     e.preventDefault();
     const destino = link.href;
 
-    // dispara o shatter (mesma animação do boot)
     shatter({ cols: 8, rows: 6, dur: 700 });
 
-    // flash ciano no centro antes de navegar
     const flash = document.createElement('div');
     flash.style.cssText = `
       position:fixed; inset:0; z-index:9999; pointer-events:none;
