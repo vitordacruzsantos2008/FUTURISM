@@ -89,7 +89,7 @@ canvas#game{display:block;width:100vw;height:100vh;image-rendering:pixelated;ima
   <h1>A Cidade do <em>Amanhã</em></h1>
   <p>Uma avenida. Prédios que repetem o passado. Nada se move — ainda. Corra sem parar e a própria cidade acelera com você. Atravesse as ruas com cuidado. Encontre os futuristas, responda, e o mundo vai mudar.</p>
   <button class="begin" id="beginBtn">Entrar na cidade</button>
-  <div class="keys">WASD ou setas · correr sem parar aumenta a Velocità · E interagir/atravessar · C codex</div>
+  <div class="keys">WASD ou setas · correr sem parar aumenta a Velocità · E interagir/atravessar · Enter continuar · C codex</div>
 </div>
 <div id="transform">
   <div class="eyebrow">A cidade responde</div>
@@ -143,6 +143,10 @@ const crosswalks=[
  {tx:40,ty:9,road:'top',answered:false,q:'O trânsito está insuportável. Para atravessar: em que ano ocorreu a Semana de Arte Moderna no Brasil?',opts:[{t:'1922.',ok:true,fb:'Em fevereiro de 1922, no Theatro Municipal de São Paulo. O Futurismo já chegava ao Brasil como rótulo acusatório — mas sua energia alimentou a Semana.'},{t:'1909.',ok:false,fb:'1909 é o Manifesto de Marinetti, na Itália. A Semana é brasileira e vem depois.'},{t:'1912.',ok:false,fb:'1912 é o ano em que Oswald de Andrade viajou à Europa. A Semana é 10 anos depois.'}]},
  {tx:25,ty:13,road:'top',answered:false,q:'Um cronista pergunta: por que o Futurismo italiano se tornou politicamente controverso?',opts:[{t:'Porque pregava o retorno à monarquia.',ok:false,fb:'Não é sobre monarquia. É sobre o culto à guerra e a aproximação com o fascismo.'},{t:'Porque exaltava a guerra e parte dos futuristas se aproximou do fascismo.',ok:true,fb:'O manifesto de 1909 chamava a guerra de "única higiene do mundo". Marinetti depois ajudou a redigir o Manifesto Fascista de 1919.'},{t:'Porque rejeitava a tecnologia.',ok:false,fb:'Ao contrário — o problema é o entusiasmo tecnológico sem limites, não a rejeição.'}]},
 ];
+// Zonas de travessia: cada faixa tem uma "trava" (open) que só abre depois de responder certo
+crosswalks.forEach(cw=>{cw.open=0;cw.x0=cw.tx*TILE;cw.x1=cw.x0+TILE;cw.y0=(cw.road==='top'?10:22)*TILE;cw.y1=(cw.road==='top'?13:25)*TILE;});
+const inCross=(cw,fx,fy)=>fx>cw.x0-5&&fx<cw.x1+5&&fy>=cw.y0&&fy<cw.y1;
+let continueHandler=null;
 
 const state={era:0,xp:0,codex:[],player:{x:25*TILE,y:17*TILE,dir:'down',anim:0,walking:false,invuln:0,speedTime:0,speedMul:1},camera:{x:0,y:0,shake:0},stations:[],artworks:[],cars:[],particles:[],holos:[],trail:[],time:0,nearest:null,traffic:{top:{stopped:0},bottom:{stopped:0}}};
 
@@ -176,7 +180,8 @@ function spawnCar(){
   const lanes=[{y:10*TILE+8,dir:1,c:C.buildB,road:'top'},{y:11*TILE+8,dir:1,c:C.buildA,road:'top'},{y:12*TILE+8,dir:-1,c:C.buildE,road:'top'},{y:22*TILE+8,dir:-1,c:C.buildB,road:'bottom'},{y:23*TILE+8,dir:1,c:C.buildA,road:'bottom'},{y:24*TILE+8,dir:-1,c:C.buildE,road:'bottom'}];
   const l=lanes[Math.floor(Math.random()*lanes.length)];
   const startX=l.dir>0?-20:MAP_W*TILE+20;
-  state.cars.push({x:startX,y:l.y,vx:l.dir*(2+Math.random()*3)*(1+p*1.1),color:l.c,w:14+Math.floor(Math.random()*6),h:6,trail:0,road:l.road});
+  const v=l.dir*(180+Math.random()*140)*(1+p*0.5);
+  state.cars.push({x:startX,y:l.y,vx:v,baseVx:v,color:l.c,w:14+Math.floor(Math.random()*6),h:6,trail:0,road:l.road});
 }
 
 function wordsInFreedom(text){
@@ -186,6 +191,7 @@ function wordsInFreedom(text){
 
 const keys={}; let dialogueOpen=false, paused=true;
 addEventListener('keydown',e=>{const k=e.key.toLowerCase();keys[k]=true;
+  if(k==='enter'&&dialogueOpen&&continueHandler){e.preventDefault();if(!e.repeat)continueHandler();}
   if(k==='e'||k===' '){if(!dialogueOpen){e.preventDefault();tryInteract();}}
   if(k==='c')toggleCodex(); if(k==='escape'){closeDialogue();closeCodex();}});
 addEventListener('keyup',e=>{keys[e.key.toLowerCase()]=false;});
@@ -194,6 +200,7 @@ function update(dt){
   state.time+=dt;
   if(state.player.invuln>0) state.player.invuln-=dt;
   for(const road of ['top','bottom']) if(state.traffic[road].stopped>0) state.traffic[road].stopped=Math.max(0,state.traffic[road].stopped-dt);
+  for(const cw of crosswalks) if(cw.open>0) cw.open=Math.max(0,cw.open-dt);
 
   let ax=0,ay=0;
   if(keys['w']||keys['arrowup'])ay-=1; if(keys['s']||keys['arrowdown'])ay+=1;
@@ -210,8 +217,12 @@ function update(dt){
   const speed=90*p.speedMul;
   const tryX=p.x+ax*speed*dt, tryY=p.y+ay*speed*dt;
   const checkSolid=(px,py)=>{const half=5;return isSolid(Math.floor((px-half)/TILE),Math.floor((py-2)/TILE))||isSolid(Math.floor((px+half)/TILE),Math.floor((py-2)/TILE))||isSolid(Math.floor((px-half)/TILE),Math.floor((py+8)/TILE))||isSolid(Math.floor((px+half)/TILE),Math.floor((py+8)/TILE));};
-  if(!checkSolid(tryX,p.y))p.x=tryX;
-  if(!checkSolid(p.x,tryY))p.y=tryY;
+  // Trava da faixa: só barra quem está ENTRANDO na faixa fechada
+  const gateBlocked=(px,py)=>crosswalks.some(cw=>cw.open<=0&&inCross(cw,px,py+8)&&!inCross(cw,p.x,p.y+8));
+  let hitGate=false;
+  if(!checkSolid(tryX,p.y)){if(gateBlocked(tryX,p.y))hitGate=true;else p.x=tryX;}
+  if(!checkSolid(p.x,tryY)){if(gateBlocked(p.x,tryY))hitGate=true;else p.y=tryY;}
+  if(hitGate)p.speedTime=0;
   p.anim = p.walking ? p.anim+dt*(6+p.speedMul*3) : 0;
 
   if(p.walking && p.speedMul>1.15){
@@ -229,17 +240,19 @@ function update(dt){
   spawnCar();
   for(let i=state.cars.length-1;i>=0;i--){
     const c=state.cars[i];
-    const light=state.traffic[c.road];
-    if(light.stopped>0){
-      const cw=crosswalks.find(x=>x.road===c.road);
-      const stopX = cw ? cw.tx*TILE+8 : MAP_W*TILE/2;
-      const dist=Math.abs(c.x-stopX);
-      c.vx *= dist<60 ? Math.pow(0.1,dt) : Math.pow(0.85,dt);
+    // Freio antes da faixa liberada (ou enquanto o jogador ainda está sobre ela)
+    const s=Math.sign(c.baseVx); let vmax=Infinity;
+    for(const cw of crosswalks){
+      if(cw.road!==c.road||!(cw.open>0||inCross(cw,p.x,p.y+8)))continue;
+      const d=((s>0?cw.x0-6:cw.x1+6)-c.x)*s-c.w/2;
+      if(d>-2)vmax=Math.min(vmax,Math.sqrt(2800*Math.max(d,0)));
     }
-    c.x+=c.vx*dt; c.trail=Math.min(c.trail+dt*20,60);
+    c.vx+=(s*Math.min(Math.abs(c.baseVx),vmax)-c.vx)*Math.min(1,dt*2.5);
+    if(Math.abs(c.vx)>vmax)c.vx=s*vmax;
+    const prevX=c.x; c.x+=c.vx*dt; c.trail=Math.min(c.trail+dt*200,90);
     if(state.player.invuln<=0){
-      const dx=Math.abs(c.x-state.player.x), dy=Math.abs(c.y-state.player.y);
-      if(dx<c.w/2+6 && dy<c.h/2+6){
+      const dy=Math.abs(c.y-state.player.y), lo=Math.min(prevX,c.x)-c.w/2-6, hi=Math.max(prevX,c.x)+c.w/2+6;
+      if(state.player.x>lo && state.player.x<hi && dy<c.h/2+6){
         state.player.invuln=1.6; state.camera.shake=14; state.player.speedTime=0;
         state.xp=Math.max(0,state.xp-30);
         document.getElementById('hitflash').classList.add('on');
@@ -258,10 +271,10 @@ function update(dt){
   let nearest=null,bestDist=40;
   for(const s of state.stations){if(s.unlocked)continue;const d=Math.hypot(s.px-p.x,s.py-p.y);if(d<bestDist){bestDist=d;nearest={type:'station',data:s};}}
   for(const a of state.artworks){if(a.unlocked)continue;const d=Math.hypot(a.px-p.x,a.py-p.y);if(d<bestDist){bestDist=d;nearest={type:'artwork',data:a};}}
-  for(const cw of crosswalks){const cwx=cw.tx*TILE+8,cwy=cw.ty*TILE+8;const d=Math.hypot(cwx-p.x,cwy-p.y);if(d<bestDist){bestDist=d;nearest={type:'crosswalk',data:cw};}}
+  for(const cw of crosswalks){const fy=p.y+8;const d=Math.hypot(Math.max(cw.x0-p.x,0,p.x-cw.x1),Math.max(cw.y0-fy,0,fy-cw.y1));if(d<Math.min(bestDist,26)){bestDist=d;nearest={type:'crosswalk',data:cw};}}
   state.nearest=nearest;
   const prompt=document.getElementById('prompt');
-  if(nearest&&!dialogueOpen){prompt.classList.add('on');prompt.innerHTML = nearest.type==='crosswalk' ? '<b>E</b> atravessar a rua' : '<b>E</b> interagir';}
+  if(nearest&&!dialogueOpen){prompt.classList.add('on');prompt.innerHTML = nearest.type==='crosswalk' ? (nearest.data.open>0 ? '<b>Travessia liberada</b> · atravesse agora' : '<b>PARE</b> · faixa de pedestres — <b>E</b> para atravessar') : '<b>E</b> interagir';}
   else prompt.classList.remove('on');
 }
 
@@ -338,8 +351,12 @@ function drawCrosswalks(camX,camY){
     for(let ty=roadStartY; ty<=roadEndY; ty++) for(let i=0;i<3;i++){
       const x=cw.tx*TILE+1+i*5-camX, y=ty*TILE+2-camY;
       if(x<-20||x>VW+20||y<-20||y>VH+20) continue;
-      ctx.fillStyle = cw.answered ? 'rgba(34,255,122,.5)' : 'rgba(255,204,51,.35)'; ctx.fillRect(x,y,3,TILE-4);
+      ctx.fillStyle = cw.open>0 ? 'rgba(34,255,122,.5)' : 'rgba(255,204,51,.35)'; ctx.fillRect(x,y,3,TILE-4);
     }
+    const isOpen=cw.open>0, zx=cw.x0-camX, zt=cw.y0-camY, zb=cw.y1-camY;
+    ctx.fillStyle=isOpen?'#22ff7a':C.magenta; ctx.globalAlpha=isOpen?0.9:0.6+0.4*Math.sin(state.time*8);
+    ctx.fillRect(zx-2,zt-2,TILE+4,2); ctx.fillRect(zx-2,zb,TILE+4,2); ctx.globalAlpha=1;
+    if(!isOpen){ctx.font='5px "Archivo Black", sans-serif';ctx.textAlign='center';ctx.fillText('PARE',zx+TILE/2,zt-5);ctx.fillText('PARE',zx+TILE/2,zb+9);ctx.textAlign='left';}
     const stopped=state.traffic[cw.road].stopped>0;
     const poleX=cw.tx*TILE+8-camX+18, poleY=(cw.road==='top'?9:21)*TILE+8-camY;
     ctx.fillStyle='#221a44'; ctx.fillRect(poleX-1,poleY-14,2,14);
@@ -415,7 +432,7 @@ function drawArtworks(camX,camY){
 function drawCars(camX,camY){
   for(const c of state.cars){
     const sx=c.x-camX, sy=c.y-camY; if(sx<-60||sx>VW+60)continue;
-    const stopped=state.traffic[c.road].stopped>0 && Math.abs(c.vx)<0.4;
+    const stopped=state.traffic[c.road].stopped>0 && Math.abs(c.vx)<8;
     const trailDir=c.vx>0?-1:1;
     const grad=ctx.createLinearGradient(sx,sy,sx+trailDir*c.trail,sy); grad.addColorStop(0,c.color+'aa'); grad.addColorStop(1,c.color+'00');
     ctx.fillStyle=grad; ctx.fillRect(trailDir>0?sx:sx+trailDir*c.trail,sy-1,c.trail,2);
@@ -463,7 +480,7 @@ let lastT=0;
 function loop(now){const dt=Math.min(0.05,((now-lastT)/1000)||0); lastT=now; if(!paused&&!dialogueOpen)update(dt); else state.time+=dt; render(); requestAnimationFrame(loop);}
 requestAnimationFrame(loop);
 
-function tryInteract(){if(dialogueOpen)return;const n=state.nearest;if(!n)return;if(n.type==='station')openStation(n.data);else if(n.type==='artwork')openArtwork(n.data);else if(n.type==='crosswalk')openCrosswalk(n.data);}
+function tryInteract(){if(dialogueOpen)return;const n=state.nearest;if(!n)return;if(n.type==='station')openStation(n.data);else if(n.type==='artwork')openArtwork(n.data);else if(n.type==='crosswalk'&&n.data.open<=0)openCrosswalk(n.data);}
 
 function openStation(s){
   dialogueOpen=true; const dlg=document.getElementById('dialogue'); dlg.classList.add('on'); dlg.classList.remove('crossing');
@@ -488,7 +505,7 @@ function chooseOption(opt,optsEl,body,s){
     const fb=document.createElement('div'); fb.className='feedback ok';
     fb.innerHTML=`<b style="color:var(--yellow)">Correto`+(mul>1.3?` — velocidade ×${mul.toFixed(1)}!`:'.')+`</b> ${wordsInFreedom(opt.fb)}`; body.appendChild(fb);
     unlockStation(s,mul); burstXP(s.px,s.py,Math.round(s.reward.xp*mul));
-    const close=document.createElement('button'); close.className='continue'; close.textContent='Continuar'; close.onclick=closeDialogue; body.appendChild(close);
+    const close=document.createElement('button'); close.className='continue'; close.textContent='Continuar · Enter'; close.onclick=closeDialogue; continueHandler=closeDialogue; body.appendChild(close);
   }
 }
 function openCrosswalk(cw){
@@ -503,9 +520,9 @@ function openCrosswalk(cw){
       [...opts.children].forEach(x=>x.disabled=true); opts.children[i].classList.add(opt.ok?'correct':'wrong');
       if(opt.ok){
         const fb=document.createElement('div'); fb.className='feedback ok'; fb.innerHTML=`<b style="color:var(--green)">Atravessia liberada por 10s.</b> ${wordsInFreedom(opt.fb)}`; body.appendChild(fb);
-        cw.answered=true; state.traffic[cw.road].stopped=10; state.xp+=40; updateHUD();
+        cw.answered=true; cw.open=10; state.traffic[cw.road].stopped=10; state.xp+=40; updateHUD();
         if(!state.codex.find(c=>c.title===`Travessia ${cw.tx},${cw.ty}`)){state.codex.push({cat:'Travessias',title:`Travessia ${cw.tx},${cw.ty}`,desc:opt.fb});renderCodex();}
-        const close=document.createElement('button'); close.className='continue'; close.textContent='Atravessar'; close.onclick=()=>{closeDialogue();}; body.appendChild(close);
+        const close=document.createElement('button'); close.className='continue'; close.textContent='Atravessar · Enter'; close.onclick=closeDialogue; continueHandler=closeDialogue; body.appendChild(close);
       } else {
         const fb=document.createElement('div'); fb.className='feedback'; fb.textContent=opt.fb; body.appendChild(fb);
         const retry=document.createElement('button'); retry.className='continue'; retry.textContent='Tentar de novo';
@@ -526,7 +543,7 @@ function openArtwork(a){
   if(!a.unlocked){a.unlocked=true;state.codex.push({cat:a.cat||'Obras',title:a.title,desc:a.desc+' — '+a.concept});state.xp+=60;updateHUD();renderCodex();}
   const close=document.createElement('button'); close.className='continue'; close.textContent='Fechar'; close.onclick=closeDialogue; body.appendChild(close);
 }
-function closeDialogue(){dialogueOpen=false;document.getElementById('dialogue').classList.remove('on');}
+function closeDialogue(){continueHandler=null;dialogueOpen=false;document.getElementById('dialogue').classList.remove('on');}
 function unlockStation(s,mul){
   if(s.unlocked)return; s.unlocked=true; state.codex.push({cat:s.reward.cat||'Geral',title:s.reward.codex,desc:s.reward.desc});
   state.xp+=Math.round(s.reward.xp*(mul||1)); updateHUD(); renderCodex();
