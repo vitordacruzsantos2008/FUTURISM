@@ -2,578 +2,1240 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>FUTURISMO — A Cidade do Amanhã</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>FUTURISMO — A arte que queria ultrapassar o presente</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="icon" href="data:,">
 <style>
-:root{--bg:#050317;--paper:#eae7f2;--magenta:#ff2fa0;--cyan:#2fe4ff;--teal:#22ffc2;--purple:#9d4dff;--yellow:#ffcc33;--steel:#7a7690;--line:#241a44;--green:#22ff7a;--brasil-yellow:#ffd400;--brasil-green:#00a859;}
-*{box-sizing:border-box;margin:0;padding:0;}
-html,body{height:100%;overflow:hidden;background:#000;color:var(--paper);font-family:'Space Grotesk',sans-serif;user-select:none;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);}
-canvas#game{display:block;width:100vw;height:100vh;image-rendering:pixelated;image-rendering:crisp-edges;}
-#hud{position:fixed;top:calc(env(safe-area-inset-top,0px) + 12px);left:0;right:0;z-index:10;display:flex;justify-content:space-between;padding:0 20px;pointer-events:none;font-size:10px;letter-spacing:.24em;text-transform:uppercase;text-shadow:0 0 6px currentColor;flex-wrap:wrap;gap:6px;}
-#hud .item{display:flex;flex-direction:column;gap:2px;}
-#hud .item span{opacity:.55;color:var(--cyan);}
-#hud .item b{font-family:'Archivo Black',sans-serif;font-size:15px;letter-spacing:0;color:var(--paper);font-variant-numeric:tabular-nums;text-shadow:0 0 8px rgba(255,47,160,.5);}
-#hud .xp b{color:var(--magenta);} #hud .codex b{color:var(--cyan);} #hud .vel b{color:var(--yellow);}
-#prompt{position:fixed;left:50%;bottom:12%;transform:translateX(-50%);z-index:15;padding:8px 16px;background:rgba(5,3,23,.9);border:1px solid var(--magenta);font-size:11px;letter-spacing:.22em;text-transform:uppercase;opacity:0;transition:opacity .2s;pointer-events:none;box-shadow:0 0 20px rgba(255,47,160,.35);}
-#prompt.on{opacity:1;} #prompt b{color:var(--yellow);}
-#hitflash{position:fixed;inset:0;background:var(--magenta);opacity:0;pointer-events:none;z-index:25;transition:opacity .3s;}
-#hitflash.on{opacity:.35;transition:opacity .04s;}
-#dialogue{position:fixed;bottom:0;left:0;right:0;z-index:20;background:linear-gradient(to top,rgba(5,3,23,.98),rgba(5,3,23,.85));border-top:2px solid var(--magenta);box-shadow:0 0 40px rgba(255,47,160,.25);padding:24px 28px calc(28px + env(safe-area-inset-bottom,0px));transform:translateY(100%);transition:transform .3s cubic-bezier(.3,.7,.3,1);max-height:75vh;overflow-y:auto;}
-#dialogue.on{transform:translateY(0);}
-#dialogue.crossing{border-top-color:var(--yellow);box-shadow:0 0 40px rgba(255,204,51,.35);}
-#dialogue .speaker{font-family:'Archivo Black',sans-serif;font-size:14px;letter-spacing:.15em;text-transform:uppercase;color:var(--cyan);margin-bottom:10px;text-shadow:0 0 10px currentColor;}
-#dialogue.crossing .speaker{color:var(--yellow);}
-#dialogue .speaker .role{font-family:'Space Grotesk',sans-serif;font-size:10px;letter-spacing:.3em;color:var(--steel);margin-left:10px;font-weight:400;text-shadow:none;}
-#dialogue .text{max-width:720px;font-size:15px;line-height:1.7;margin-bottom:20px;}
-#dialogue .question{font-family:'Archivo Black',sans-serif;font-size:14px;text-transform:uppercase;margin-bottom:14px;color:var(--yellow);}
-#dialogue .options{display:flex;flex-direction:column;gap:8px;max-width:720px;}
-#dialogue .option{text-align:left;padding:12px 16px;background:transparent;border:1px solid var(--line);color:var(--paper);font-family:inherit;font-size:14px;line-height:1.5;cursor:pointer;transition:.2s;}
-#dialogue .option:hover:not(:disabled){border-color:var(--magenta);background:rgba(255,47,160,.08);box-shadow:0 0 12px rgba(255,47,160,.3);}
-#dialogue .option.correct{border-color:var(--yellow);background:rgba(255,204,51,.1);color:var(--yellow);}
-#dialogue .option.wrong{border-color:var(--line);opacity:.35;}
-#dialogue .option:disabled{cursor:default;}
-#dialogue .feedback{margin-top:14px;padding:14px 18px;background:rgba(255,47,160,.06);border-left:2px solid var(--magenta);font-size:14px;line-height:1.65;max-width:720px;}
-#dialogue .feedback.ok{background:rgba(34,255,122,.08);border-left-color:var(--green);}
-#dialogue .feedback.ok span{display:inline-block;}
-#dialogue .continue{margin-top:18px;padding:12px 26px;background:var(--magenta);color:#000;border:none;font-family:'Archivo Black',sans-serif;font-size:11px;letter-spacing:.25em;text-transform:uppercase;cursor:pointer;transition:.2s;}
-#dialogue .continue:hover{background:var(--yellow);}
-#dialogue.crossing .continue{background:var(--yellow);}
-#codexBtn{position:fixed;bottom:calc(env(safe-area-inset-bottom,0px) + 22px);right:22px;z-index:15;width:48px;height:48px;border-radius:4px;background:rgba(5,3,23,.9);border:1px solid var(--cyan);color:var(--cyan);cursor:pointer;font-family:'Archivo Black',sans-serif;font-size:16px;transition:.2s;box-shadow:0 0 14px rgba(47,228,255,.4);}
-#codexBtn:hover{background:var(--cyan);color:#000;box-shadow:0 0 24px rgba(47,228,255,.8);}
-#codex{position:fixed;top:0;right:0;bottom:0;z-index:30;width:min(420px,92vw);background:rgba(5,3,23,.98);border-left:1px solid var(--cyan);padding:28px 24px calc(28px + env(safe-area-inset-bottom,0px));transform:translateX(100%);transition:transform .35s cubic-bezier(.3,.7,.3,1);overflow-y:auto;box-shadow:-10px 0 40px rgba(47,228,255,.15);}
-#codex.on{transform:translateX(0);}
-#codex h2{font-family:'Archivo Black',sans-serif;font-size:18px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px;color:var(--cyan);text-shadow:0 0 12px currentColor;}
-#codex .sub{font-size:10px;letter-spacing:.3em;color:var(--steel);text-transform:uppercase;margin-bottom:22px;}
-#codex .category{font-family:'Archivo Black',sans-serif;font-size:11px;letter-spacing:.3em;color:var(--magenta);text-transform:uppercase;margin-top:22px;margin-bottom:10px;}
-#codex .category:first-child{margin-top:0;}
-#codex .entry{padding:12px 0;border-bottom:1px solid var(--line);}
-#codex .entry .t{font-family:'Archivo Black',sans-serif;font-size:12.5px;text-transform:uppercase;color:var(--yellow);margin-bottom:6px;letter-spacing:.05em;}
-#codex .entry .d{font-size:12.5px;color:var(--steel);line-height:1.65;}
-#codex .entry.locked .t{color:var(--line);} #codex .entry.locked .d{color:var(--line);font-style:italic;}
-#codex .close{position:absolute;top:18px;right:18px;background:none;border:none;color:var(--paper);font-size:22px;cursor:pointer;line-height:1;}
-#codex .close:hover{color:var(--magenta);}
-#title{position:fixed;inset:0;z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;background:radial-gradient(circle at center, rgba(157,77,255,.35) 0%, rgba(5,3,23,.96) 55%, #050317 100%);text-align:center;padding:30px;transition:opacity .6s;}
-#title.hidden{opacity:0;pointer-events:none;}
-#title .year{font-family:'Archivo Black',sans-serif;font-size:clamp(60px,15vw,180px);line-height:.85;letter-spacing:-.04em;text-shadow:3px 0 var(--magenta),-3px 0 var(--cyan);}
-#title h1{font-family:'Archivo Black',sans-serif;font-size:clamp(20px,3.8vw,36px);margin-top:20px;letter-spacing:.02em;text-transform:uppercase;}
-#title h1 em{font-style:normal;color:var(--magenta);}
-#title p{max-width:560px;margin-top:22px;color:var(--steel);font-size:14.5px;line-height:1.7;}
-#title .begin{margin-top:40px;padding:16px 38px;background:var(--magenta);color:#000;border:none;font-family:'Archivo Black',sans-serif;font-size:12px;letter-spacing:.25em;text-transform:uppercase;cursor:pointer;transition:.2s;box-shadow:0 0 24px rgba(255,47,160,.5);}
-#title .begin:hover{background:var(--yellow);box-shadow:0 0 36px rgba(255,204,51,.6);transform:scale(1.04);}
-#title .keys{margin-top:32px;font-size:10px;letter-spacing:.3em;color:var(--steel);text-transform:uppercase;}
-#transform{position:fixed;inset:0;z-index:60;background:#000;display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:30px;opacity:0;pointer-events:none;transition:opacity .6s;}
-#transform.on{opacity:1;pointer-events:auto;}
-#transform .eyebrow{font-size:11px;letter-spacing:.5em;color:var(--magenta);text-transform:uppercase;margin-bottom:22px;}
-#transform h2{font-family:'Archivo Black',sans-serif;font-size:clamp(30px,7.5vw,80px);line-height:.92;text-transform:uppercase;letter-spacing:-.03em;}
-#transform h2 em{font-style:normal;color:var(--magenta);}
-#transform p{max-width:520px;margin-top:22px;color:var(--steel);font-size:14.5px;line-height:1.7;}
-#transform .continue{margin-top:32px;padding:14px 32px;background:var(--yellow);color:#000;border:none;font-family:'Archivo Black',sans-serif;font-size:11px;letter-spacing:.25em;text-transform:uppercase;cursor:pointer;}
+:root{
+  --bg:#0a0a0c; --paper:#edede4; --red:#ff3300; --yellow:#f2ff00;
+  --steel:#8a8a90; --line:#2a2a2e; --cyan:#00eaff;
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--bg); color:var(--paper);
+  font-family:'Space Grotesk',sans-serif;
+  overflow-x:hidden; cursor:none; -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4,.display{font-family:'Archivo Black',sans-serif; line-height:.95; letter-spacing:-.01em;}
+::selection{background:var(--red); color:#000;}
+a{color:inherit; text-decoration:none;}
+canvas{display:block;}
+
+#grain{
+  position:fixed; inset:0; z-index:800; pointer-events:none; opacity:.05;
+  mix-blend-mode:overlay;
+  background-image:repeating-linear-gradient(0deg,rgba(255,255,255,.6) 0 1px,transparent 1px 3px);
+  animation:grainShift 1s steps(4) infinite;
+}
+@keyframes grainShift{0%{transform:translate(0,0)}50%{transform:translate(-1px,1px)}100%{transform:translate(1px,-1px)}}
+
+.rail{position:fixed; left:0; top:0; bottom:0; width:3px; z-index:900; background:var(--line); pointer-events:none;}
+.rail i{position:absolute; left:0; top:0; width:100%; height:0%; background:linear-gradient(to bottom,var(--yellow),var(--red)); box-shadow:0 0 14px rgba(255,51,0,.7); transition:height .08s linear;}
+@media(max-width:640px){.rail{width:2px;}}
+
+#cursor{position:fixed; width:14px; height:14px; border:1px solid var(--red); border-radius:50%; pointer-events:none; z-index:9000; transform:translate(-50%,-50%); transition:width .12s, height .12s; mix-blend-mode:difference;}
+@media(hover:none){#cursor{display:none;} body{cursor:auto;}}
+
+#boot{position:fixed; inset:0; z-index:3000; background:#000; display:flex; align-items:center; justify-content:center; flex-direction:column; overflow:hidden;}
+#boot.done{display:none;}
+#bootCv{position:absolute; inset:0; width:100%; height:100%;}
+.boot-inner{position:relative; z-index:2; text-align:center; padding:0 20px;}
+#bootLabel{font-size:11px; letter-spacing:.5em; color:var(--red); text-transform:uppercase; margin-bottom:22px;}
+#bootYear{font-family:'Archivo Black',sans-serif; font-size:clamp(72px,22vw,260px); line-height:.85; color:var(--paper); font-variant-numeric:tabular-nums; text-shadow:0 0 60px rgba(255,51,0,.35);}
+#bootSub{margin-top:26px; font-size:12px; letter-spacing:.35em; color:var(--steel); text-transform:uppercase;}
+.boot-bar{margin-top:34px; width:min(320px,70vw); height:1px; background:var(--line); position:relative; overflow:hidden;}
+.boot-bar i{position:absolute; inset:0 100% 0 0; background:var(--red); transition:right .1s linear;}
+
+#shatter{position:fixed; inset:0; z-index:3100; pointer-events:none; display:none;}
+#shatter.on{display:block;}
+.shard{position:absolute; inset:0; background:linear-gradient(135deg, rgba(255,51,0,.08), rgba(10,10,12,.5) 55%, rgba(0,0,0,.65)); box-shadow:inset 0 0 0 1px rgba(237,237,228,.08); will-change:transform,opacity; transform:translate3d(0,0,0) rotate(0deg); opacity:1; transition:transform .78s cubic-bezier(.22,.72,.25,1), opacity .78s ease-out;}
+.shard.fly{transform:translate3d(var(--tx),var(--ty),0) rotate(var(--rot)) scale(var(--sc)); opacity:0;}
+
+nav{position:fixed; top:0; left:0; right:0; z-index:500; display:flex; justify-content:space-between; align-items:center; gap:16px; padding:16px 22px 16px 30px; padding-top:calc(16px + env(safe-area-inset-top,0px)); mix-blend-mode:difference; font-size:12px; pointer-events:none; letter-spacing:.06em;}
+nav .brand{font-family:'Archivo Black',sans-serif; font-size:13px;}
+nav .links{display:flex; gap:14px; pointer-events:auto; flex-wrap:wrap; justify-content:center;}
+nav .links a{opacity:.55; transition:opacity .2s; font-size:11.5px;}
+nav .links a:hover{opacity:1;}
+nav .hud{display:flex; gap:14px; font-variant-numeric:tabular-nums; font-size:11px;}
+nav .hud span{opacity:.5;}
+nav .hud b{font-weight:500;}
+@media(max-width:900px){nav .links{display:none;}}
+
+canvas#bg{position:fixed; inset:0; z-index:0; opacity:.55; pointer-events:none;}
+
+section{position:relative; z-index:1; padding:110px 22px 110px 34px; max-width:1120px; margin:0 auto;}
+.eyebrow{font-size:11px; letter-spacing:.42em; text-transform:uppercase; color:var(--red); margin-bottom:18px; opacity:0; transform:translateX(-14px); transition:opacity .7s, transform .7s;}
+.eyebrow.in{opacity:1; transform:translateX(0);}
+
+#hero{min-height:100svh; display:flex; flex-direction:column; justify-content:center; padding-top:140px;}
+#hero h1{font-size:clamp(44px,11vw,132px); text-transform:uppercase; transition:transform .25s ease-out; will-change:transform;}
+#hero h1 em{font-style:normal; color:var(--red);}
+#hero .sub{max-width:540px; margin-top:28px; color:var(--steel); font-size:15px; line-height:1.65;}
+#hero .meta{display:flex; gap:28px; flex-wrap:wrap; margin-top:44px; font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:var(--steel);}
+#hero .meta b{color:var(--paper); display:block; font-family:'Archivo Black',sans-serif; font-size:22px; letter-spacing:0; margin-bottom:4px;}
+.scroll-hint{margin-top:56px; font-size:11px; letter-spacing:.35em; text-transform:uppercase; color:var(--steel); animation:pulse 2.4s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:.35}50%{opacity:1}}
+
+#heroLines{position:absolute; inset:0; z-index:-1; opacity:.5;}
+
+/* ============ 01 CONTEXTO ============ */
+#contexto{padding-bottom:60px;}
+.ctx-narr{max-width:640px; margin-top:32px; font-size:15.5px; line-height:1.85; color:var(--steel);}
+.ctx-narr b{color:var(--paper);}
+.ctx-narr em{font-style:normal; color:var(--red); font-family:'Archivo Black',sans-serif;}
+.ctx-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:1px; background:var(--line); margin-top:52px; border:1px solid var(--line);}
+.ctx-cell{background:var(--bg); padding:32px 24px; transition:background .25s, transform .25s;}
+.ctx-cell:hover{background:#111116; transform:translateY(-4px);}
+.ctx-cell .ctx-num{font-family:'Archivo Black',sans-serif; font-size:11px; letter-spacing:.3em; color:var(--red);}
+.ctx-cell h3{font-size:clamp(18px,2.4vw,24px); text-transform:uppercase; margin-top:14px; line-height:1.1;}
+.ctx-cell p{font-size:13.5px; color:var(--steel); margin-top:12px; line-height:1.7;}
+.ctx-cell .ctx-keys{margin-top:20px; display:flex; flex-wrap:wrap; gap:6px;}
+.ctx-cell .ctx-keys span{font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; border:1px solid var(--line); padding:5px 9px; color:var(--steel); transition:.2s;}
+.ctx-cell:hover .ctx-keys span{border-color:var(--red); color:var(--paper);}
+
+/* ============ INTERLÚDIO ============ */
+#manifesto{min-height:80vh; display:flex; align-items:center; justify-content:center; text-align:center; flex-direction:column;}
+#manifesto .words{display:flex; flex-wrap:wrap; justify-content:center; gap:6px 20px; margin-top:34px;}
+#manifesto .words span{display:inline-block; font-family:'Archivo Black',sans-serif; font-size:clamp(26px,6vw,64px); text-transform:uppercase; transition:transform .18s cubic-bezier(.2,.8,.3,1.4), color .18s; will-change:transform;}
+#manifesto .words span:hover{color:var(--red); transform:scale(1.14) skewX(-8deg);}
+#manifesto .words span:nth-child(even):hover{color:var(--yellow);}
+
+/* ============ 02 EXPOSIÇÃO ============ */
+#exposicao{padding-bottom:80px;}
+.expo-lead{color:var(--steel); max-width:580px; margin-top:18px; font-size:14.5px; line-height:1.75;}
+.expo-legend{display:flex; justify-content:space-between; align-items:center; margin-top:52px; padding-bottom:12px; border-bottom:1px solid var(--line); font-size:10.5px; letter-spacing:.32em; text-transform:uppercase; color:var(--steel); flex-wrap:wrap; gap:12px;}
+.expo-legend b{color:var(--red); font-family:'Archivo Black',sans-serif;}
+
+.artists{display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:22px; margin-top:36px;}
+.artist-card{perspective:1600px; cursor:pointer; aspect-ratio:3/4; outline:none; position:relative; -webkit-tap-highlight-color:transparent;}
+.artist-inner{position:relative; width:100%; height:100%; transform-style:preserve-3d; transition:transform 1s cubic-bezier(.45,.05,.2,1);}
+.artist-card.flipped .artist-inner{transform:rotateY(180deg);}
+.artist-card:focus-visible .artist-inner{box-shadow:0 0 0 2px var(--red);}
+.artist-face{position:absolute; inset:0; backface-visibility:hidden; -webkit-backface-visibility:hidden; overflow:hidden; background:#0e0e12; border:1px solid var(--line); display:flex; flex-direction:column;}
+.artist-back{transform:rotateY(180deg);}
+.artist-front .frame{position:relative; flex:1; overflow:hidden; background:#101014;}
+.artist-front .frame canvas{position:absolute; inset:0; width:100%; height:100%; image-rendering:pixelated; transition:filter .4s, transform .8s cubic-bezier(.2,.7,.3,1); z-index:2;}
+.artist-card:hover .artist-front .frame canvas{filter:brightness(1.12) saturate(1.2); transform:scale(1.04);}
+.artist-front .frame::after{content:''; position:absolute; inset:0; z-index:3; pointer-events:none; background:linear-gradient(to top, rgba(10,10,12,.95) 0%, rgba(10,10,12,.2) 45%, transparent 70%);}
+.artist-front .caption{position:relative; z-index:4; padding:20px 18px 22px; margin-top:-84px;}
+.artist-front .an{font-family:'Archivo Black',sans-serif; font-size:15px; text-transform:uppercase; line-height:1.15;}
+.artist-front .ay{color:var(--red); font-size:12px; margin-top:8px; letter-spacing:.12em; font-weight:500;}
+.flip-hint{position:absolute; top:14px; right:14px; z-index:5; font-size:9.5px; letter-spacing:.22em; text-transform:uppercase; color:var(--paper); background:rgba(10,10,12,.65); border:1px solid rgba(237,237,228,.18); padding:6px 9px; backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px); opacity:.75; transition:opacity .3s, border-color .3s, color .3s;}
+.artist-card:hover .flip-hint{opacity:1; border-color:var(--red); color:var(--red);}
+.artist-back .work{position:relative; flex:1; overflow:hidden; background:#08080a;}
+.artist-back .work canvas{position:absolute; inset:0; width:100%; height:100%; image-rendering:pixelated; z-index:2; transition:transform 8s linear;}
+.artist-card.flipped .artist-back .work canvas{transform:scale(1.06);}
+.artist-back .work::after{content:''; position:absolute; inset:0; z-index:3; pointer-events:none; background:linear-gradient(to top, rgba(0,0,0,.92) 0%, rgba(0,0,0,.4) 50%, transparent 80%);}
+.artist-back .work-info{position:relative; z-index:4; padding:22px 18px; margin-top:-104px;}
+.artist-back .work-title{font-family:'Archivo Black',sans-serif; font-size:14.5px; text-transform:uppercase; line-height:1.25; color:var(--paper);}
+.artist-back .work-year{color:var(--yellow); font-size:11.5px; letter-spacing:.18em; margin-top:8px; font-weight:500;}
+.artist-back .work-desc{padding:0 18px 22px; font-size:12.5px; color:var(--steel); line-height:1.6; position:relative; z-index:4;}
+.artist-back .flip-hint{color:var(--yellow); border-color:rgba(242,255,0,.3);}
+
+/* ============ 03 RUÍDO / MÚSICA ============ */
+#ruido{background:#000; border-top:1px solid var(--line); border-bottom:1px solid var(--line); max-width:none; padding-left:22px; padding-right:22px;}
+#ruido .inner{max-width:1120px; margin:0 auto;}
+.pads{display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:32px;}
+@media(max-width:520px){.pads{grid-template-columns:repeat(2,1fr);}}
+.pad{border:1px solid var(--line); padding:24px 10px; text-align:center; background:none; color:var(--paper); font-family:'Space Grotesk',sans-serif; font-size:12px; letter-spacing:.12em; cursor:pointer; transition:.18s; text-transform:uppercase; -webkit-tap-highlight-color:transparent;}
+.pad:hover{border-color:var(--red); color:var(--red);}
+.pad.active{background:var(--yellow); color:#000; border-color:var(--yellow);}
+#noise-vis{width:100%; height:90px; margin-top:26px; border:1px solid var(--line);}
+
+/* ============ 04 ANIME ============ */
+#anime{padding-bottom:80px;}
+.anime-hero{display:grid; grid-template-columns:minmax(220px,380px) 1fr; gap:44px; margin-top:44px; align-items:center;}
+@media(max-width:760px){.anime-hero{grid-template-columns:1fr;}}
+.anime-poster{position:relative; aspect-ratio:2/3; overflow:hidden; background:#000; border:1px solid var(--line); box-shadow:0 0 70px rgba(0,234,255,.2);}
+.anime-poster img{width:100%; height:100%; object-fit:cover; display:block; transition:transform .9s cubic-bezier(.2,.7,.3,1), filter .4s;}
+.anime-poster:hover img{transform:scale(1.05); filter:brightness(1.1) saturate(1.2);}
+.anime-poster::after{content:''; position:absolute; inset:0; pointer-events:none; background:linear-gradient(to top, rgba(0,0,0,.6), transparent 40%);}
+.anime-info h3{font-size:clamp(32px,6.4vw,72px); text-transform:uppercase; line-height:1; margin-top:12px; text-shadow:2px 0 var(--red), -2px 0 var(--cyan);}
+.anime-meta{color:var(--steel); font-size:11.5px; letter-spacing:.18em; margin-top:16px; text-transform:uppercase;}
+.anime-info p{color:var(--steel); font-size:14.5px; line-height:1.75; margin-top:18px; max-width:520px;}
+.anime-info p b{color:var(--paper);}
+.anime-keys{display:flex; flex-wrap:wrap; gap:8px; margin-top:26px;}
+.anime-keys span{font-size:11px; letter-spacing:.16em; text-transform:uppercase; border:1px solid var(--line); padding:7px 12px; color:var(--paper); transition:.2s;}
+.anime-keys span:hover{border-color:var(--red); color:var(--red);}
+.trailer-btn{display:inline-block; margin-top:24px; border:1px solid var(--cyan); color:var(--cyan); padding:12px 28px; font-size:12px; letter-spacing:.25em; text-transform:uppercase; transition:.2s;}
+.trailer-btn:hover{background:var(--cyan); color:#000; box-shadow:0 0 24px rgba(0,234,255,.4);}
+
+/* ============ 05 RELAÇÃO ============ */
+.rel-grid{display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--line); margin-top:44px; border:1px solid var(--line);}
+@media(max-width:640px){.rel-grid{grid-template-columns:1fr;}}
+.rel-item{background:var(--bg); padding:30px 24px; transition:background .25s;}
+.rel-item:hover{background:#111116;}
+.rel-item .rel-tag{font-size:11px; letter-spacing:.3em; text-transform:uppercase; color:var(--red); font-family:'Archivo Black',sans-serif;}
+.rel-item h4{font-size:17px; text-transform:uppercase; margin-top:12px; line-height:1.15;}
+.rel-item p{font-size:13.5px; color:var(--steel); margin-top:12px; line-height:1.7;}
+.rel-item p b{color:var(--paper);}
+.rel-note{margin-top:36px; border-left:2px solid var(--red); padding-left:18px; color:var(--paper); font-size:14.5px; line-height:1.75; max-width:640px;}
+.rel-note em{font-style:normal; color:var(--red); font-family:'Archivo Black',sans-serif;}
+
+/* ============ 06 PRÓS ============ */
+.pros-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:1px; background:var(--line); margin-top:44px; border:1px solid var(--line);}
+.pros-item{background:var(--bg); padding:30px 24px; transition:background .25s, color .25s, transform .25s; min-height:170px; display:flex; flex-direction:column; justify-content:space-between;}
+.pros-item:hover{background:var(--yellow); color:#000; transform:translateY(-4px);}
+.pros-item:hover p{color:rgba(0,0,0,.75);}
+.pros-item .pros-num{font-family:'Archivo Black',sans-serif; font-size:11px; letter-spacing:.3em; color:var(--yellow);}
+.pros-item:hover .pros-num{color:#000;}
+.pros-item h4{font-size:17px; text-transform:uppercase; margin-top:14px; line-height:1.15;}
+.pros-item p{font-size:13px; color:var(--steel); margin-top:10px; line-height:1.6;}
+
+/* ============ 07 BLACK MIRROR ============ */
+.bm-hero{display:grid; grid-template-columns:minmax(240px,420px) 1fr; gap:44px; margin-top:44px; align-items:center;}
+@media(max-width:760px){.bm-hero{grid-template-columns:1fr;}}
+.bm-cover{position:relative; aspect-ratio:2/3; overflow:hidden; background:#000; border:1px solid rgba(0,234,255,.35); box-shadow:0 0 90px rgba(0,234,255,.2), 0 0 0 6px #000, 0 0 0 7px rgba(0,234,255,.15);}
+.bm-cover img{width:100%; height:100%; object-fit:cover; display:block; transition:transform .9s cubic-bezier(.2,.7,.3,1), filter .4s;}
+.bm-cover:hover img{transform:scale(1.05); filter:brightness(1.1) saturate(1.2);}
+.bm-cover::after{content:''; position:absolute; inset:0; pointer-events:none; background:repeating-linear-gradient(0deg, rgba(0,234,255,.05) 0 1px, transparent 1px 3px), linear-gradient(to top, rgba(0,0,0,.5), transparent 40%);}
+.bm-info h3{font-size:clamp(36px,7.4vw,88px); text-transform:uppercase; margin-top:12px; text-shadow:3px 0 var(--red), -3px 0 var(--cyan);}
+.bm-q{font-family:'Archivo Black',sans-serif; font-size:clamp(16px,2.4vw,24px); line-height:1.25; margin-top:24px; text-transform:uppercase;}
+.bm-note{border-left:2px solid var(--cyan); padding-left:16px; color:var(--steel); font-size:13.5px; line-height:1.6; margin-top:22px; max-width:480px;}
+.bm-btn{margin-top:30px; padding:18px 36px; font-family:'Archivo Black',sans-serif; font-size:14px; background:var(--cyan); color:#000; box-shadow:0 0 34px rgba(0,234,255,.35);}
+.bm-btn:hover{background:var(--yellow); border-color:var(--yellow); box-shadow:0 0 50px rgba(242,255,0,.5); transform:scale(1.04);}
+
+.grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:1px; background:var(--line); margin-top:40px; border:1px solid var(--line);}
+.cell{background:var(--bg); padding:32px 22px; min-height:200px; display:flex; flex-direction:column; justify-content:space-between; transition:background .25s, color .25s, transform .25s;}
+.cell:hover{background:var(--red); color:#000; transform:translateY(-4px);}
+.cell .num{font-family:'Archivo Black',sans-serif; font-size:12px; color:var(--red); letter-spacing:.2em;}
+.cell:hover .num{color:#000;}
+.cell h3{font-size:17px; margin-top:16px; text-transform:uppercase;}
+.cell p{font-size:13px; color:var(--steel); margin-top:12px; line-height:1.6;}
+.cell:hover p{color:rgba(0,0,0,.75);}
+.grid.bm .cell .num{color:var(--cyan);}
+.grid.bm .cell:hover{background:var(--cyan);}
+.grid.bm .cell:hover .num{color:#000;}
+.bm-sub{margin-top:64px; font-size:clamp(20px,3.4vw,34px); text-transform:uppercase;}
+.bm-sub em{font-style:normal; color:var(--cyan);}
+
+/* ============ FECHAMENTO ============ */
+.pairs{display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--line); margin-top:44px; border:1px solid var(--line);}
+@media(max-width:640px){.pairs{grid-template-columns:1fr;}}
+.pair{display:contents;}
+.pair > div{background:var(--bg); padding:24px; transition:background .25s;}
+.pair > div:hover{background:#111116;}
+.pair .a{color:var(--red); font-size:11px; letter-spacing:.24em; font-family:'Archivo Black',sans-serif;}
+.pair .b{margin-top:10px; font-size:14.5px; line-height:1.6;}
+.closing{margin-top:56px; font-size:clamp(22px,4.4vw,46px); text-transform:uppercase; line-height:1;}
+.closing em{font-style:normal; color:var(--cyan); text-shadow:0 0 30px rgba(0,234,255,.35);}
+
+/* ============ 08 JOGO ============ */
+#jogo{padding-bottom:120px;}
+#jogo .game-lead{color:var(--steel); max-width:680px; margin-top:22px; font-size:15px; line-height:1.82;}
+.game-preview{position:relative; margin-top:56px; border:1px solid var(--line); background:radial-gradient(circle at 50% 0%, rgba(0,234,255,.10) 0%, transparent 60%), linear-gradient(180deg, #0b0b14 0%, #060610 100%); padding:70px 30px 60px; text-align:center; overflow:hidden;}
+@media(max-width:640px){.game-preview{padding:50px 22px 44px;}}
+.game-preview::before{content:''; position:absolute; inset:0; background-image:repeating-linear-gradient(0deg, rgba(0,234,255,.04) 0 1px, transparent 1px 3px); pointer-events:none;}
+.game-preview-glow{position:absolute; left:50%; bottom:-120px; width:600px; height:240px; transform:translateX(-50%); background:radial-gradient(ellipse at center, rgba(0,234,255,.35) 0%, rgba(0,234,255,.08) 40%, transparent 70%); filter:blur(20px); pointer-events:none; animation:pulse 3.5s ease-in-out infinite;}
+.game-preview-inner{position:relative; z-index:2;}
+.gp-tag{font-size:11px; letter-spacing:.4em; text-transform:uppercase; color:var(--cyan); margin-bottom:22px; text-shadow:0 0 12px currentColor;}
+.gp-title{font-family:'Archivo Black',sans-serif; font-size:clamp(38px,8vw,96px); line-height:.9; letter-spacing:-.03em; text-transform:uppercase; color:var(--paper); text-shadow:3px 0 var(--red), -3px 0 var(--cyan); margin-bottom:24px;}
+.gp-meta{display:flex; justify-content:center; gap:12px; flex-wrap:wrap; font-size:11px; letter-spacing:.25em; text-transform:uppercase; color:var(--steel); margin-bottom:44px;}
+.gp-cta{display:inline-block; padding:20px 46px; background:var(--red); color:#000; font-family:'Archivo Black',sans-serif; font-size:14px; letter-spacing:.22em; text-transform:uppercase; transition:.25s; box-shadow:0 0 40px rgba(255,51,0,.35); cursor:pointer;}
+.gp-cta:hover{background:var(--yellow); transform:scale(1.04); box-shadow:0 0 60px rgba(242,255,0,.5);}
+.gp-hint{margin-top:28px; font-size:11px; letter-spacing:.22em; color:var(--steel); text-transform:uppercase; opacity:.8;}
+.game-controls{display:flex; gap:22px; flex-wrap:wrap; margin-top:32px; font-size:11px; letter-spacing:.22em; text-transform:uppercase; color:var(--steel);}
+.game-controls kbd{display:inline-block; padding:3px 8px; margin:0 4px; border:1px solid var(--line); background:#0e0e12; font-family:'Archivo Black',sans-serif; font-size:10px; letter-spacing:.05em; color:var(--paper);}
+
+footer{padding:70px 22px 90px 34px; text-align:center; color:var(--steel); font-size:12px; letter-spacing:.1em; border-top:1px solid var(--line);}
+footer b{color:var(--red); font-family:'Archivo Black',sans-serif;}
+
+@media(prefers-reduced-motion:reduce){
+  *{animation:none !important; transition:none !important;}
+  html{scroll-behavior:auto;}
+  .artist-inner{transition:none;}
+  .artist-card.flipped .artist-inner{transform:rotateY(180deg);}
+}
 </style>
 </head>
 <body>
-<canvas id="game"></canvas>
-<div id="hitflash"></div>
-<div id="hud">
-  <div class="item"><span>Ano</span><b id="hudYear">1909</b></div>
-  <div class="item xp"><span>Conhecimento</span><b id="hudXp">0</b></div>
-  <div class="item codex"><span>Codex</span><b id="hudCodex">0 / 12</b></div>
-  <div class="item vel"><span>Velocità</span><b id="hudVel">×1.0</b></div>
+
+<div id="boot">
+  <canvas id="bootCv"></canvas>
+  <div class="boot-inner">
+    <div id="bootLabel">Inicializando salto temporal</div>
+    <div id="bootYear">2026</div>
+    <div id="bootSub">Destino: Milão · Itália</div>
+    <div class="boot-bar"><i id="bootBar"></i></div>
+  </div>
 </div>
-<div id="prompt"><b>E</b> interagir</div>
-<div id="dialogue"><div class="speaker" id="dlgSpeaker"></div><div class="text" id="dlgText"></div><div id="dlgBody"></div></div>
-<button id="codexBtn" title="Codex (C)">C</button>
-<div id="codex"><button class="close" id="codexClose">×</button><h2>Codex</h2><div class="sub">Conhecimento desbloqueado</div><div id="codexList"></div></div>
-<div id="title">
-  <div class="year">1909</div>
-  <h1>A Cidade do <em>Amanhã</em></h1>
-  <p>Uma avenida. Prédios que repetem o passado. Nada se move — ainda. Corra sem parar e a própria cidade acelera com você. Atravesse as ruas com cuidado. Encontre os futuristas, responda, e o mundo vai mudar.</p>
-  <button class="begin" id="beginBtn">Entrar na cidade</button>
-  <div class="keys">WASD ou setas · correr sem parar aumenta a Velocità · E interagir/atravessar · Enter continuar · C codex</div>
-</div>
-<div id="transform">
-  <div class="eyebrow">A cidade responde</div>
-  <h2>Era <em>Città Nuova</em></h2>
-  <p>Os manifestos foram ouvidos. A cidade acelera. As luzes mudam. A velocidade entra no concreto.</p>
-  <button class="continue" id="transformContinue">Continuar</button>
-</div>
+<div id="shatter"></div>
+
+<div id="grain"></div>
+<div class="rail"><i id="railFill"></i></div>
+<div id="cursor"></div>
+<canvas id="bg"></canvas>
+
+<nav>
+  <div class="brand">FUTURISMO</div>
+  <div class="links">
+    <a href="#contexto">contexto</a>
+    <a href="#exposicao">exposição</a>
+    <a href="#ruido">ruído</a>
+    <a href="#anime">anime</a>
+    <a href="#relacao">relação</a>
+    <a href="#pros">prós</a>
+    <a href="#blackmirror">black mirror</a>
+    <a href="jogo.html" style="color:var(--red)">▶ jogar</a>
+  </div>
+  <div class="hud" id="hud">
+    <span>ANO <b id="hudYear">1909</b></span>
+    <span>V <b id="speed">0000</b></span>
+  </div>
+</nav>
+
+<!-- ============ HERO ============ -->
+<section id="hero">
+  <svg id="heroLines" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice" aria-hidden="true"></svg>
+  <div class="eyebrow">Itália · 1909</div>
+  <h1 class="display" id="heroH1">
+    A arte que<br>queria <em>ultrapassar</em><br>o presente
+  </h1>
+  <p class="sub">
+    O movimento que quis destruir o passado e inventar o futuro —
+    e a pergunta que ele não fez.
+  </p>
+  <div class="meta">
+    <div><b>1909</b>Manifesto em Paris</div>
+    <div><b>1ª</b>Vanguarda europeia</div>
+    <div><b>+</b>máquina · velocidade</div>
+    <div><b>→</b>anime · black mirror · jogo</div>
+  </div>
+  <div class="scroll-hint">↓ desça — o tempo vem junto</div>
+</section>
+
+<!-- ============ 01 — CONTEXTO ============ -->
+<section id="contexto">
+  <div class="eyebrow">01 — Contexto</div>
+  <h2 class="display" style="font-size:clamp(28px,5.4vw,60px); text-transform:uppercase;">O futuro<br>como <em style="font-style:normal;color:var(--red)">programa</em></h2>
+
+  <p class="ctx-narr">
+    <b>1909.</b> A Itália industrial descobre a velocidade.
+    Marinetti publica o <em>Manifesto Futurista</em> em Paris e propõe
+    destruir o passado para inventar o futuro. Nasce a primeira vanguarda europeia —
+    um movimento que transforma <b>máquina, velocidade e modernidade</b> em arte.
+  </p>
+
+  <div class="ctx-grid">
+    <div class="ctx-cell">
+      <div class="ctx-num">ORIGEM</div>
+      <h3>Ruptura<br>com o passado</h3>
+      <p>Contra museus, academias e tradição. O presente é ponto de partida — o futuro, destino.</p>
+      <div class="ctx-keys">
+        <span>1909</span><span>Manifesto</span><span>vanguarda</span>
+      </div>
+    </div>
+
+    <div class="ctx-cell">
+      <div class="ctx-num">CONTEXTO</div>
+      <h3>Itália<br>industrial</h3>
+      <p>Fábricas, automóveis, eletricidade, multidões urbanas. O mundo mudou — a arte precisava mudar também.</p>
+      <div class="ctx-keys">
+        <span>cidade</span><span>fábrica</span><span>ruído</span>
+      </div>
+    </div>
+
+    <div class="ctx-cell">
+      <div class="ctx-num">CARACTERÍSTICAS</div>
+      <h3>Velocidade<br>e máquina</h3>
+      <p>Movimento, tecnologia e experimentação como linguagem. Pintura, escultura, música e literatura.</p>
+      <div class="ctx-keys">
+        <span>velocidade</span><span>máquina</span><span>movimento</span><span>experimento</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ INTERLÚDIO ============ -->
+<section id="manifesto">
+  <div class="eyebrow">— Ideias-força</div>
+  <h2 class="display" style="font-size:clamp(24px,4.4vw,44px); text-transform:uppercase;">Palavras em liberdade</h2>
+  <div class="words" id="words">
+    <span>Velocidade</span>
+    <span>Máquina</span>
+    <span>Ruptura</span>
+    <span>Futuro</span>
+  </div>
+</section>
+
+<!-- ============ 02 — EXPOSIÇÃO ============ -->
+<section id="exposicao">
+  <div class="eyebrow">02 — Exposição</div>
+  <h2 class="display" style="font-size:clamp(28px,5.4vw,60px); text-transform:uppercase;">Galeria<br>futurista</h2>
+  <p class="expo-lead">
+    As obras deixaram de ser tópicos separados. Agora são <b style="color:var(--paper)">exposição</b> —
+    clique em cada peça para virar a obra e ver o título, o ano e a ideia por trás.
+  </p>
+
+  <div class="expo-legend">
+    <span>Peça <b>01</b> — <b>08</b></span>
+    <span>Clique → obra · Clique ← voltar</span>
+    <span>Pintura · Escultura · Arquitetura · Música</span>
+  </div>
+
+  <div class="artists" id="artistGrid"></div>
+</section>
+
+<!-- ============ 03 — RUÍDO / MÚSICA ============ -->
+<section id="ruido">
+  <div class="inner">
+    <div class="eyebrow">03 — Russolo e a arte do ruído</div>
+    <h2 class="display" style="font-size:clamp(24px,4.4vw,46px); text-transform:uppercase;">A cidade como<br>instrumento</h2>
+    <p style="color:var(--steel); max-width:520px; margin-top:18px; font-size:14.5px; line-height:1.7;">
+      1913: a cidade industrial ganhou sua própria música. Em 1915, a <b style="color:var(--paper)">Primeira Guerra</b>
+      trouxe outra trilha — bombas, tiros e granadas. Toque os botões e combine ruídos.
+    </p>
+    <div class="pads" id="pads"></div>
+    <canvas id="noise-vis"></canvas>
+  </div>
+</section>
+
+<!-- ============ 04 — ANIME ============ -->
+<section id="anime">
+  <div class="eyebrow">04 — Anime</div>
+  <h2 class="display" style="font-size:clamp(28px,5.4vw,60px); text-transform:uppercase;">Do cavalo<br>à Night City</h2>
+
+  <div class="anime-hero">
+    <div class="anime-poster">
+      <img src="pixel/cyberpunk.png" alt="Cartaz de Cyberpunk: Edgerunners — David diante dos arranha-céus de Night City">
+    </div>
+    <div class="anime-info">
+      <div class="vp-tag" style="font-size:11px;letter-spacing:.32em;color:var(--cyan);text-transform:uppercase;font-family:'Archivo Black',sans-serif;">Série · 2022 · Netflix × Studio Trigger</div>
+      <h3>Cyberpunk:<br>Edgerunners</h3>
+      <div class="anime-meta">10 episódios · Night City · 2076</div>
+      <p>
+        Em uma cidade dominada por megacorporações, um jovem vira
+        <b>edgerunner</b> — e descobre que o corpo pode ser modificado
+        até virar quase-máquina. Quanto mais implantes, mais perto da
+        <em style="font-style:normal;color:var(--cyan)">cyberpsicose</em>.
+      </p>
+      <div class="anime-keys">
+        <span>Night City</span>
+        <span>Corpo + máquina</span>
+        <span>Velocidade</span>
+        <span>Progresso sem freio</span>
+      </div>
+      <a class="trailer-btn" href="https://www.youtube.com/watch?v=ax5YUmkWf_Y" target="_blank" rel="noopener" style="margin-top:32px;">▶ ASSISTIR AO TRAILER</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 05 — RELAÇÃO ============ -->
+<section id="relacao">
+  <div class="eyebrow">05 — Relação com o Futurismo</div>
+  <h2 class="display" style="font-size:clamp(28px,5.4vw,60px); text-transform:uppercase;">Mesmo impulso,<br>outras máquinas</h2>
+
+  <div class="rel-grid">
+    <div class="rel-item">
+      <div class="rel-tag">FUTURISMO · 1909</div>
+      <h4>Velocidade como beleza</h4>
+      <p>O automóvel e o aeroplano eram a nova estética. <b>Mais rápido = mais belo.</b></p>
+    </div>
+    <div class="rel-item">
+      <div class="rel-tag">ANIME · 2076</div>
+      <h4>Velocidade como implante</h4>
+      <p>O Sandevistan acelera o próprio corpo. <b>Mais rápido = mais perto do colapso.</b></p>
+    </div>
+
+    <div class="rel-item">
+      <div class="rel-tag">FUTURISMO · 1909</div>
+      <h4>Máquina celebrada</h4>
+      <p>A fábrica, o aço, o ruído industrial viram matéria-prima da arte.</p>
+    </div>
+    <div class="rel-item">
+      <div class="rel-tag">ANIME · 2076</div>
+      <h4>Máquina internalizada</h4>
+      <p>A máquina entra no corpo. A cidade e o chip se confundem com a pessoa.</p>
+    </div>
+
+    <div class="rel-item">
+      <div class="rel-tag">FUTURISMO · 1909</div>
+      <h4>Ruptura e experimento</h4>
+      <p>Destruir o passado para criar o novo. A arte como ato de violência criativa.</p>
+    </div>
+    <div class="rel-item">
+      <div class="rel-tag">ANIME · 2076</div>
+      <h4>Ruptura do corpo</h4>
+      <p>O limite do humano é rompido — e a pergunta é o que resta depois.</p>
+    </div>
+  </div>
+
+  <p class="rel-note">
+    Night City é a <em>Città Nuova</em> levada ao limite.
+    O que os futuristas sonharam como beleza, o anime mostra como preço.
+    <br><br>
+    <b>E as pessoas que a máquina esmaga?</b>
+  </p>
+</section>
+
+<!-- ============ 06 — PRÓS ============ -->
+<section id="pros">
+  <div class="eyebrow">06 — Prós e aspectos positivos</div>
+  <h2 class="display" style="font-size:clamp(28px,5.4vw,60px); text-transform:uppercase;">O que o<br>Futurismo abriu</h2>
+
+  <div class="pros-grid" id="prosGrid"></div>
+</section>
+
+<!-- ============ 07 — BLACK MIRROR ============ -->
+<section id="blackmirror">
+  <div class="eyebrow" style="color:var(--cyan)">07 — Contraponto · Black Mirror</div>
+  <h2 class="display" style="font-size:clamp(28px,5.2vw,60px); text-transform:uppercase;">O outro lado<br>do espelho</h2>
+
+  <div class="bm-hero">
+    <div class="bm-cover">
+      <img id="bmCover" src="pixel/blackmirror.png" alt="Capa oficial de Black Mirror">
+    </div>
+    <div class="bm-info">
+      <div class="vp-tag" style="font-size:11px;letter-spacing:.32em;color:var(--cyan);text-transform:uppercase;font-family:'Archivo Black',sans-serif;">Série · Charlie Brooker · Netflix</div>
+      <h3>Black<br>Mirror</h3>
+      <p class="bm-q">O que acontece quando buscamos o progresso sem pensar nas consequências?</p>
+      <p class="bm-note">
+        O Futurismo celebrava velocidade, máquinas e futuro.
+        Black Mirror mostra o preço.
+      </p>
+      <a class="trailer-btn" href="https://www.youtube.com/watch?v=k7uFcpF0pXk" target="_blank" rel="noopener">▶ ASSISTIR AO TRAILER</a>
+    </div>
+  </div>
+
+  <h3 class="display bm-sub">Consequências do <em>avanço</em></h3>
+  <div class="grid bm" id="bmGrid"></div>
+</section>
+
+<!-- ============ FECHAMENTO ============ -->
+<section id="presente">
+  <div class="eyebrow">— 1909 × agora</div>
+  <h2 class="display" style="font-size:clamp(26px,4.6vw,48px); text-transform:uppercase;">Mesmo impulso,<br>outras máquinas</h2>
+  <div class="pairs" id="pairs"></div>
+  <p class="display closing">O futuro não é só velocidade.<br>É <em>direção</em>.</p>
+</section>
+
+<!-- ============ 08 — JOGO ============ -->
+<section id="jogo">
+  <div class="eyebrow">08 — Jogo · A Cidade do Amanhã</div>
+  <h2 class="display" style="font-size:clamp(28px,5.2vw,60px); text-transform:uppercase;">
+    Você viu a história.<br>agora entre nela.
+  </h2>
+
+  <p class="game-lead">
+    Atravesse a <b style="color:var(--paper)">Città Nuova</b>: responda, acumule
+    conhecimento — e o trânsito obedece.
+  </p>
+
+  <div class="game-preview">
+    <div class="game-preview-glow"></div>
+    <div class="game-preview-inner">
+      <div class="gp-tag">RPG · Pixel Art · 2.5D</div>
+      <div class="gp-title">A CIDADE<br>DO AMANHÃ</div>
+      <div class="gp-meta">
+        <span>3 futuristas</span>
+        <span>·</span>
+        <span>5 obras</span>
+        <span>·</span>
+        <span>1 travessia</span>
+      </div>
+      <a href="jogo.html" class="gp-cta" id="enterGame">
+        ▶ ENTRAR NA CIDADE
+      </a>
+      <div class="gp-hint">WASD para andar · E para interagir · C para o Codex</div>
+    </div>
+  </div>
+
+  <div class="game-controls">
+    <span><kbd>WASD</kbd>ou<kbd>↑ ↓ ← →</kbd>andar</span>
+    <span><kbd>E</kbd>interagir / atravessar</span>
+    <span><kbd>C</kbd>codex</span>
+    <span><kbd>Esc</kbd>fechar</span>
+  </div>
+</section>
+
+<footer>
+  <b>FUTURISMO</b><br>
+  Contexto → características → exposição → ruído → anime → relação → prós → Black Mirror → jogo.
+</footer>
 
 <script>
-const canvas=document.getElementById('game'), ctx=canvas.getContext('2d');
-let VW,VH; const PIXEL=3;
-function resize(){VW=Math.floor(innerWidth/PIXEL);VH=Math.floor(innerHeight/PIXEL);canvas.width=VW;canvas.height=VH;}
-resize(); addEventListener('resize',resize);
+const $ = s => document.querySelector(s);
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-const C={floor:'#1c1440',floorDark:'#130d30',sidewalk:'#140a34',road:'#08051c',grid:'#2e2360',buildA:'#2fe4ff',buildB:'#ff2fa0',buildC:'#22ffc2',buildD:'#9d4dff',buildE:'#ffcc33',hair:'#2fe4ff',hairTip:'#7ef4ff',outline:'#050216',face:'#ff9d66',faceShade:'#d9764a',visor:'#ff2fa0',visorGlow:'#ff8fd0',jacket:'#3a1a66',jacketHi:'#6b2eb8',pants:'#160a30',shoes:'#050216',blade:'#ff2fa0',bladeCore:'#ffe0f2',white:'#ffffff',leaf:'#1fae7c',leafHi:'#22ffc2',trunk:'#3a2a1a',yellow:'#ffcc33',brasilFloor:'#0e2a1e',brasilFloorDark:'#081a12',brasilLeaf:'#00a859',brasilLeafHi:'#22ff7a',brasilTrunk:'#4a2a1a',brasilYellow:'#ffd400',brasilGreen:'#00a859'};
-
-function buildSprite(rows,palette){const w=rows[0].length,h=rows.length,c=document.createElement('canvas');c.width=w;c.height=h;const x=c.getContext('2d');for(let y=0;y<h;y++)for(let i=0;i<w;i++){const col=palette[rows[y][i]];if(col){x.fillStyle=col;x.fillRect(i,y,1,1);}}return c;}
-
-const P_IDLE=['.....HHTH.......','....HHHHTH......','...HHHHHHHT.....','...HHHHHHHH.....','..OBBBBBBBBO....','..OBFFFFFFBO....','..OBVVVVVVBO....','..OBVGVVVGBO....','..OBFFFFFFBO....','...OFsFFsFO.....','....OOOOOO......','..sJJJJJJJJ.....','.sJJJJJJJJJs....','.sJPPPPPPJs..s..','.sJJJJJJJJs..b..','.sJJJJJJJJ...b..','..sJJJJJJs...c..','..sJJJJJJs...b..','...OO..OO....s..','...LL..LL.......','...LL..LL.......','...LL..LL.......','..OOO..OOO......','..SSS..SSS......'];
-const P_WALKA=P_IDLE.map((r,i)=> i<18? r : ['...OO..OO....s..','..LLL....LL..b..','.LLL......LL.c..','LL.........LLb..','OOO........sOO..','SSS.........SSS.'][i-18] || r);
-const P_WALKB=P_IDLE.map((r,i)=> i<18? r : ['...OO..OO....s..','..LL....LLL..b..','.LL......LLLc...','LL.........LL...','OOO........OOO..','SSS........SSS..'][i-18] || r);
-const P_PAL={'.':null,'H':C.hairTip,'T':C.hair,'O':C.outline,'F':C.face,'s':C.faceShade,'V':C.visor,'G':C.visorGlow,'J':C.jacket,'P':C.jacketHi,'L':C.pants,'S':C.shoes,'b':C.blade,'c':C.bladeCore};
-const PLAYER_SPRITES={idle:buildSprite(P_IDLE,P_PAL),walkA:buildSprite(P_WALKA,P_PAL),walkB:buildSprite(P_WALKB,P_PAL)};
-function buildNPC(main,alt,glow){const pal={'.':null,'H':main,'T':main,'O':C.outline,'F':main,'s':alt,'V':alt,'G':glow||C.white,'J':main,'P':alt,'L':alt,'S':alt,'b':glow||main,'c':C.white};return buildSprite(P_IDLE,pal);}
-const NPC_SPRITES={marinetti:buildNPC(C.buildA,'#0f8fae',C.white),boccioni:buildNPC(C.buildB,'#a3005c',C.white),russolo:buildNPC(C.buildE,'#a97a00',C.white),carra:buildNPC(C.buildD,'#5a2a8a',C.white),balla:buildNPC(C.buildC,'#0f8f5a',C.white),santelia:buildNPC('#7aa0ff','#3a5aaa',C.white),oswald:buildNPC(C.brasilYellow,'#a88000',C.white),cronista:buildNPC('#c0c0d0','#606070',C.white)};
-
-const TILE=16, MAP_W=60, MAP_H=40;
-const map=[];
-for(let y=0;y<MAP_H;y++){map[y]=[];for(let x=0;x<MAP_W;x++){let t=0;
-  if(x<3||x>MAP_W-4||y<3||y>MAP_H-4)t=3;
-  else if(y===10||y===11||y===12)t=2; else if(y===22||y===23||y===24)t=2;
-  else if(y===9||y===13||y===21||y===25)t=1; else if(x===24||x===25||x===26)t=1;
-  map[y][x]=t;}}
-const buildingBlocks=[{x:5,y:5,w:6,h:3,c:'buildA'},{x:15,y:5,w:5,h:3,c:'buildD'},{x:30,y:5,w:6,h:3,c:'buildB'},{x:40,y:5,w:5,h:3,c:'buildC'},{x:49,y:5,w:5,h:3,c:'buildD'},{x:5,y:15,w:4,h:5,c:'buildC'},{x:41,y:15,w:4,h:5,c:'buildD'},{x:50,y:15,w:5,h:5,c:'buildA'},{x:5,y:27,w:7,h:4,c:'buildB'},{x:16,y:27,w:5,h:4,c:'buildA'},{x:28,y:27,w:6,h:4,c:'buildE'},{x:38,y:27,w:7,h:4,c:'buildC'},{x:49,y:27,w:6,h:4,c:'buildD'}];
-const brasilBlocks=[{x:3,y:31,w:5,h:3},{x:11,y:31,w:4,h:3},{x:3,y:35,w:4,h:2},{x:11,y:35,w:4,h:2}];
-for(const b of buildingBlocks)for(let y=b.y;y<b.y+b.h;y++)for(let x=b.x;x<b.x+b.w;x++)map[y][x]=3;
-for(const b of brasilBlocks)for(let y=b.y;y<b.y+b.h;y++)for(let x=b.x;x<b.x+b.w;x++)map[y][x]=3;
-const isSolid=(tx,ty)=>{if(tx<0||ty<0||tx>=MAP_W||ty>=MAP_H)return true;return map[ty][tx]===3;};
-const isBrasil=(tx,ty)=> tx>=2 && tx<=18 && ty>=28 && ty<=MAP_H-4;
-
-const trees=[];
-[[21,16],[29,16],[21,20],[29,20],[7,10],[43,10],[7,23],[43,23],[35,16],[35,20]].forEach(([tx,ty])=>{if(!isSolid(tx,ty)) trees.push({x:tx*TILE+8,y:ty*TILE+8,type:'cyber'});});
-[[7,32],[15,32],[7,37],[15,37],[4,29],[17,29]].forEach(([tx,ty])=>{if(!isSolid(tx,ty)) trees.push({x:tx*TILE+8,y:ty*TILE+8,type:'palm'});});
-const lamps=[];
-[[24,17],[26,17],[24,7],[26,7],[24,27],[26,27],[50,17],[50,27]].forEach(([tx,ty])=>lamps.push({x:tx*TILE+8,y:ty*TILE+8}));
-const brasilMonuments=[{x:10*TILE+8,y:34*TILE+8,type:'flag'},{x:15*TILE+8,y:35*TILE+8,type:'obelisk'}];
-
-const crosswalks=[
- {tx:12,ty:9,road:'top',answered:false,q:'Na rua, você é atropelado pelas máquinas. Qual destas ideias o Manifesto de 1909 exaltava?',opts:[{t:'A velocidade e a máquina como nova beleza.',ok:true,fb:'Acelerar é a única higiene. Carros, aviões e indústrias são a nova estética do movimento.'},{t:'O retorno à pintura acadêmica do século XVIII.',ok:false,fb:'O manifesto ataca justamente a academia. Não há retorno, só ruptura.'},{t:'A rejeição de qualquer forma de tecnologia.',ok:false,fb:'Ao contrário — a tecnologia é celebrada como matéria-prima da arte.'}]},
- {tx:25,ty:25,road:'bottom',answered:false,q:'Para atravessar sem ser atropelado, responda: qual artista futurista propôs os "intonarumori"?',opts:[{t:'Umberto Boccioni.',ok:false,fb:'Boccioni ficou com a escultura e o dinamismo. O ruído é de outro.'},{t:'Luigi Russolo.',ok:true,fb:'Russolo escreveu "A Arte dos Ruídos" (1913) e construiu os intonarumori — máquinas de produzir ruído organizado.'},{t:'Giacomo Balla.',ok:false,fb:'Balla trabalhou luz e repetição. O ruído ficou com Russolo.'}]},
- {tx:40,ty:9,road:'top',answered:false,q:'O trânsito está insuportável. Para atravessar: em que ano ocorreu a Semana de Arte Moderna no Brasil?',opts:[{t:'1922.',ok:true,fb:'Em fevereiro de 1922, no Theatro Municipal de São Paulo. O Futurismo já chegava ao Brasil como rótulo acusatório — mas sua energia alimentou a Semana.'},{t:'1909.',ok:false,fb:'1909 é o Manifesto de Marinetti, na Itália. A Semana é brasileira e vem depois.'},{t:'1912.',ok:false,fb:'1912 é o ano em que Oswald de Andrade viajou à Europa. A Semana é 10 anos depois.'}]},
- {tx:25,ty:13,road:'top',answered:false,q:'Um cronista pergunta: por que o Futurismo italiano se tornou politicamente controverso?',opts:[{t:'Porque pregava o retorno à monarquia.',ok:false,fb:'Não é sobre monarquia. É sobre o culto à guerra e a aproximação com o fascismo.'},{t:'Porque exaltava a guerra e parte dos futuristas se aproximou do fascismo.',ok:true,fb:'O manifesto de 1909 chamava a guerra de "única higiene do mundo". Marinetti depois ajudou a redigir o Manifesto Fascista de 1919.'},{t:'Porque rejeitava a tecnologia.',ok:false,fb:'Ao contrário — o problema é o entusiasmo tecnológico sem limites, não a rejeição.'}]},
-];
-// Zonas de travessia: cada faixa tem uma "trava" (open) que só abre depois de responder certo
-crosswalks.forEach(cw=>{cw.open=0;cw.x0=cw.tx*TILE;cw.x1=cw.x0+TILE;cw.y0=(cw.road==='top'?10:22)*TILE;cw.y1=(cw.road==='top'?13:25)*TILE;});
-const inCross=(cw,fx,fy)=>fx>cw.x0-5&&fx<cw.x1+5&&fy>=cw.y0&&fy<cw.y1;
-let continueHandler=null;
-
-const state={era:0,xp:0,codex:[],player:{x:25*TILE,y:17*TILE,dir:'down',anim:0,walking:false,invuln:0,speedTime:0,speedMul:1},camera:{x:0,y:0,shake:0},stations:[],artworks:[],cars:[],particles:[],holos:[],trail:[],time:0,nearest:null,traffic:{top:{stopped:0},bottom:{stopped:0}}};
-
-const STATIONS_DATA=[
- {id:'marinetti',sprite:'marinetti',name:'F. T. Marinetti',role:'Fundador · Manifesto',tx:12,ty:17,intro:'Sou Marinetti. Em 20 de fevereiro de 1909, publiquei no Le Figaro o manifesto que fundou o Futurismo. Antes de qualquer outra coisa, me responda:',question:'Por que destruir o passado?',options:[{t:'Porque o passado é feio e antiquado.',ok:false,fb:'Não é uma questão de beleza. O manifesto não ataca a estética antiga — ataca a autoridade que ela exerce sobre o presente.'},{t:'Porque sua autoridade impede que o futuro seja inventado.',ok:true,fb:'Exato. O peso da tradição trava a criação. Destruir o passado, no manifesto, é abrir espaço para o novo.'},{t:'Porque precisamos esquecer tudo o que já foi feito.',ok:false,fb:'Não é amnésia — é ruptura. Não se trata de apagar o passado, mas de recusar que ele determine o que virá.'}],reward:{cat:'Manifestos',codex:'Manifesto Futurista',desc:'Publicado em 20 de fevereiro de 1909, no Le Figaro. Funda o movimento: ruptura com o passado, velocidade, máquina, cidade moderna — e, em tom controverso, a exaltação da guerra.',xp:120}},
- {id:'boccioni',sprite:'boccioni',name:'Umberto Boccioni',role:'Pintor e escultor · Dinamismo',tx:25,ty:6,intro:'Sou Boccioni. Pintura e escultura, para mim, não devem congelar o instante. Olhe para uma figura em movimento: o que você vê?',question:'Uma figura em movimento — o que a arte futurista deve representar?',options:[{t:'Um único instante congelado, perfeito.',ok:false,fb:'Não. Congelar é o gesto do passado. Queremos o deslocamento, a trajetória, a transformação da própria forma pelo movimento.'},{t:'O deslocamento e a transformação da forma.',ok:true,fb:'Isso. Formas Únicas de Continuidade no Espaço não é um corpo em um instante — é o corpo atravessando o ar, fundido ao movimento.'},{t:'A figura sempre simétrica e ideal.',ok:false,fb:'Simetria e ideal são valores clássicos. O dinamismo destrói a simetria — a figura se deforma pelo deslocamento.'}],reward:{cat:'Artistas',codex:'Dinamismo',desc:'Formas repetidas, linhas de força, corpos fragmentados. A tela tenta capturar o deslocamento — não o instante. É a marca visual do Futurismo.',xp:140}},
- {id:'russolo',sprite:'russolo',name:'Luigi Russolo',role:'Músico · A Arte dos Ruídos',tx:38,ty:17,intro:'Sou Russolo. Escrevi A Arte dos Ruídos em 1913. A cidade industrial produziu uma música nova. Qual?',question:'O que o Futurismo propõe como matéria musical?',options:[{t:'Apenas melodias mais rápidas.',ok:false,fb:'Não é questão de velocidade da melodia. O manifesto pede uma música que incorpore o ruído — o barulho industrial como matéria-prima.'},{t:'O ruído da máquina e da cidade.',ok:true,fb:'Exato. Construí os intonarumori para produzir ruídos organizados. A cidade é a nova orquestra.'},{t:'O silêncio como forma de composição.',ok:false,fb:'O silêncio é o oposto do que proponho. O Futurismo é afirmativo: quer o som do mundo moderno em toda a sua intensidade.'}],reward:{cat:'Manifestos',codex:'A Arte dos Ruídos',desc:'Manifesto de 1913. Russolo constrói os intonarumori — máquinas que transformam o barulho industrial em música. A cidade é a nova orquestra.',xp:160}},
- {id:'carra',sprite:'carra',name:'Carlo Carrà',role:'Pintor · Fragmentação',tx:12,ty:6,intro:'Sou Carrà. Em O Funeral do Anarquista Galli, a multidão vira linhas de força. O que uma multidão em choque produz na tela?',question:'Como a pintura futurista trata a multidão e o conflito?',options:[{t:'Como um retrato fiel, com cada pessoa separada.',ok:false,fb:'O Futurismo não retrata fielmente. Ele decompõe: a multidão vira um campo de forças, não um conjunto de indivíduos.'},{t:'Como um campo de forças e fragmentos em choque.',ok:true,fb:'Isso. Em O Funeral do Anarquista Galli, corpos e diagonais se misturam. A multidão é energia, não indivíduo.'},{t:'Como uma cena estática e contemplativa.',ok:false,fb:'Estático é o oposto do que procuramos. O quadro futurista é movimento congelado no meio da explosão.'}],reward:{cat:'Artistas',codex:'Carlo Carrà',desc:'Assinante do Manifesto dos Pintores (1910). Em "O Funeral do Anarquista Galli" (1911), transforma a multidão em linhas de força — política, violência e movimento.',xp:130}},
- {id:'balla',sprite:'balla',name:'Giacomo Balla',role:'Pintor · Luz e velocidade',tx:38,ty:6,intro:'Sou Balla. "Dinamismo de um cão na coleira" tem vinte patas. Não é loucura — é honestidade. O que o olho vê quando algo se move?',question:'Por que Balla multiplica patas e formas na tela?',options:[{t:'Para decorar o quadro com repetição.',ok:false,fb:'Não é decoração. A repetição é a forma de representar o movimento.'},{t:'Para representar o deslocamento, e não o instante.',ok:true,fb:'Exato. O cão não tem vinte patas em um instante — tem em vinte instantes. A pintura desenha o tempo.'},{t:'Para confundir o espectador.',ok:false,fb:'Não é confusão — é uma proposta nova de percepção.'}],reward:{cat:'Artistas',codex:'Giacomo Balla',desc:'Em "Dinamismo de um cão na coleira" (1912), multiplica formas e linhas para representar o deslocamento — luz, repetição e decomposição do movimento.',xp:130}},
- {id:'santelia',sprite:'santelia',name:'Antonio Sant’Elia',role:'Arquiteto · Città Nuova',tx:25,ty:30,intro:'Sou Sant’Elia. Arranha-céus, elevadores externos, estações, usinas. A cidade não deve crescer — deve se mover. O que a arquitetura futurista recusa?',question:'O que a arquitetura futurista de Sant’Elia recusa?',options:[{t:'O ornamento e a monumentalidade do passado.',ok:true,fb:'Exato. A "Città Nuova" é de concreto, aço e vidro. Recusa cornijas, frontões e toda a herança clássica.'},{t:'A verticalização e a velocidade.',ok:false,fb:'Ao contrário — a verticalização é a marca. O que se recusa é o ornamento do passado.'},{t:'O uso de máquinas e elevadores.',ok:false,fb:'As máquinas são o coração da cidade. O que se recusa é o ornamento clássico.'}],reward:{cat:'Arquitetura',codex:'Città Nuova',desc:'Projeto de Sant’Elia (1914) para uma cidade industrial vertical. Morreu em treinamento militar em 1916, antes de ver a cidade construída.',xp:150}},
- {id:'oswald',sprite:'oswald',name:'Oswald de Andrade',role:'Modernista brasileiro · 1912',tx:8,ty:31,intro:'Viajei à Europa em 1912. Voltei com a cabeça em chamas. O que os modernistas brasileiros recusaram do movimento italiano?',question:'O que os modernistas brasileiros recusaram do Futurismo italiano?',options:[{t:'A velocidade e a ruptura estética.',ok:false,fb:'Isso foi absorvido — a energia de ruptura alimentou a Semana de 1922.'},{t:'O culto à guerra e o nacionalismo agressivo.',ok:true,fb:'Exato. A estética de ruptura foi aproveitada; a ideologia belicista e o fascismo, não.'},{t:'A ideia de vanguarda.',ok:false,fb:'A ideia de vanguarda foi bem-vinda. O que se recusou foi a política belicista.'}],reward:{cat:'Brasil',codex:'Oswald de Andrade e o Futurismo',desc:'Em 1924 lançou o Manifesto da Poesia Pau-Brasil; em 1928, o Manifesto Antropófago. O Futurismo foi referência de ruptura, mas sua ideologia política foi recusada.',xp:180}},
- {id:'cronista',sprite:'cronista',name:'O Cronista',role:'Contexto político · 1914',tx:50,ty:17,intro:'Anote. O Futurismo nasceu em 1909 e, cinco anos depois, a Europa entrou na guerra. Não é coincidência.',question:'Como o Futurismo se relacionou com a Primeira Guerra?',options:[{t:'Foi pacifista e recusou o conflito.',ok:false,fb:'Não. O manifesto de 1909 chamava a guerra de "única higiene do mundo".'},{t:'Exaltou a guerra como "higiene do mundo" e muitos futuristas foram voluntários.',ok:true,fb:'Isso. Boccioni e Sant’Elia morreram em treinamento em 1916. Marinetti participou da fundação dos Fasci di Combattimento em 1919.'},{t:'Ficou indiferente à guerra.',ok:false,fb:'Impossível — o movimento celebrou o conflito como realização da velocidade e da violência.'}],reward:{cat:'Contexto político',codex:'Futurismo e Fascismo',desc:'O manifesto de 1909 exaltava a guerra e a destruição. Marinetti participou da fundação dos Fasci di Combattimento em 1919. Dimensão histórica e controversa.',xp:200}},
-];
-state.stations=STATIONS_DATA.map(s=>({...s,px:s.tx*TILE+TILE/2,py:s.ty*TILE+TILE/2,unlocked:false}));
-state.artworks=[
- {tx:18,ty:20,title:'Formas Únicas de Continuidade no Espaço',artist:'Boccioni · 1913',desc:'Uma figura humana atravessando o ar como um corpo-máquina em movimento.',concept:'Dinamismo',cat:'Obras',unlocked:false},
- {tx:33,ty:14,title:'Dinamismo de um cão na coleira',artist:'Balla · 1912',desc:'Patas e coleira multiplicadas em dezenas de posições: a pintura desenha o deslocamento.',concept:'Movimento',cat:'Obras',unlocked:false},
- {tx:18,ty:12,title:'O Funeral do Anarquista Galli',artist:'Carrà · 1911',desc:'A multidão em choque com a polícia vira linhas de força.',concept:'Fragmentação',cat:'Obras',unlocked:false},
- {tx:45,ty:20,title:'Città Nuova',artist:'Sant’Elia · 1914',desc:'Desenhos de uma cidade vertical: arranha-céus, elevadores externos, usinas.',concept:'Arquitetura futurista',cat:'Obras',unlocked:false},
- {tx:15,ty:29,title:'Manifesto da Poesia Pau-Brasil',artist:'Oswald de Andrade · 1924',desc:'Antropofagia cultural: devorar a vanguarda europeia e transformá-la em algo próprio.',concept:'Modernismo brasileiro',cat:'Brasil',unlocked:false},
-];
-state.artworks.forEach(a=>{a.px=a.tx*TILE+TILE/2;a.py=a.ty*TILE+TILE/2;});
-for(let i=0;i<6;i++) state.holos.push({x:(22+Math.random()*6)*TILE,y:(15+Math.random()*5)*TILE,phase:Math.random()*Math.PI*2,color:Math.random()<0.5?C.buildB:C.buildA});
-for(let i=0;i<3;i++) state.holos.push({x:(5+Math.random()*10)*TILE,y:(29+Math.random()*6)*TILE,phase:Math.random()*Math.PI*2,color:C.brasilGreen});
-
-function progress(){const total=state.stations.length+state.artworks.length;return state.codex.length/total;}
-
-function spawnCar(){
-  const p=progress();
-  if(Math.random()>=(0.45+p*0.95))return;
-  const lanes=[{y:10*TILE+8,dir:1,c:C.buildB,road:'top'},{y:11*TILE+8,dir:1,c:C.buildA,road:'top'},{y:12*TILE+8,dir:-1,c:C.buildE,road:'top'},{y:22*TILE+8,dir:-1,c:C.buildB,road:'bottom'},{y:23*TILE+8,dir:1,c:C.buildA,road:'bottom'},{y:24*TILE+8,dir:-1,c:C.buildE,road:'bottom'}];
-  const l=lanes[Math.floor(Math.random()*lanes.length)];
-  const startX=l.dir>0?-20:MAP_W*TILE+20;
-  const v=l.dir*(180+Math.random()*140)*(1+p*0.5);
-  state.cars.push({x:startX,y:l.y,vx:v,baseVx:v,color:l.c,w:14+Math.floor(Math.random()*6),h:6,trail:0,road:l.road});
-}
-
-function wordsInFreedom(text){
-  const colors=['#ff2fa0','#2fe4ff','#ffcc33','#eae7f2'];
-  return text.split(' ').map(w=>`<span style="font-size:${12+Math.random()*7}px;transform:translateY(${(Math.random()-0.5)*6}px) rotate(${(Math.random()-0.5)*5}deg);color:${colors[Math.floor(Math.random()*colors.length)]};margin:0 2px;">${w}</span>`).join(' ');
-}
-
-const keys={}; let dialogueOpen=false, paused=true;
-addEventListener('keydown',e=>{const k=e.key.toLowerCase();keys[k]=true;
-  if(k==='enter'&&dialogueOpen&&continueHandler){e.preventDefault();if(!e.repeat)continueHandler();}
-  if(k==='e'||k===' '){if(!dialogueOpen){e.preventDefault();tryInteract();}}
-  if(k==='c')toggleCodex(); if(k==='escape'){closeDialogue();closeCodex();}});
-addEventListener('keyup',e=>{keys[e.key.toLowerCase()]=false;});
-
-function update(dt){
-  state.time+=dt;
-  if(state.player.invuln>0) state.player.invuln-=dt;
-  for(const road of ['top','bottom']) if(state.traffic[road].stopped>0) state.traffic[road].stopped=Math.max(0,state.traffic[road].stopped-dt);
-  for(const cw of crosswalks) if(cw.open>0) cw.open=Math.max(0,cw.open-dt);
-
-  let ax=0,ay=0;
-  if(keys['w']||keys['arrowup'])ay-=1; if(keys['s']||keys['arrowdown'])ay+=1;
-  if(keys['a']||keys['arrowleft'])ax-=1; if(keys['d']||keys['arrowright'])ax+=1;
-  const len=Math.hypot(ax,ay);
-  const p=state.player;
-  p.walking = len>0;
-  if(len>0){ax/=len;ay/=len; if(Math.abs(ax)>Math.abs(ay))p.dir=ax>0?'right':'left'; else p.dir=ay>0?'down':'up';}
-
-  p.speedTime = p.walking ? p.speedTime+dt : Math.max(0,p.speedTime-dt*2.2);
-  p.speedMul = 1+Math.min(2,p.speedTime/5);
-  document.getElementById('hudVel').textContent='×'+p.speedMul.toFixed(1);
-
-  const speed=90*p.speedMul;
-  const tryX=p.x+ax*speed*dt, tryY=p.y+ay*speed*dt;
-  const checkSolid=(px,py)=>{const half=5;return isSolid(Math.floor((px-half)/TILE),Math.floor((py-2)/TILE))||isSolid(Math.floor((px+half)/TILE),Math.floor((py-2)/TILE))||isSolid(Math.floor((px-half)/TILE),Math.floor((py+8)/TILE))||isSolid(Math.floor((px+half)/TILE),Math.floor((py+8)/TILE));};
-  // Trava da faixa: só barra quem está ENTRANDO na faixa fechada
-  const gateBlocked=(px,py)=>crosswalks.some(cw=>cw.open<=0&&inCross(cw,px,py+8)&&!inCross(cw,p.x,p.y+8));
-  let hitGate=false;
-  if(!checkSolid(tryX,p.y)){if(gateBlocked(tryX,p.y))hitGate=true;else p.x=tryX;}
-  if(!checkSolid(p.x,tryY)){if(gateBlocked(p.x,tryY))hitGate=true;else p.y=tryY;}
-  if(hitGate)p.speedTime=0;
-  p.anim = p.walking ? p.anim+dt*(6+p.speedMul*3) : 0;
-
-  if(p.walking && p.speedMul>1.15){
-    state.trail.unshift({x:p.x,y:p.y,dir:p.dir,life:0.35});
-    if(state.trail.length>6) state.trail.pop();
+/* ---------- shatter ---------- */
+function shatter({cols=7, rows=5, dur=800}={}) {
+  const layer = $('#shatter');
+  if (!layer) return;
+  layer.innerHTML = '';
+  layer.classList.add('on');
+  const W = innerWidth, H = innerHeight, cw = W/cols, ch = H/rows, cx = W/2, cy = H/2;
+  const shards = [];
+  for (let r=0; r<rows; r++) for (let c=0; c<cols; c++) {
+    const j = () => (Math.random()-.5);
+    const pts = [
+      [c*cw + j()*cw*.55, r*ch + j()*ch*.55],
+      [(c+1)*cw + j()*cw*.55, r*ch + j()*ch*.55],
+      [(c+1)*cw + j()*cw*.55, (r+1)*ch + j()*ch*.55],
+      [c*cw + j()*cw*.55, (r+1)*ch + j()*ch*.55]
+    ];
+    const el = document.createElement('div');
+    el.className = 'shard';
+    el.style.clipPath = `polygon(${pts.map(p=>`${p[0].toFixed(1)}px ${p[1].toFixed(1)}px`).join(',')})`;
+    const mx = c*cw+cw/2, my = r*ch+ch/2, ang = Math.atan2(my-cy, mx-cx);
+    const dist = 200 + Math.random()*560;
+    el.style.setProperty('--tx', `${(Math.cos(ang)*dist+(Math.random()-.5)*180).toFixed(0)}px`);
+    el.style.setProperty('--ty', `${(Math.sin(ang)*dist+(Math.random()-.5)*180+100).toFixed(0)}px`);
+    el.style.setProperty('--rot', `${((Math.random()-.5)*80).toFixed(1)}deg`);
+    el.style.setProperty('--sc', (0.7+Math.random()*0.7).toFixed(2));
+    el.style.transitionDuration = `${dur + Math.random()*250}ms`;
+    layer.appendChild(el); shards.push(el);
   }
-  for(const t of state.trail) t.life-=dt;
-  state.trail=state.trail.filter(t=>t.life>0);
+  requestAnimationFrame(()=>requestAnimationFrame(()=>shards.forEach(s=>s.classList.add('fly'))));
+  setTimeout(()=>{ layer.classList.remove('on'); layer.innerHTML=''; }, dur+500);
+}
 
-  const cam=state.camera;
-  cam.x += ((p.x-VW/2)-cam.x)*Math.min(1,dt*6);
-  cam.y += ((p.y-VH/2)-cam.y)*Math.min(1,dt*6);
-  if(cam.shake>0)cam.shake=Math.max(0,cam.shake-dt*40);
+/* ---------- boot ---------- */
+(function boot(){
+  const bootEl=$('#boot'), yearEl=$('#bootYear'), barEl=$('#bootBar'), labelEl=$('#bootLabel'), cv=$('#bootCv'), ctx=cv.getContext('2d');
+  let W,H,lines=[];
+  function resize(){W=cv.width=innerWidth; H=cv.height=innerHeight;}
+  resize(); addEventListener('resize',resize);
+  const maxR=()=>Math.hypot(W,H)/2;
+  for(let i=0;i<170;i++) lines.push({a:Math.random()*Math.PI*2, r:Math.random()*maxR(), len:40+Math.random()*220, sp:2+Math.random()*9, w:Math.random()<.15?2:1, col:Math.random()<.18?'255,51,0':'237,237,228'});
 
-  spawnCar();
-  for(let i=state.cars.length-1;i>=0;i--){
-    const c=state.cars[i];
-    // Freio antes da faixa liberada (ou enquanto o jogador ainda está sobre ela)
-    const s=Math.sign(c.baseVx); let vmax=Infinity;
-    for(const cw of crosswalks){
-      if(cw.road!==c.road||!(cw.open>0||inCross(cw,p.x,p.y+8)))continue;
-      const d=((s>0?cw.x0-6:cw.x1+6)-c.x)*s-c.w/2;
-      if(d>-2)vmax=Math.min(vmax,Math.sqrt(2800*Math.max(d,0)));
+  const DUR = reduce ? 200 : 4300;
+  const t0 = performance.now();
+  let done=false;
+  const labels=[[0,'Inicializando salto temporal'],[0.38,'Recalculando linha do tempo'],[0.68,'Destino: Milão · Itália'],[0.90,'Impacto iminente']];
+  const ease = x => 1-Math.pow(1-x,3);
+
+  function frame(now){
+    const p=Math.min(1,(now-t0)/DUR), e=ease(p);
+    yearEl.textContent = Math.round(2026-(2026-1909)*e);
+    barEl.style.right = `${100-p*100}%`;
+    for(const [th,txt] of labels) if(p>=th) labelEl.textContent=txt;
+    ctx.fillStyle='rgba(0,0,0,.35)'; ctx.fillRect(0,0,W,H);
+    const cx=W/2, cy=H/2, boost=1+e*14;
+    for(const L of lines){
+      L.r += L.sp*boost*(0.5+p*2);
+      if(L.r>maxR()*1.4){L.r=Math.random()*40; L.a=Math.random()*Math.PI*2;}
+      const x1=cx+Math.cos(L.a)*L.r, y1=cy+Math.sin(L.a)*L.r;
+      const x2=cx+Math.cos(L.a)*(L.r+L.len*(0.4+p*2.4)), y2=cy+Math.sin(L.a)*(L.r+L.len*(0.4+p*2.4));
+      ctx.strokeStyle=`rgba(${L.col},${0.06+p*0.55})`; ctx.lineWidth=L.w;
+      ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke();
     }
-    c.vx+=(s*Math.min(Math.abs(c.baseVx),vmax)-c.vx)*Math.min(1,dt*2.5);
-    if(Math.abs(c.vx)>vmax)c.vx=s*vmax;
-    const prevX=c.x; c.x+=c.vx*dt; c.trail=Math.min(c.trail+dt*200,90);
-    if(state.player.invuln<=0){
-      const dy=Math.abs(c.y-state.player.y), lo=Math.min(prevX,c.x)-c.w/2-6, hi=Math.max(prevX,c.x)+c.w/2+6;
-      if(state.player.x>lo && state.player.x<hi && dy<c.h/2+6){
-        state.player.invuln=1.6; state.camera.shake=14; state.player.speedTime=0;
-        state.xp=Math.max(0,state.xp-30);
-        document.getElementById('hitflash').classList.add('on');
-        setTimeout(()=>document.getElementById('hitflash').classList.remove('on'),180);
-        updateHUD();
-        const back = state.player.dir==='up'?16 : state.player.dir==='down'?-16 : 0;
-        const side = state.player.dir==='left'?16 : state.player.dir==='right'?-16 : 0;
-        state.player.x+=side; state.player.y+=back;
-        for(let k=0;k<20;k++){const a=Math.random()*Math.PI*2;state.particles.push({x:state.player.x,y:state.player.y-8,vx:Math.cos(a)*60,vy:Math.sin(a)*60-20,life:0.6+Math.random()*0.5,maxLife:1.1,size:1+Math.random()*2,color:C.magenta});}
-      }
-    }
-    if((c.vx>0&&c.x>MAP_W*TILE+40)||(c.vx<0&&c.x<-40))state.cars.splice(i,1);
+    if(p<1) requestAnimationFrame(frame);
+    else if(!done){done=true; finish();}
   }
-  for(let i=state.particles.length-1;i>=0;i--){const pt=state.particles[i];pt.x+=pt.vx*dt;pt.y+=pt.vy*dt;pt.vx*=0.96;pt.vy*=0.96;pt.life-=dt;if(pt.life<=0)state.particles.splice(i,1);}
 
-  let nearest=null,bestDist=40;
-  for(const s of state.stations){if(s.unlocked)continue;const d=Math.hypot(s.px-p.x,s.py-p.y);if(d<bestDist){bestDist=d;nearest={type:'station',data:s};}}
-  for(const a of state.artworks){if(a.unlocked)continue;const d=Math.hypot(a.px-p.x,a.py-p.y);if(d<bestDist){bestDist=d;nearest={type:'artwork',data:a};}}
-  for(const cw of crosswalks){const fy=p.y+8;const d=Math.hypot(Math.max(cw.x0-p.x,0,p.x-cw.x1),Math.max(cw.y0-fy,0,fy-cw.y1));if(d<Math.min(bestDist,26)){bestDist=d;nearest={type:'crosswalk',data:cw};}}
-  state.nearest=nearest;
-  const prompt=document.getElementById('prompt');
-  if(nearest&&!dialogueOpen){prompt.classList.add('on');prompt.innerHTML = nearest.type==='crosswalk' ? (nearest.data.open>0 ? '<b>Travessia liberada</b> · atravesse agora' : '<b>PARE</b> · faixa de pedestres — <b>E</b> para atravessar') : '<b>E</b> interagir';}
-  else prompt.classList.remove('on');
-}
+  function finish(){
+    bootEl.classList.add('done');
+    shatter({cols:7, rows:5, dur:800});
+  }
 
-function render(){
-  ctx.fillStyle=C.floorDark; ctx.fillRect(0,0,VW,VH);
-  const camX=state.camera.x, camY=state.camera.y;
-  ctx.save();
-  if(state.camera.shake>0)ctx.translate((Math.random()-0.5)*state.camera.shake,(Math.random()-0.5)*state.camera.shake);
-  drawGround(camX,camY); drawRoads(camX,camY); drawCrosswalks(camX,camY);
-  drawDecor(camX,camY); drawBrasilDecor(camX,camY); drawHolos(camX,camY);
-  drawArtworks(camX,camY); drawStations(camX,camY); drawCars(camX,camY);
-  drawTrail(camX,camY); drawPlayer(camX,camY); drawParticles(camX,camY); drawNeonOverlay();
-  ctx.restore();
-}
+  requestAnimationFrame(frame);
+  setTimeout(()=>{ if(!bootEl.classList.contains('done')) bootEl.classList.add('done'); }, DUR+3000);
+})();
 
-function drawGround(camX,camY){
-  const x0=Math.floor(camX/TILE)-1, y0=Math.floor(camY/TILE)-1;
-  const x1=x0+Math.ceil(VW/TILE)+3, y1=y0+Math.ceil(VH/TILE)+3;
-  for(let ty=y0;ty<=y1;ty++)for(let tx=x0;tx<=x1;tx++){
-    if(tx<0||ty<0||tx>=MAP_W||ty>=MAP_H)continue;
-    const sx=tx*TILE-camX, sy=ty*TILE-camY, t=map[ty][tx];
-    const inPlaza = tx>=22&&tx<=28&&ty>=14&&ty<=20;
-    const brasil = isBrasil(tx,ty);
-    if(t===0||t===1){
-      const floorCol = brasil ? (t===1?C.brasilFloorDark:C.brasilFloor) : (t===1?C.sidewalk:C.floor);
-      ctx.fillStyle=floorCol; ctx.fillRect(sx,sy,TILE,TILE);
-      ctx.globalAlpha=0.18; ctx.fillStyle=brasil?C.brasilLeafHi:C.grid; ctx.fillRect(sx,sy,TILE,1); ctx.fillRect(sx,sy,1,TILE); ctx.globalAlpha=1;
-      if(inPlaza && (tx+ty)%2===0){ctx.strokeStyle='rgba(255,47,160,.28)';ctx.beginPath();ctx.moveTo(sx+8,sy);ctx.lineTo(sx+16,sy+8);ctx.lineTo(sx+8,sy+16);ctx.lineTo(sx,sy+8);ctx.closePath();ctx.stroke();}
-      if(brasil && (tx+ty)%3===0){ctx.fillStyle=C.brasilYellow;ctx.globalAlpha=0.55;ctx.fillRect(sx+7,sy+7,2,2);ctx.globalAlpha=1;}
-      if(!brasil && (tx*7+ty*13)%11===0){ctx.fillStyle=state.era===0?'#3a2a5a':C.magenta;ctx.globalAlpha=0.5;ctx.fillRect(sx+8,sy+8,1,1);ctx.globalAlpha=1;}
-    } else if(t===2){ctx.fillStyle=C.road;ctx.fillRect(sx,sy,TILE,TILE);}
-    else if(t===3){if(brasil) drawBrasilBuilding(tx,ty,sx,sy); else drawBuilding(tx,ty,sx,sy);}
-  }
-}
-function buildingColorFor(tx,ty){for(const b of buildingBlocks) if(tx>=b.x&&tx<b.x+b.w&&ty>=b.y&&ty<b.y+b.h) return C[b.c]; return C.buildA;}
-function drawBuilding(tx,ty,sx,sy){
-  const accent=buildingColorFor(tx,ty);
-  ctx.fillStyle=C.floorDark; ctx.fillRect(sx,sy,TILE,TILE);
-  ctx.fillStyle='#0f0a26'; ctx.fillRect(sx,sy,TILE,4);
-  ctx.fillStyle='#1a1240'; for(let i=2;i<TILE;i+=5) ctx.fillRect(sx+i,sy+4,1,TILE-4);
-  const isEdge=tx<4||tx>MAP_W-5||ty<4||ty>MAP_H-5;
-  if(!isEdge){
-    const seed=(tx*31+ty*17)%100;
-    for(let r=0;r<2;r++)for(let c=0;c<3;c++){
-      const wx=sx+3+c*5, wy=sy+6+r*6, on=(seed+r*7+c*11)%5<3;
-      if(on){ctx.fillStyle=accent;ctx.globalAlpha=0.8+0.2*Math.sin(state.time*2+seed+c);ctx.fillRect(wx,wy,2,2);ctx.globalAlpha=0.15;ctx.fillRect(wx-1,wy-1,4,4);ctx.globalAlpha=1;}
-      else {ctx.fillStyle='#0f0a26';ctx.fillRect(wx,wy,2,2);}
-    }
-  }
-  const isTopEdge=(ty>0 && !isSolid(tx,ty-1));
-  if(isTopEdge && !isEdge){ctx.fillStyle=accent;ctx.globalAlpha=0.9;ctx.fillRect(sx+TILE/2-1,sy-3,2,3);ctx.fillRect(sx+TILE/2-2,sy-4,4,1);ctx.globalAlpha=1;}
-  ctx.strokeStyle=state.era===0?'#1a1240':accent+'55'; ctx.lineWidth=1; ctx.strokeRect(sx+0.5,sy+0.5,TILE-1,TILE-1);
-}
-function drawBrasilBuilding(tx,ty,sx,sy){
-  ctx.fillStyle='#1a3a24'; ctx.fillRect(sx,sy,TILE,TILE);
-  ctx.fillStyle='#a8321a'; ctx.fillRect(sx,sy,TILE,5);
-  ctx.fillStyle='#d84a28'; ctx.fillRect(sx,sy,TILE,2);
-  ctx.fillStyle=C.brasilYellow; ctx.globalAlpha=0.85; ctx.fillRect(sx+1,sy+5,TILE-2,TILE-7); ctx.globalAlpha=1;
-  ctx.fillStyle='#4a2a1a'; ctx.fillRect(sx+6,sy+9,4,6);
-  ctx.fillStyle=C.brasilGreen; ctx.fillRect(sx+2,sy+7,2,2); ctx.fillRect(sx+12,sy+7,2,2);
-  ctx.strokeStyle='#0a3a1a'; ctx.lineWidth=1; ctx.strokeRect(sx+0.5,sy+0.5,TILE-1,TILE-1);
-}
-function drawRoads(camX,camY){
-  ctx.globalAlpha=0.85;
-  for(const ty of [11,23]){const sy=ty*TILE+8-camY; if(sy<-10||sy>VH+10)continue;
-    for(let x=0;x<MAP_W*TILE;x+=24){const sx=x-camX; if(sx<-20||sx>VW+20)continue; ctx.fillStyle= ty===11?C.magenta:C.cyan; ctx.fillRect(sx,sy-1,12,1);}}
-  ctx.globalAlpha=1;
-}
-function drawCrosswalks(camX,camY){
-  for(const cw of crosswalks){
-    const sx=cw.tx*TILE+8-camX, sy=cw.ty*TILE+8-camY;
-    if(sy<-80||sy>VH+40) continue;
-    const roadStartY = cw.road==='top'?10:22, roadEndY = cw.road==='top'?12:24;
-    for(let ty=roadStartY; ty<=roadEndY; ty++) for(let i=0;i<3;i++){
-      const x=cw.tx*TILE+1+i*5-camX, y=ty*TILE+2-camY;
-      if(x<-20||x>VW+20||y<-20||y>VH+20) continue;
-      ctx.fillStyle = cw.open>0 ? 'rgba(34,255,122,.5)' : 'rgba(255,204,51,.35)'; ctx.fillRect(x,y,3,TILE-4);
-    }
-    const isOpen=cw.open>0, zx=cw.x0-camX, zt=cw.y0-camY, zb=cw.y1-camY;
-    ctx.fillStyle=isOpen?'#22ff7a':C.magenta; ctx.globalAlpha=isOpen?0.9:0.6+0.4*Math.sin(state.time*8);
-    ctx.fillRect(zx-2,zt-2,TILE+4,2); ctx.fillRect(zx-2,zb,TILE+4,2); ctx.globalAlpha=1;
-    if(!isOpen){ctx.font='5px "Archivo Black", sans-serif';ctx.textAlign='center';ctx.fillText('PARE',zx+TILE/2,zt-5);ctx.fillText('PARE',zx+TILE/2,zb+9);ctx.textAlign='left';}
-    const stopped=state.traffic[cw.road].stopped>0;
-    const poleX=cw.tx*TILE+8-camX+18, poleY=(cw.road==='top'?9:21)*TILE+8-camY;
-    ctx.fillStyle='#221a44'; ctx.fillRect(poleX-1,poleY-14,2,14);
-    const lightColor=stopped?C.green:C.magenta;
-    ctx.fillStyle=lightColor; ctx.globalAlpha=0.6+0.4*Math.sin(state.time*6); ctx.beginPath(); ctx.arc(poleX,poleY-16,3,0,Math.PI*2); ctx.fill();
-    ctx.globalAlpha=0.18; ctx.beginPath(); ctx.arc(poleX,poleY-16,9,0,Math.PI*2); ctx.fill(); ctx.globalAlpha=1;
-  }
-}
-function drawDecor(camX,camY){
-  for(const t of trees){
-    const sx=t.x-camX, sy=t.y-camY; if(sx<-20||sx>VW+20||sy<-20||sy>VH+20)continue;
-    if(t.type==='palm'){
-      ctx.fillStyle=C.brasilTrunk; ctx.fillRect(sx-1,sy-2,2,12);
-      for(let i=0;i<6;i++){const ang=(i/6)*Math.PI*2;const ex=sx+Math.cos(ang)*7,ey=sy-2+Math.sin(ang)*4;ctx.strokeStyle=C.brasilLeaf;ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(sx,sy-2);ctx.lineTo(ex,ey);ctx.stroke();}
-      ctx.fillStyle=C.brasilLeafHi; ctx.globalAlpha=0.4+0.3*Math.sin(state.time*1.6+t.x); ctx.beginPath(); ctx.arc(sx,sy-2,3,0,Math.PI*2); ctx.fill(); ctx.globalAlpha=1;
-    } else {
-      ctx.fillStyle=C.trunk; ctx.fillRect(sx-1,sy+2,2,6);
-      ctx.fillStyle=C.leaf; ctx.beginPath(); ctx.arc(sx,sy-2,6,0,Math.PI*2); ctx.fill();
-      ctx.fillStyle=C.leafHi; ctx.globalAlpha=0.5+0.3*Math.sin(state.time*1.5+t.x); ctx.beginPath(); ctx.arc(sx-2,sy-4,2,0,Math.PI*2); ctx.fill(); ctx.globalAlpha=1;
-    }
-  }
-  for(const l of lamps){
-    const sx=l.x-camX, sy=l.y-camY; if(sx<-20||sx>VW+20||sy<-30||sy>VH+20)continue;
-    ctx.fillStyle='#221a44'; ctx.fillRect(sx-1,sy-14,2,14);
-    const pulse=0.6+0.4*Math.sin(state.time*3+l.x);
-    ctx.fillStyle=C.yellow; ctx.globalAlpha=0.85*pulse; ctx.beginPath(); ctx.arc(sx,sy-16,3,0,Math.PI*2); ctx.fill();
-    ctx.globalAlpha=0.18*pulse; ctx.beginPath(); ctx.arc(sx,sy-16,9,0,Math.PI*2); ctx.fill(); ctx.globalAlpha=1;
-  }
-}
-function drawBrasilDecor(camX,camY){
-  for(const m of brasilMonuments){
-    const sx=m.x-camX, sy=m.y-camY; if(sx<-40||sx>VW+40)continue;
-    if(m.type==='flag'){ctx.fillStyle='#3a2a1a';ctx.fillRect(sx-1,sy-14,2,14);ctx.fillStyle=C.brasilGreen;ctx.fillRect(sx+1,sy-14,14,10);ctx.fillStyle=C.brasilYellow;ctx.beginPath();ctx.moveTo(sx+8,sy-13);ctx.lineTo(sx+14,sy-9);ctx.lineTo(sx+8,sy-5);ctx.lineTo(sx+2,sy-9);ctx.closePath();ctx.fill();ctx.fillStyle='#002776';ctx.beginPath();ctx.arc(sx+8,sy-9,2,0,Math.PI*2);ctx.fill();}
-    else {ctx.fillStyle='#2a2a3a';ctx.fillRect(sx-3,sy-18,6,18);ctx.fillStyle=C.brasilYellow;ctx.fillRect(sx-2,sy-18,4,3);ctx.fillStyle='rgba(34,255,122,.35)';ctx.beginPath();ctx.arc(sx,sy-18,8,0,Math.PI*2);ctx.fill();}
-  }
-}
-function drawHolos(camX,camY){
-  for(const h of state.holos){
-    const sx=h.x-camX, sy=h.y-camY+Math.sin(state.time*1.2+h.phase)*6; if(sx<-20||sx>VW+20)continue;
-    ctx.save(); ctx.translate(sx,sy); ctx.globalAlpha=0.55+0.2*Math.sin(state.time*2+h.phase);
-    ctx.fillStyle=h.color; ctx.beginPath(); ctx.ellipse(0,0,7,3,0,0,Math.PI*2); ctx.fill();
-    ctx.beginPath(); ctx.moveTo(-7,0); ctx.lineTo(-11,-3); ctx.lineTo(-11,3); ctx.closePath(); ctx.fill();
-    ctx.restore(); ctx.globalAlpha=1;
-  }
-}
-function drawStations(camX,camY){
-  for(const s of state.stations){
-    const sx=s.px-camX, sy=s.py-camY; if(sx<-100||sx>VW+100)continue; if(s.unlocked)continue;
-    const pulse=0.6+0.4*Math.sin(state.time*3);
-    ctx.fillStyle=`rgba(47,228,255,${0.25*pulse})`; ctx.beginPath(); ctx.ellipse(sx,sy+10,17,5,0,0,Math.PI*2); ctx.fill();
-    ctx.strokeStyle=`rgba(47,228,255,${0.7*pulse})`; ctx.lineWidth=1; ctx.beginPath(); ctx.ellipse(sx,sy+10,19,6,0,0,Math.PI*2); ctx.stroke();
-    const grad=ctx.createLinearGradient(sx,sy-34,sx,sy+10); grad.addColorStop(0,'rgba(47,228,255,0)'); grad.addColorStop(0.5,`rgba(47,228,255,${0.12*pulse})`); grad.addColorStop(1,`rgba(47,228,255,${0.3*pulse})`);
-    ctx.fillStyle=grad; ctx.fillRect(sx-15,sy-34,30,44);
-    ctx.fillStyle=`rgba(47,228,255,${0.2*pulse})`; for(let yy=-34;yy<10;yy+=3) ctx.fillRect(sx-15,sy+yy,30,1);
-    const sprite=NPC_SPRITES[s.sprite];
-    ctx.globalAlpha=0.85+0.15*Math.sin(state.time*6); ctx.drawImage(sprite,Math.round(sx-sprite.width/2),Math.round(sy-sprite.height+10)); ctx.globalAlpha=1;
-    ctx.globalAlpha=0.25; ctx.fillStyle='#050216'; for(let yy=sy-sprite.height+10;yy<sy+10;yy+=2) ctx.fillRect(sx-sprite.width/2,yy,sprite.width,1); ctx.globalAlpha=1;
-    ctx.font='6px "Archivo Black", sans-serif'; ctx.textAlign='center'; ctx.fillStyle=C.buildA; ctx.globalAlpha=0.9; ctx.fillText(s.name.toUpperCase(),sx,sy-sprite.height-2); ctx.globalAlpha=1; ctx.textAlign='left';
-  }
-}
-function drawArtworks(camX,camY){
-  for(const a of state.artworks){
-    if(a.unlocked)continue;
-    const sx=a.px-camX, sy=a.py-camY; if(sx<-80||sx>VW+80)continue;
-    const pulse=0.6+0.4*Math.sin(state.time*2.5+a.tx);
-    const isBrasilArt=a.cat==='Brasil';
-    ctx.strokeStyle = isBrasilArt ? `rgba(255,212,0,${0.75*pulse})` : `rgba(255,47,160,${0.7*pulse})`; ctx.lineWidth=1; ctx.strokeRect(sx-10,sy-24,20,18);
-    ctx.fillStyle = isBrasilArt ? `rgba(255,212,0,${0.12*pulse})` : `rgba(255,47,160,${0.12*pulse})`; ctx.fillRect(sx-10,sy-24,20,18);
-    ctx.fillStyle = isBrasilArt ? `rgba(255,212,0,${0.3*pulse})` : `rgba(255,47,160,${0.25*pulse})`; for(let yy=sy-24;yy<sy-6;yy+=2) ctx.fillRect(sx-10,yy,20,1);
-    ctx.fillStyle=`rgba(47,228,255,${0.4*pulse})`; ctx.beginPath(); ctx.ellipse(sx,sy+4,12,3,0,0,Math.PI*2); ctx.fill();
-  }
-}
-function drawCars(camX,camY){
-  for(const c of state.cars){
-    const sx=c.x-camX, sy=c.y-camY; if(sx<-60||sx>VW+60)continue;
-    const stopped=state.traffic[c.road].stopped>0 && Math.abs(c.vx)<8;
-    const trailDir=c.vx>0?-1:1;
-    const grad=ctx.createLinearGradient(sx,sy,sx+trailDir*c.trail,sy); grad.addColorStop(0,c.color+'aa'); grad.addColorStop(1,c.color+'00');
-    ctx.fillStyle=grad; ctx.fillRect(trailDir>0?sx:sx+trailDir*c.trail,sy-1,c.trail,2);
-    ctx.fillStyle=C.outline; ctx.fillRect(sx-c.w/2,sy-c.h/2,c.w,c.h);
-    ctx.fillStyle=c.color; ctx.fillRect(sx-c.w/2+3,sy-c.h/2+1,c.w-6,1);
-    ctx.fillStyle=c.vx>0?C.white:C.yellow; ctx.fillRect(c.vx>0?sx+c.w/2-2:sx-c.w/2,sy-1,2,2);
-    ctx.fillStyle=c.color; ctx.globalAlpha=0.6; ctx.fillRect(sx-c.w/2,sy+c.h/2-1,c.w,1); ctx.globalAlpha=1;
-    if(stopped){ctx.fillStyle=C.magenta; ctx.globalAlpha=0.5+0.5*Math.sin(state.time*8); ctx.fillRect(c.vx>0?sx-c.w/2:sx+c.w/2-2,sy-2,3,4); ctx.globalAlpha=1;}
-  }
-}
-function drawTrail(camX,camY){
-  for(const t of state.trail){
-    const sx=t.x-camX, sy=t.y-camY; const a=Math.max(0,t.life/0.35)*0.35;
-    ctx.globalAlpha=a; ctx.drawImage(PLAYER_SPRITES.idle,Math.round(sx-PLAYER_SPRITES.idle.width/2),Math.round(sy-PLAYER_SPRITES.idle.height+10));
-  }
-  ctx.globalAlpha=1;
-}
-function drawPlayer(camX,camY){
-  const p=state.player, sx=p.x-camX, sy=p.y-camY;
-  ctx.fillStyle='rgba(0,0,0,.5)'; ctx.beginPath(); ctx.ellipse(sx,sy+10,8,3,0,0,Math.PI*2); ctx.fill();
-  ctx.fillStyle='rgba(255,47,160,.25)'; ctx.beginPath(); ctx.ellipse(sx,sy+10,12,4,0,0,Math.PI*2); ctx.fill();
-  let sprite = !p.walking ? PLAYER_SPRITES.idle : (Math.floor(p.anim)%2===0?PLAYER_SPRITES.walkA:PLAYER_SPRITES.walkB);
-  const bob=p.walking?Math.sin(p.anim*Math.PI)*0.5:0;
-  const blink = p.invuln>0 && Math.floor(state.time*20)%2===0;
-  if(!blink){
-    ctx.save();
-    if(p.dir==='left'){ctx.translate(sx,0);ctx.scale(-1,1);ctx.translate(-sx,0);}
-    ctx.drawImage(sprite,Math.round(sx-sprite.width/2),Math.round(sy-sprite.height+10+bob));
-    ctx.restore();
-    if(p.speedMul>1.5){ctx.strokeStyle=`rgba(47,228,255,${0.3+0.3*Math.sin(state.time*10)})`;ctx.lineWidth=1;
-      for(let i=0;i<3;i++){ctx.beginPath();const off=(i-1)*4;ctx.moveTo(sx-10-off,sy-6);ctx.lineTo(sx-20-off,sy-6+i*3);ctx.stroke();}}
-  }
-  ctx.globalAlpha=0.15+0.05*Math.sin(state.time*4); ctx.fillStyle=C.visor; ctx.beginPath(); ctx.arc(sx,sy-4,13,0,Math.PI*2); ctx.fill(); ctx.globalAlpha=1;
-}
-function drawParticles(camX,camY){for(const pt of state.particles){const sx=pt.x-camX,sy=pt.y-camY;ctx.globalAlpha=Math.max(0,pt.life/pt.maxLife);ctx.fillStyle=pt.color;ctx.fillRect(sx,sy,pt.size,pt.size);}ctx.globalAlpha=1;}
-function drawNeonOverlay(){
-  const p=progress();
-  const g=ctx.createRadialGradient(VW/2,VH/2,Math.min(VW,VH)*0.35,VW/2,VH/2,Math.max(VW,VH)*0.8);
-  g.addColorStop(0,'rgba(0,0,0,0)'); g.addColorStop(1,`rgba(255,47,160,${0.05+p*0.16})`);
-  ctx.fillStyle=g; ctx.fillRect(0,0,VW,VH);
-  ctx.fillStyle='rgba(0,0,0,.08)'; for(let y=0;y<VH;y+=3) ctx.fillRect(0,y,VW,1);
-}
-
-let lastT=0;
-function loop(now){const dt=Math.min(0.05,((now-lastT)/1000)||0); lastT=now; if(!paused&&!dialogueOpen)update(dt); else state.time+=dt; render(); requestAnimationFrame(loop);}
-requestAnimationFrame(loop);
-
-function tryInteract(){if(dialogueOpen)return;const n=state.nearest;if(!n)return;if(n.type==='station')openStation(n.data);else if(n.type==='artwork')openArtwork(n.data);else if(n.type==='crosswalk'&&n.data.open<=0)openCrosswalk(n.data);}
-
-function openStation(s){
-  dialogueOpen=true; const dlg=document.getElementById('dialogue'); dlg.classList.add('on'); dlg.classList.remove('crossing');
-  document.getElementById('dlgSpeaker').innerHTML=`${s.name} <span class="role">${s.role}</span>`;
-  document.getElementById('dlgText').textContent=s.intro;
-  const body=document.getElementById('dlgBody'); body.innerHTML='';
-  const q=document.createElement('div'); q.className='question'; q.textContent=s.question; body.appendChild(q);
-  const opts=document.createElement('div'); opts.className='options';
-  s.options.forEach((opt,i)=>{const b=document.createElement('button');b.className='option';b.textContent=['A) ','B) ','C) '][i]+opt.t;b.onclick=()=>chooseOption(opt,opts,body,s);opts.appendChild(b);});
-  body.appendChild(opts);
-}
-function chooseOption(opt,optsEl,body,s){
-  [...optsEl.children].forEach(b=>b.disabled=true);
-  const idx=s.options.indexOf(opt); optsEl.children[idx].classList.add(opt.ok?'correct':'wrong');
-  if(!opt.ok){
-    const fb=document.createElement('div'); fb.className='feedback'; fb.textContent=opt.fb; body.appendChild(fb);
-    const retry=document.createElement('button'); retry.className='continue'; retry.textContent='Tentar de novo';
-    retry.onclick=()=>{fb.remove();retry.remove();[...optsEl.children].forEach(b=>{b.disabled=false;b.classList.remove('wrong');});};
-    body.appendChild(retry);
-  } else {
-    const mul=state.player.speedMul;
-    const fb=document.createElement('div'); fb.className='feedback ok';
-    fb.innerHTML=`<b style="color:var(--yellow)">Correto`+(mul>1.3?` — velocidade ×${mul.toFixed(1)}!`:'.')+`</b> ${wordsInFreedom(opt.fb)}`; body.appendChild(fb);
-    unlockStation(s,mul); burstXP(s.px,s.py,Math.round(s.reward.xp*mul));
-    const close=document.createElement('button'); close.className='continue'; close.textContent='Continuar · Enter'; close.onclick=closeDialogue; continueHandler=closeDialogue; body.appendChild(close);
-  }
-}
-function openCrosswalk(cw){
-  dialogueOpen=true; const dlg=document.getElementById('dialogue'); dlg.classList.add('on'); dlg.classList.add('crossing');
-  document.getElementById('dlgSpeaker').innerHTML=`Travessia <span class="role">Responda para liberar</span>`;
-  document.getElementById('dlgText').textContent=cw.q;
-  const body=document.getElementById('dlgBody'); body.innerHTML='';
-  const opts=document.createElement('div'); opts.className='options';
-  cw.opts.forEach((opt,i)=>{
-    const b=document.createElement('button'); b.className='option'; b.textContent=['A) ','B) ','C) '][i]+opt.t;
-    b.onclick=()=>{
-      [...opts.children].forEach(x=>x.disabled=true); opts.children[i].classList.add(opt.ok?'correct':'wrong');
-      if(opt.ok){
-        const fb=document.createElement('div'); fb.className='feedback ok'; fb.innerHTML=`<b style="color:var(--green)">Atravessia liberada por 10s.</b> ${wordsInFreedom(opt.fb)}`; body.appendChild(fb);
-        cw.answered=true; cw.open=10; state.traffic[cw.road].stopped=10; state.xp+=40; updateHUD();
-        if(!state.codex.find(c=>c.title===`Travessia ${cw.tx},${cw.ty}`)){state.codex.push({cat:'Travessias',title:`Travessia ${cw.tx},${cw.ty}`,desc:opt.fb});renderCodex();}
-        const close=document.createElement('button'); close.className='continue'; close.textContent='Atravessar · Enter'; close.onclick=closeDialogue; continueHandler=closeDialogue; body.appendChild(close);
-      } else {
-        const fb=document.createElement('div'); fb.className='feedback'; fb.textContent=opt.fb; body.appendChild(fb);
-        const retry=document.createElement('button'); retry.className='continue'; retry.textContent='Tentar de novo';
-        retry.onclick=()=>{fb.remove();retry.remove();[...opts.children].forEach(x=>{x.disabled=false;x.classList.remove('wrong');});};
-        body.appendChild(retry);
-      }
-    };
-    opts.appendChild(b);
+/* ---------- cursor ---------- */
+(function cursor(){
+  const cur=$('#cursor'), speedEl=$('#speed');
+  let lx=innerWidth/2, ly=innerHeight/2;
+  addEventListener('mousemove', e=>{
+    cur.style.left=e.clientX+'px'; cur.style.top=e.clientY+'px';
+    const dx=e.clientX-lx, dy=e.clientY-ly;
+    const vel=Math.min(9999, Math.round(Math.hypot(dx,dy)*8));
+    lx=e.clientX; ly=e.clientY;
+    speedEl.textContent=String(vel).padStart(4,'0');
+    cur.style.width = cur.style.height = (14+Math.min(34,vel/18))+'px';
   });
-  body.appendChild(opts);
-}
-function openArtwork(a){
-  dialogueOpen=true; const dlg=document.getElementById('dialogue'); dlg.classList.add('on'); dlg.classList.remove('crossing');
-  document.getElementById('dlgSpeaker').innerHTML=`Obra holográfica <span class="role">${a.artist}</span>`;
-  document.getElementById('dlgText').innerHTML=`<b style="color:var(--yellow)">${a.title}</b><br>${a.desc}`;
-  const body=document.getElementById('dlgBody'); body.innerHTML='';
-  const fb=document.createElement('div'); fb.className='feedback ok'; fb.innerHTML=`Novo conceito desbloqueado: <b style="color:var(--yellow)">${a.concept}</b>`; body.appendChild(fb);
-  if(!a.unlocked){a.unlocked=true;state.codex.push({cat:a.cat||'Obras',title:a.title,desc:a.desc+' — '+a.concept});state.xp+=60;updateHUD();renderCodex();}
-  const close=document.createElement('button'); close.className='continue'; close.textContent='Fechar'; close.onclick=closeDialogue; body.appendChild(close);
-}
-function closeDialogue(){continueHandler=null;dialogueOpen=false;document.getElementById('dialogue').classList.remove('on');}
-function unlockStation(s,mul){
-  if(s.unlocked)return; s.unlocked=true; state.codex.push({cat:s.reward.cat||'Geral',title:s.reward.codex,desc:s.reward.desc});
-  state.xp+=Math.round(s.reward.xp*(mul||1)); updateHUD(); renderCodex();
-  if(state.stations.every(x=>x.unlocked)) setTimeout(()=>document.getElementById('transform').classList.add('on'),900);
-}
-function burstXP(wx,wy,amount){
-  for(let i=0;i<30;i++){const a=Math.random()*Math.PI*2,sp=30+Math.random()*90;state.particles.push({x:wx,y:wy-8,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp-30,life:0.8+Math.random()*0.8,maxLife:1.6,size:1+Math.random()*2,color:Math.random()<0.5?C.yellow:C.magenta});}
-  state.camera.shake=4;
-}
-function updateHUD(){document.getElementById('hudXp').textContent=state.xp;const total=state.stations.length+state.artworks.length;document.getElementById('hudCodex').textContent=`${state.codex.length} / ${total}`;}
-document.getElementById('transformContinue').onclick=()=>{
-  document.getElementById('transform').classList.remove('on'); state.era=1;
-  document.getElementById('hudYear').textContent='1912'; document.getElementById('hudYear').style.color='var(--magenta)';
-  for(let i=0;i<200;i++){state.particles.push({x:state.player.x+(Math.random()-0.5)*100,y:state.player.y+(Math.random()-0.5)*100,vx:(Math.random()-0.5)*120,vy:(Math.random()-0.5)*120,life:1+Math.random()*2,maxLife:3,size:1+Math.random()*3,color:Math.random()<0.5?C.magenta:C.cyan});}
-};
-function toggleCodex(){document.getElementById('codex').classList.toggle('on');}
-function closeCodex(){document.getElementById('codex').classList.remove('on');}
-document.getElementById('codexBtn').onclick=toggleCodex; document.getElementById('codexClose').onclick=closeCodex;
-function renderCodex(){
-  const list=document.getElementById('codexList'); list.innerHTML='';
-  const all=[...state.stations.map(s=>({cat:s.reward.cat||'Geral',title:s.reward.codex,desc:s.reward.desc,unlocked:s.unlocked,hint:`Encontre ${s.name}.`})),
-    ...state.artworks.map(a=>({cat:a.cat||'Obras',title:a.title,desc:a.desc+' — '+a.concept,unlocked:a.unlocked,hint:`Encontre a obra na cidade.`})),
-    ...state.codex.filter(c=>c.cat==='Travessias').map(c=>({cat:'Travessias',title:c.title,desc:c.desc,unlocked:true}))];
-  const byCat={}; for(const e of all){if(!byCat[e.cat])byCat[e.cat]=[];byCat[e.cat].push(e);}
-  for(const cat of Object.keys(byCat)){
-    const catEl=document.createElement('div'); catEl.className='category'; catEl.textContent=cat; list.appendChild(catEl);
-    for(const e of byCat[cat]){const el=document.createElement('div');el.className='entry'+(e.unlocked?'':' locked');el.innerHTML=e.unlocked?`<div class="t">✓ ${e.title}</div><div class="d">${e.desc}</div>`:`<div class="t">□ ${e.title}</div><div class="d">${e.hint}</div>`;list.appendChild(el);}
+})();
+
+/* ---------- fundo ---------- */
+(function background(){
+  const bg=$('#bg'), ctx=bg.getContext('2d');
+  let W,H,pts=[],vel=0;
+  function resize(){W=bg.width=innerWidth; H=bg.height=innerHeight;}
+  function seed(){pts=Array.from({length:80},()=>({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.35,vy:(Math.random()-.5)*.35,s:Math.random()<.15?2:1}));}
+  resize(); seed();
+  addEventListener('resize',()=>{resize(); seed();});
+  addEventListener('mousemove',()=>{vel=Math.min(vel+6,40);});
+  function loop(){
+    ctx.clearRect(0,0,W,H); ctx.fillStyle='rgba(255,51,0,.55)';
+    for(const p of pts){
+      p.x+=p.vx+vel*0.012*(Math.random()-.5); p.y+=p.vy+vel*0.004*(Math.random()-.5);
+      if(p.x<0)p.x=W; if(p.x>W)p.x=0; if(p.y<0)p.y=H; if(p.y>H)p.y=0;
+      ctx.fillRect(p.x,p.y,p.s,p.s);
+    }
+    vel*=0.93; requestAnimationFrame(loop);
   }
-}
-document.getElementById('beginBtn').onclick=()=>{document.getElementById('title').classList.add('hidden'); paused=false; renderCodex(); updateHUD();};
+  loop();
+})();
+
+/* ---------- linhas do hero ---------- */
+(function heroParallax(){
+  const svg=$('#heroLines'), h1=$('#heroH1');
+  if(!svg) return;
+  let frags=[];
+  for(let i=0;i<26;i++){
+    const y=Math.random()*800, len=200+Math.random()*700, x=Math.random()*1200;
+    const col = Math.random()<.25 ? '#ff3300' : '#edede4';
+    frags.push(`<line x1="${x}" y1="${y}" x2="${x+len}" y2="${y-60+Math.random()*120}" stroke="${col}" stroke-opacity="${(0.04+Math.random()*0.1).toFixed(2)}" stroke-width="${Math.random()<.15?2:1}"/>`);
+  }
+  svg.innerHTML = frags.join('');
+  if(reduce) return;
+  addEventListener('mousemove', e=>{
+    const dx=(e.clientX/innerWidth-.5), dy=(e.clientY/innerHeight-.5);
+    svg.style.transform = `translate(${dx*-18}px,${dy*-10}px)`;
+    if(h1) h1.style.transform = `translate(${dx*8}px,${dy*5}px)`;
+  });
+})();
+
+/* ---------- HUD ---------- */
+(function hud(){
+  const yearEl=$('#hudYear'), rail=$('#railFill');
+  function update(){
+    const max=document.documentElement.scrollHeight-innerHeight;
+    const p = max>0 ? Math.min(1,Math.max(0,scrollY/max)) : 0;
+    yearEl.textContent = Math.round(1909+p*(2026-1909));
+    rail.style.height = (p*100)+'%';
+  }
+  addEventListener('scroll',update,{passive:true});
+  addEventListener('resize',update);
+  update();
+})();
+
+/* ---------- reveal dos eyebrows ---------- */
+(function reveal(){
+  const io=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  },{threshold:.18, rootMargin:'0px 0px -12% 0px'});
+  document.querySelectorAll('.eyebrow').forEach(el=>io.observe(el));
+})();
+
+/* ---------- EXPOSIÇÃO ---------- */
+(function exposicao(){
+  const GW = 130, GH = 170;
+
+  const ARQUIVOS = {
+    'Filippo Tommaso Marinetti':  { retrato:'pixel/marinetti.png', obra:'pixel/zangtumb.png'  },
+    'Umberto Boccioni':           { retrato:'pixel/boccioni.png',  obra:'pixel/unique.png'    },
+    'Giacomo Balla':              { retrato:'pixel/balla.png',     obra:'pixel/dog.png'       },
+    'Carlo Carrà':                { retrato:'pixel/carra.png',     obra:'pixel/funeral.png'   },
+    'Gino Severini':              { retrato:'pixel/severini.png',  obra:'pixel/tabarin.png'   },
+    'Luigi Russolo':              { retrato:'pixel/russolo.png',   obra:'pixel/rebellion.png' },
+    'Antonio Sant’Elia':          { retrato:'pixel/santelia.png',  obra:'pixel/citta.png'     },
+    'Francesco Balilla Pratella': { retrato:'pixel/pratella.png',  obra:'pixel/music.png'     },
+  };
+
+  function loadParticles(url, step = 1){
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+      img.onload = () => {
+        const cv = document.createElement('canvas');
+        cv.width = GW; cv.height = GH;
+        const ctx = cv.getContext('2d', { willReadFrequently: true });
+        ctx.imageSmoothingEnabled = false;
+        ctx.drawImage(img, 0, 0, GW, GH);
+        const data = ctx.getImageData(0, 0, GW, GH).data;
+        const pts = [];
+        for (let y = 0; y < GH; y += step) {
+          for (let x = 0; x < GW; x += step) {
+            const i = (y * GW + x) * 4;
+            const a = data[i + 3];
+            if (a < 20) continue;
+            const r = data[i], g = data[i + 1], b = data[i + 2];
+            pts.push({ gx:x, gy:y, c:`rgb(${r},${g},${b})`, s:step });
+          }
+        }
+        resolve(pts);
+      };
+      img.onerror = () => reject(new Error('falha ao carregar ' + url));
+      img.src = url;
+    });
+  }
+
+  class PixelArt {
+    constructor(canvas, particles){
+      this.ctx = canvas.getContext('2d');
+      this.particles = particles.map(p => ({...p}));
+      this.playing = false; this.settled = false; this.t0 = 0; this._raf = null;
+      this.mx = -999; this.my = -999;
+      canvas.width = GW; canvas.height = GH;
+      canvas.addEventListener('mousemove', e => {
+        const r = canvas.getBoundingClientRect();
+        this.mx = (e.clientX - r.left) / r.width * GW;
+        this.my = (e.clientY - r.top) / r.height * GH;
+      });
+      canvas.addEventListener('mouseleave', () => { this.mx = -999; this.my = -999; });
+    }
+    play(){
+      this.t0 = performance.now(); this.playing = true; this.settled = false;
+      const ang0 = Math.random() * Math.PI * 2;
+      this.particles.forEach((p, i) => {
+        const ang = ang0 + i * 0.09, dist = GW * 1.6 + Math.random() * GW;
+        p.sx = GW/2 + Math.cos(ang) * dist;
+        p.sy = GH/2 + Math.sin(ang) * dist;
+        p.delay = Math.random() * 380;
+      });
+      if (!this._raf) this.loop();
+    }
+    loop(now){
+      this._raf = requestAnimationFrame(t => this.loop(t));
+      now = now || performance.now();
+      const ctx = this.ctx, dur = 1000;
+      ctx.clearRect(0, 0, GW, GH);
+      let allDone = true;
+      for (const p of this.particles){
+        let x, y;
+        if (this.playing){
+          const el = now - this.t0 - p.delay;
+          if (el < 0){ x = p.sx; y = p.sy; allDone = false; }
+          else {
+            const t = Math.min(1, el / dur);
+            if (t < 1) allDone = false;
+            const e = 1 - Math.pow(1 - t, 3);
+            x = p.sx + (p.gx - p.sx) * e;
+            y = p.sy + (p.gy - p.sy) * e;
+            if (t < 0.85){
+              ctx.fillStyle = 'rgba(255,51,0,.3)';
+              ctx.fillRect(x - 1, y, p.s, p.s);
+              ctx.fillStyle = 'rgba(0,234,255,.25)';
+              ctx.fillRect(x + 1, y, p.s, p.s);
+            }
+          }
+        } else { x = p.gx; y = p.gy; }
+        if (this.mx > -500){
+          const dx = x - this.mx, dy = y - this.my, d = Math.hypot(dx, dy);
+          if (d < 8 && d > 0.01){
+            const f = (8 - d) / 8 * 2;
+            x += dx / d * f; y += dy / d * f;
+          }
+        }
+        ctx.fillStyle = p.c;
+        ctx.fillRect(x, y, p.s, p.s);
+      }
+      if (this.playing && allDone){ this.playing = false; this.settled = true; }
+    }
+  }
+
+  const artists = [
+    { n:'Filippo Tommaso Marinetti', y:'1876 — 1944',
+      workTitle:'Zang Tumb Tumb', workYear:'1914',
+      workDesc:'Palavras em liberdade: a tipografia explode na página.' },
+    { n:'Umberto Boccioni', y:'1882 — 1916',
+      workTitle:'Formas Únicas de Continuidade no Espaço', workYear:'1913',
+      workDesc:'Um corpo atravessando o ar: movimento feito escultura.' },
+    { n:'Giacomo Balla', y:'1871 — 1958',
+      workTitle:'Dinamismo de um cão na coleira', workYear:'1912',
+      workDesc:'Patas multiplicadas: a pintura desenha o deslocamento.' },
+    { n:'Carlo Carrà', y:'1881 — 1966',
+      workTitle:'O Funeral do Anarquista Galli', workYear:'1911',
+      workDesc:'A multidão em choque vira linhas de força.' },
+    { n:'Gino Severini', y:'1883 — 1966',
+      workTitle:'Hieróglifo Dinâmico do Bal Tabarin', workYear:'1912',
+      workDesc:'Luz, dança e cidade noturna em fragmentos.' },
+    { n:'Luigi Russolo', y:'1885 — 1947',
+      workTitle:'A Rebelião (La Rivolta)', workYear:'1911',
+      workDesc:'A cidade como massa elétrica em revolta.' },
+    { n:'Antonio Sant’Elia', y:'1888 — 1916',
+      workTitle:'Città Nuova (Cidade Nova)', workYear:'1914',
+      workDesc:'A cidade como máquina vertical.' },
+    { n:'Francesco Balilla Pratella', y:'1880 — 1955',
+      workTitle:'Manifesto dos Músicos Futuristas', workYear:'1911',
+      workDesc:'Uma música que incorpora o ruído do mundo industrial.' },
+  ];
+
+  const grid = document.querySelector('#artistGrid');
+  if(!grid) return;
+
+  (async () => {
+    for (const a of artists){
+      const card = document.createElement('article');
+      card.className = 'artist-card';
+      card.setAttribute('tabindex', '0');
+      card.setAttribute('role', 'button');
+      card.setAttribute('aria-label', `Virar peça de ${a.n}`);
+      card.innerHTML = `
+        <div class="artist-inner">
+          <div class="artist-face artist-front">
+            <div class="flip-hint">clique → obra</div>
+            <div class="frame"><canvas class="pix" data-side="front"></canvas></div>
+            <div class="caption"><div class="an">${a.n}</div><div class="ay">${a.y}</div></div>
+          </div>
+          <div class="artist-face artist-back">
+            <div class="flip-hint">← voltar</div>
+            <div class="work"><canvas class="pix" data-side="back"></canvas></div>
+            <div class="work-info">
+              <div class="work-title">${a.workTitle}</div>
+              <div class="work-year">${a.workYear}</div>
+            </div>
+            <div class="work-desc">${a.workDesc}</div>
+          </div>
+        </div>`;
+      grid.appendChild(card);
+
+      const arquivos = ARQUIVOS[a.n];
+      let frontPts = [], backPts = [];
+      try {
+        [frontPts, backPts] = await Promise.all([
+          loadParticles(arquivos.retrato, 2),
+          loadParticles(arquivos.obra, 2)
+        ]);
+      } catch (err){
+        console.warn('Falha ao carregar pixel art de', a.n, err);
+      }
+
+      const frontArt = new PixelArt(card.querySelector('[data-side="front"]'), frontPts);
+      const backArt  = new PixelArt(card.querySelector('[data-side="back"]'),  backPts);
+
+      const io = new IntersectionObserver(entries => {
+        entries.forEach(e => { if (e.isIntersecting){ frontArt.play(); io.disconnect(); } });
+      }, { threshold: .3 });
+      io.observe(card);
+
+      let flipped = false;
+      const flip = () => {
+        flipped = !flipped;
+        card.classList.toggle('flipped', flipped);
+        flipped ? backArt.play() : frontArt.play();
+      };
+      card.addEventListener('click', flip);
+      card.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); flip(); }
+      });
+    }
+  })();
+})();
+
+/* ---------- 03 RUÍDO + MÚSICA (GUERRA) ---------- */
+(function noise(){
+  const AC = window.AudioContext || window.webkitAudioContext;
+  if(!AC) return;
+  let actx = null, noiseBuffer = null;
+
+  function ensureContext(){
+    if(!actx){
+      actx = new AC();
+      const size = 2 * actx.sampleRate;
+      noiseBuffer = actx.createBuffer(1, size, actx.sampleRate);
+      const d = noiseBuffer.getChannelData(0);
+      for(let i = 0; i < size; i++) d[i] = Math.random() * 2 - 1;
+    }
+    if(actx.state === 'suspended') actx.resume();
+    return actx;
+  }
+
+  /* ============ SONS DE GUERRA (one-shot) ============ */
+
+  // 💥 BOMBA — boom grave + estalo + rumble
+  function playExplosion(ac){
+    const now = ac.currentTime;
+    const out = ac.createGain(); out.gain.value = 0.9;
+    out.connect(ac.destination);
+
+    const boom = ac.createOscillator();
+    boom.type = 'sine';
+    boom.frequency.setValueAtTime(140, now);
+    boom.frequency.exponentialRampToValueAtTime(22, now + 0.9);
+    const boomG = ac.createGain();
+    boomG.gain.setValueAtTime(0, now);
+    boomG.gain.linearRampToValueAtTime(0.95, now + 0.01);
+    boomG.gain.exponentialRampToValueAtTime(0.001, now + 1.3);
+    boom.connect(boomG).connect(out);
+    boom.start(now); boom.stop(now + 1.4);
+
+    const crack = ac.createBufferSource();
+    crack.buffer = noiseBuffer;
+    const ckF = ac.createBiquadFilter();
+    ckF.type = 'highpass'; ckF.frequency.value = 900;
+    const ckG = ac.createGain();
+    ckG.gain.setValueAtTime(0.7, now);
+    ckG.gain.exponentialRampToValueAtTime(0.001, now + 0.09);
+    crack.connect(ckF).connect(ckG).connect(out);
+    crack.start(now); crack.stop(now + 0.1);
+
+    const rumble = ac.createBufferSource();
+    rumble.buffer = noiseBuffer;
+    const rF = ac.createBiquadFilter();
+    rF.type = 'lowpass';
+    rF.frequency.setValueAtTime(500, now);
+    rF.frequency.exponentialRampToValueAtTime(60, now + 1.5);
+    const rG = ac.createGain();
+    rG.gain.setValueAtTime(0, now);
+    rG.gain.linearRampToValueAtTime(0.45, now + 0.05);
+    rG.gain.exponentialRampToValueAtTime(0.001, now + 1.9);
+    rumble.connect(rF).connect(rG).connect(out);
+    rumble.start(now); rumble.stop(now + 2);
+  }
+
+  // 🔫 TIROTEIO — rajada de tiros
+  function playGunfire(ac){
+    const now = ac.currentTime;
+    const out = ac.createGain(); out.gain.value = 0.7;
+    out.connect(ac.destination);
+
+    const shots = 9;
+    for(let i = 0; i < shots; i++){
+      const t = now + i * 0.09 + Math.random() * 0.035;
+      const shot = ac.createBufferSource();
+      shot.buffer = noiseBuffer;
+
+      const f = ac.createBiquadFilter();
+      f.type = 'bandpass';
+      f.frequency.value = 1400 + Math.random() * 900;
+      f.Q.value = 2.5;
+
+      const g = ac.createGain();
+      g.gain.setValueAtTime(0, t);
+      g.gain.linearRampToValueAtTime(0.5, t + 0.002);
+      g.gain.exponentialRampToValueAtTime(0.001, t + 0.05);
+
+      shot.connect(f).connect(g).connect(out);
+      shot.start(t); shot.stop(t + 0.06);
+    }
+  }
+
+  // 💣 GRANADA — estalo + estilhaços + thud
+  function playGrenade(ac){
+    const now = ac.currentTime;
+    const out = ac.createGain(); out.gain.value = 0.85;
+    out.connect(ac.destination);
+
+    const crack = ac.createBufferSource();
+    crack.buffer = noiseBuffer;
+    const cF = ac.createBiquadFilter();
+    cF.type = 'bandpass'; cF.frequency.value = 2200; cF.Q.value = 1;
+    const cG = ac.createGain();
+    cG.gain.setValueAtTime(0.8, now);
+    cG.gain.exponentialRampToValueAtTime(0.001, now + 0.07);
+    crack.connect(cF).connect(cG).connect(out);
+    crack.start(now); crack.stop(now + 0.08);
+
+    const frag = ac.createBufferSource();
+    frag.buffer = noiseBuffer;
+    const fF = ac.createBiquadFilter();
+    fF.type = 'highpass'; fF.frequency.value = 3200;
+    const fG = ac.createGain();
+    fG.gain.setValueAtTime(0, now + 0.02);
+    fG.gain.linearRampToValueAtTime(0.28, now + 0.03);
+    fG.gain.exponentialRampToValueAtTime(0.001, now + 0.55);
+    frag.connect(fF).connect(fG).connect(out);
+    frag.start(now); frag.stop(now + 0.6);
+
+    const thud = ac.createOscillator();
+    thud.type = 'sine';
+    thud.frequency.setValueAtTime(90, now);
+    thud.frequency.exponentialRampToValueAtTime(30, now + 0.5);
+    const tG = ac.createGain();
+    tG.gain.setValueAtTime(0, now);
+    tG.gain.linearRampToValueAtTime(0.65, now + 0.01);
+    tG.gain.exponentialRampToValueAtTime(0.001, now + 0.7);
+    thud.connect(tG).connect(out);
+    thud.start(now); thud.stop(now + 0.8);
+  }
+
+  /* ============ SONS CONTÍNUOS (toggle) ============ */
+  const config = {
+    'MOTOR':        {src:'osc', type:'sawtooth', f:55,   filter:'lowpass',  fc:420,  q:4, g:0.14},
+    'METAL':        {src:'osc', type:'square',   f:320,  filter:'bandpass', fc:2400, q:9, g:0.09},
+    'CIDADE':       {src:'noise',                        filter:'bandpass', fc:900,  q:1.6, g:0.12},
+    'MÁQUINA':      {src:'osc', type:'square',   f:130,  filter:'lowpass',  fc:1300, q:5, g:0.12},
+    'ELETRICIDADE': {src:'osc', type:'sawtooth', f:1800, filter:'highpass', fc:2200, q:6, g:0.06},
+  };
+
+  const active = {}, padsEl = $('#pads'), vis = $('#noise-vis'), vctx = vis.getContext('2d');
+
+  // Pads contínuos
+  Object.entries(config).forEach(([key, cfg]) => {
+    const btn = document.createElement('button');
+    btn.type = 'button'; btn.className = 'pad'; btn.textContent = key;
+    btn.addEventListener('click', async () => {
+      const ac = ensureContext();
+      if(ac.state !== 'running'){ try{ await ac.resume(); }catch(e){} }
+      if(active[key]){
+        const {src, gain} = active[key]; const now = ac.currentTime;
+        gain.gain.cancelScheduledValues(now); gain.gain.setValueAtTime(gain.gain.value, now);
+        gain.gain.linearRampToValueAtTime(0, now + 0.12);
+        try{ src.stop(now + 0.15); }catch(e){}
+        delete active[key]; btn.classList.remove('active'); return;
+      }
+      const now = ac.currentTime;
+      const gain = ac.createGain(); gain.gain.setValueAtTime(0, now); gain.gain.linearRampToValueAtTime(cfg.g, now + 0.08);
+      const filter = ac.createBiquadFilter(); filter.type = cfg.filter; filter.frequency.value = cfg.fc; filter.Q.value = cfg.q;
+      let src;
+      if(cfg.src === 'noise'){ src = ac.createBufferSource(); src.buffer = noiseBuffer; src.loop = true; }
+      else { src = ac.createOscillator(); src.type = cfg.type; src.frequency.value = cfg.f; }
+      const lfo = ac.createOscillator(), lfoGain = ac.createGain();
+      lfo.frequency.value = key === 'MOTOR' ? 6 : 3;
+      lfoGain.gain.value = cfg.src === 'noise' ? 120 : cfg.f * 0.05;
+      lfo.connect(lfoGain);
+      if(cfg.src === 'noise') lfoGain.connect(filter.frequency); else lfoGain.connect(src.frequency);
+      lfo.start();
+      src.connect(filter).connect(gain).connect(ac.destination); src.start();
+      active[key] = {src, gain, filter, lfo}; btn.classList.add('active');
+    });
+    padsEl.appendChild(btn);
+  });
+
+  // Pad GUERRA — toggle que mistura explosão, tiroteio e granada em loop
+  const guerraBtn = document.createElement('button');
+  guerraBtn.type = 'button';
+  guerraBtn.className = 'pad';
+  guerraBtn.textContent = 'GUERRA';
+  guerraBtn.addEventListener('click', async () => {
+    const ac = ensureContext();
+    if(ac.state !== 'running'){ try{ await ac.resume(); }catch(e){} }
+
+    if(active['GUERRA']){
+      clearTimeout(active['GUERRA'].timer);
+      delete active['GUERRA'];
+      guerraBtn.classList.remove('active');
+      return;
+    }
+
+    const fire = () => {
+      const r = Math.random();
+      if(r < 0.4)       playExplosion(ac);
+      else if(r < 0.75) playGunfire(ac);
+      else              playGrenade(ac);
+
+      const next = 600 + Math.random() * 900;
+      active['GUERRA'].timer = setTimeout(fire, next);
+    };
+
+    active['GUERRA'] = { timer: null };
+    guerraBtn.classList.add('active');
+    fire();
+  });
+  padsEl.appendChild(guerraBtn);
+
+  function sizeVis(){ vis.width = vis.clientWidth; vis.height = 90; }
+  sizeVis(); addEventListener('resize', sizeVis);
+
+  function draw(){
+    vctx.clearRect(0, 0, vis.width, vis.height);
+    const n = Object.keys(active).length;
+    vctx.strokeStyle = n ? '#f2ff00' : '#2a2a2e';
+    vctx.lineWidth = 1.4;
+    vctx.beginPath();
+    for(let x = 0; x < vis.width; x++){
+      const t = x * 0.05 + performance.now() * 0.006 * (n || 1);
+      const y = vis.height/2 + Math.sin(t) * (n * 9 + 2) + Math.sin(t * 3.7) * (n * 3);
+      x === 0 ? vctx.moveTo(x, y) : vctx.lineTo(x, y);
+    }
+    vctx.stroke();
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+/* ---------- PRÓS ---------- */
+(function pros(){
+  const data = [
+    ['01','Renovação estética','Quebra dos modelos acadêmicos e abertura para o novo.'],
+    ['02','Arte + tecnologia','Aproximou a arte da indústria, do design e da máquina.'],
+    ['03','Novas linguagens','Palavras em liberdade, verso livre, colagem, ruído musical.'],
+    ['04','Influência duradoura','Abriu caminho para outras vanguardas — dadá, surrealismo, modernismo.'],
+    ['05','Antecipação','Viu o futuro industrial antes que ele chegasse.'],
+    ['06','Coragem experimental','Transformou o risco em método de criação.'],
+  ];
+  const grid = document.getElementById('prosGrid');
+  if(!grid) return;
+  data.forEach(([n,t,d])=>{
+    const el = document.createElement('div'); el.className='pros-item';
+    el.innerHTML = `<div class="pros-num">${n}</div><div><h4>${t}</h4><p>${d}</p></div>`;
+    grid.appendChild(el);
+  });
+})();
+
+/* ---------- BLACK MIRROR ---------- */
+(function blackMirror(){
+  const items=[
+    ['01','Dependência','A tela vira extensão do corpo.'],
+    ['02','Controle','Vigilância e algoritmos decidem por nós.'],
+    ['03','Impacto social','Atenção, reputação e relações viram métrica.'],
+    ['04','Lado obscuro','A velocidade sem freio cobra seu preço.'],
+  ];
+  const grid=$('#bmGrid');
+  if(grid){
+    items.forEach(([n,t,d])=>{
+      const el=document.createElement('div'); el.className='cell';
+      el.innerHTML=`<div class="num">${n}</div><div><h3>${t}</h3><p>${d}</p></div>`;
+      grid.appendChild(el);
+    });
+  }
+
+  const img=$('#bmCover');
+  if(!img) return;
+  const svg=`<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 450'><rect width='300' height='450' fill='#050508'/><path d='M150 225 L40 0 M150 225 L300 80 M150 225 L210 450 M150 225 L0 340 M150 225 L120 450' stroke='#00eaff' stroke-opacity='.4' fill='none'/><text x='150' y='215' fill='#edede4' font-family='Arial Black,Arial,sans-serif' font-size='34' text-anchor='middle'>BLACK</text><text x='150' y='255' fill='#00eaff' font-family='Arial Black,Arial,sans-serif' font-size='34' text-anchor='middle'>MIRROR</text></svg>`;
+  const fallback=()=>{ img.src='data:image/svg+xml;utf8,'+encodeURIComponent(svg); };
+  img.addEventListener('error', fallback, {once:true});
+  if(img.complete && img.naturalWidth===0) fallback();
+})();
+
+/* ---------- fechamento 1909 × agora ---------- */
+(function present(){
+  const pairs=[
+    ['1909','Aeroplano — velocidade como espetáculo público'],
+    ['2026','Carros autônomos — velocidade delegada a algoritmos'],
+    ['1913','Intonarumori — máquinas geram música'],
+    ['2026','IA generativa — algoritmos geram imagem e som'],
+    ['1909','Manifesto impresso em jornal, em Paris'],
+    ['2026','Manifesto publicado em rede, em tempo real'],
+    ['1916','Tecnologia industrial aplicada à destruição em massa'],
+    ['2026','Tecnologia digital aplicada à vigilância e à atenção'],
+  ];
+  const wrap=$('#pairs');
+  if(!wrap) return;
+  for(let i=0;i<pairs.length;i+=2){
+    const row=document.createElement('div'); row.className='pair';
+    [pairs[i],pairs[i+1]].forEach(([a,b])=>{
+      const d=document.createElement('div'); d.innerHTML=`<div class="a">${a}</div><div class="b">${b}</div>`;
+      row.appendChild(d);
+    });
+    wrap.appendChild(row);
+  }
+})();
+
+/* ---------- manifesto · clique nas palavras ---------- */
+(function manifestoClick(){
+  const wrap = document.getElementById('words');
+  if(!wrap) return;
+  wrap.addEventListener('click', e=>{
+    const s=e.target.closest('span');
+    if(!s || reduce) return;
+    s.style.transition='transform .35s cubic-bezier(.2,.8,.3,1.5), color .35s';
+    s.style.transform='scale(1.6) skewX(-14deg)'; s.style.color='var(--yellow)';
+    setTimeout(()=>{ s.style.transform=''; s.style.color=''; }, 380);
+  });
+})();
+
+/* ---------- 08 · transição para o jogo ---------- */
+(function enterGame(){
+  const link = document.getElementById('enterGame');
+  if (!link) return;
+
+  link.addEventListener('click', e => {
+    if (reduce) return;
+    e.preventDefault();
+    const destino = link.href;
+
+    shatter({ cols: 8, rows: 6, dur: 700 });
+
+    const flash = document.createElement('div');
+    flash.style.cssText = `
+      position:fixed; inset:0; z-index:9999; pointer-events:none;
+      background:radial-gradient(circle at center,
+        rgba(0,234,255,.6) 0%, rgba(255,51,0,.4) 40%, transparent 70%);
+      opacity:0; transition:opacity .35s;
+    `;
+    document.body.appendChild(flash);
+    requestAnimationFrame(()=>flash.style.opacity='1');
+
+    setTimeout(() => { window.location.href = destino; }, 620);
+  });
+})();
 </script>
 </body>
 </html>

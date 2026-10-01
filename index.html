@@ -20,7 +20,7 @@ body{
   font-family:'Space Grotesk',sans-serif;
   overflow-x:hidden; cursor:none; -webkit-font-smoothing:antialiased;
 }
-h1,h2,h3,.display{font-family:'Archivo Black',sans-serif; line-height:.95; letter-spacing:-.01em;}
+h1,h2,h3,h4,.display{font-family:'Archivo Black',sans-serif; line-height:.95; letter-spacing:-.01em;}
 ::selection{background:var(--red); color:#000;}
 a{color:inherit; text-decoration:none;}
 canvas{display:block;}
@@ -33,183 +33,84 @@ canvas{display:block;}
 }
 @keyframes grainShift{0%{transform:translate(0,0)}50%{transform:translate(-1px,1px)}100%{transform:translate(1px,-1px)}}
 
-.rail{
-  position:fixed; left:0; top:0; bottom:0; width:3px; z-index:900;
-  background:var(--line); pointer-events:none;
-}
-.rail i{
-  position:absolute; left:0; top:0; width:100%; height:0%;
-  background:linear-gradient(to bottom,var(--yellow),var(--red));
-  box-shadow:0 0 14px rgba(255,51,0,.7);
-  transition:height .08s linear;
-}
+.rail{position:fixed; left:0; top:0; bottom:0; width:3px; z-index:900; background:var(--line); pointer-events:none;}
+.rail i{position:absolute; left:0; top:0; width:100%; height:0%; background:linear-gradient(to bottom,var(--yellow),var(--red)); box-shadow:0 0 14px rgba(255,51,0,.7); transition:height .08s linear;}
 @media(max-width:640px){.rail{width:2px;}}
 
-#cursor{
-  position:fixed; width:14px; height:14px; border:1px solid var(--red);
-  border-radius:50%; pointer-events:none; z-index:9000;
-  transform:translate(-50%,-50%); transition:width .12s, height .12s;
-  mix-blend-mode:difference;
-}
+#cursor{position:fixed; width:14px; height:14px; border:1px solid var(--red); border-radius:50%; pointer-events:none; z-index:9000; transform:translate(-50%,-50%); transition:width .12s, height .12s; mix-blend-mode:difference;}
 @media(hover:none){#cursor{display:none;} body{cursor:auto;}}
 
-#boot{
-  position:fixed; inset:0; z-index:3000; background:#000;
-  display:flex; align-items:center; justify-content:center;
-  flex-direction:column; overflow:hidden;
-}
+#boot{position:fixed; inset:0; z-index:3000; background:#000; display:flex; align-items:center; justify-content:center; flex-direction:column; overflow:hidden;}
 #boot.done{display:none;}
 #bootCv{position:absolute; inset:0; width:100%; height:100%;}
 .boot-inner{position:relative; z-index:2; text-align:center; padding:0 20px;}
-#bootLabel{
-  font-size:11px; letter-spacing:.5em; color:var(--red);
-  text-transform:uppercase; margin-bottom:22px;
-}
-#bootYear{
-  font-family:'Archivo Black',sans-serif;
-  font-size:clamp(72px,22vw,260px); line-height:.85;
-  color:var(--paper); font-variant-numeric:tabular-nums;
-  text-shadow:0 0 60px rgba(255,51,0,.35);
-}
-#bootSub{
-  margin-top:26px; font-size:12px; letter-spacing:.35em;
-  color:var(--steel); text-transform:uppercase;
-}
-.boot-bar{
-  margin-top:34px; width:min(320px,70vw); height:1px;
-  background:var(--line); position:relative; overflow:hidden;
-}
-.boot-bar i{
-  position:absolute; inset:0 100% 0 0; background:var(--red);
-  transition:right .1s linear;
-}
+#bootLabel{font-size:11px; letter-spacing:.5em; color:var(--red); text-transform:uppercase; margin-bottom:22px;}
+#bootYear{font-family:'Archivo Black',sans-serif; font-size:clamp(72px,22vw,260px); line-height:.85; color:var(--paper); font-variant-numeric:tabular-nums; text-shadow:0 0 60px rgba(255,51,0,.35);}
+#bootSub{margin-top:26px; font-size:12px; letter-spacing:.35em; color:var(--steel); text-transform:uppercase;}
+.boot-bar{margin-top:34px; width:min(320px,70vw); height:1px; background:var(--line); position:relative; overflow:hidden;}
+.boot-bar i{position:absolute; inset:0 100% 0 0; background:var(--red); transition:right .1s linear;}
 
 #shatter{position:fixed; inset:0; z-index:3100; pointer-events:none; display:none;}
 #shatter.on{display:block;}
-.shard{
-  position:absolute; inset:0;
-  background:linear-gradient(135deg, rgba(255,51,0,.08), rgba(10,10,12,.5) 55%, rgba(0,0,0,.65));
-  box-shadow:inset 0 0 0 1px rgba(237,237,228,.08);
-  will-change:transform,opacity;
-  transform:translate3d(0,0,0) rotate(0deg);
-  opacity:1;
-  transition:transform .78s cubic-bezier(.22,.72,.25,1), opacity .78s ease-out;
-}
-.shard.fly{
-  transform:translate3d(var(--tx),var(--ty),0) rotate(var(--rot)) scale(var(--sc));
-  opacity:0;
-}
+.shard{position:absolute; inset:0; background:linear-gradient(135deg, rgba(255,51,0,.08), rgba(10,10,12,.5) 55%, rgba(0,0,0,.65)); box-shadow:inset 0 0 0 1px rgba(237,237,228,.08); will-change:transform,opacity; transform:translate3d(0,0,0) rotate(0deg); opacity:1; transition:transform .78s cubic-bezier(.22,.72,.25,1), opacity .78s ease-out;}
+.shard.fly{transform:translate3d(var(--tx),var(--ty),0) rotate(var(--rot)) scale(var(--sc)); opacity:0;}
 
-nav{
-  position:fixed; top:0; left:0; right:0; z-index:500;
-  display:flex; justify-content:space-between; align-items:center; gap:16px;
-  padding:16px 22px 16px 30px; padding-top:calc(16px + env(safe-area-inset-top,0px));
-  mix-blend-mode:difference; font-size:12px; pointer-events:none;
-  letter-spacing:.06em;
-}
+nav{position:fixed; top:0; left:0; right:0; z-index:500; display:flex; justify-content:space-between; align-items:center; gap:16px; padding:16px 22px 16px 30px; padding-top:calc(16px + env(safe-area-inset-top,0px)); mix-blend-mode:difference; font-size:12px; pointer-events:none; letter-spacing:.06em;}
 nav .brand{font-family:'Archivo Black',sans-serif; font-size:13px;}
-nav .links{display:flex; gap:16px; pointer-events:auto; flex-wrap:wrap; justify-content:center;}
-nav .links a{opacity:.55; transition:opacity .2s;}
+nav .links{display:flex; gap:14px; pointer-events:auto; flex-wrap:wrap; justify-content:center;}
+nav .links a{opacity:.55; transition:opacity .2s; font-size:11.5px;}
 nav .links a:hover{opacity:1;}
-nav .hud{display:flex; gap:14px; font-variant-numeric:tabular-nums;}
-nav .hud span{opacity:.5; transition:color .4s,opacity .4s;}
-nav .hud b{font-weight:500; transition:color .4s;}
-nav .hud.war-mode b, nav .hud.war-mode span{color:var(--red); opacity:.9;}
-@media(max-width:780px){nav .links{display:none;}}
+nav .hud{display:flex; gap:14px; font-variant-numeric:tabular-nums; font-size:11px;}
+nav .hud span{opacity:.5;}
+nav .hud b{font-weight:500;}
+@media(max-width:900px){nav .links{display:none;}}
 
 canvas#bg{position:fixed; inset:0; z-index:0; opacity:.55; pointer-events:none;}
 
 section{position:relative; z-index:1; padding:110px 22px 110px 34px; max-width:1120px; margin:0 auto;}
-.eyebrow{
-  font-size:11px; letter-spacing:.42em; text-transform:uppercase;
-  color:var(--red); margin-bottom:18px;
-  opacity:0; transform:translateX(-14px);
-  transition:opacity .7s, transform .7s;
-}
+.eyebrow{font-size:11px; letter-spacing:.42em; text-transform:uppercase; color:var(--red); margin-bottom:18px; opacity:0; transform:translateX(-14px); transition:opacity .7s, transform .7s;}
 .eyebrow.in{opacity:1; transform:translateX(0);}
 
-#hero{
-  min-height:100svh; display:flex; flex-direction:column;
-  justify-content:center; padding-top:140px;
-}
-#hero h1{
-  font-size:clamp(44px,11vw,132px);
-  text-transform:uppercase;
-  transition:transform .25s ease-out;
-  will-change:transform;
-}
+#hero{min-height:100svh; display:flex; flex-direction:column; justify-content:center; padding-top:140px;}
+#hero h1{font-size:clamp(44px,11vw,132px); text-transform:uppercase; transition:transform .25s ease-out; will-change:transform;}
 #hero h1 em{font-style:normal; color:var(--red);}
-#hero .sub{
-  max-width:540px; margin-top:28px; color:var(--steel);
-  font-size:15px; line-height:1.65;
-}
-#hero .meta{
-  display:flex; gap:28px; flex-wrap:wrap; margin-top:44px;
-  font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:var(--steel);
-}
-#hero .meta b{color:var(--paper); display:block; font-family:'Archivo Black',sans-serif;
-  font-size:22px; letter-spacing:0; margin-bottom:4px;}
-.scroll-hint{
-  margin-top:56px; font-size:11px; letter-spacing:.35em;
-  text-transform:uppercase; color:var(--steel);
-  animation:pulse 2.4s ease-in-out infinite;
-}
+#hero .sub{max-width:540px; margin-top:28px; color:var(--steel); font-size:15px; line-height:1.65;}
+#hero .meta{display:flex; gap:28px; flex-wrap:wrap; margin-top:44px; font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:var(--steel);}
+#hero .meta b{color:var(--paper); display:block; font-family:'Archivo Black',sans-serif; font-size:22px; letter-spacing:0; margin-bottom:4px;}
+.scroll-hint{margin-top:56px; font-size:11px; letter-spacing:.35em; text-transform:uppercase; color:var(--steel); animation:pulse 2.4s ease-in-out infinite;}
 @keyframes pulse{0%,100%{opacity:.35}50%{opacity:1}}
 
 #heroLines{position:absolute; inset:0; z-index:-1; opacity:.5;}
 
-#origem{padding-bottom:40px;}
-.tl-v{position:relative; margin-top:80px; padding-left:52px; padding-bottom:40px;}
-.tl-v::before{
-  content:'';
-  position:absolute; left:14px; top:20px; bottom:20px; width:1px;
-  background:linear-gradient(to bottom,transparent 0%,var(--red) 6%,var(--red) 94%,transparent 100%);
-  box-shadow:0 0 20px rgba(255,51,0,.4);
-}
-@media(max-width:640px){.tl-v{padding-left:36px;} .tl-v::before{left:8px;}}
-.tl-entry{
-  position:relative; padding-bottom:70px;
-  opacity:0; transform:translateY(70px);
-  transition:opacity 1s cubic-bezier(.2,.75,.25,1), transform 1s cubic-bezier(.2,.75,.25,1);
-}
-.tl-entry:last-child{padding-bottom:20px;}
-.tl-entry.in{opacity:1; transform:translateY(0);}
-.tl-entry::before{
-  content:''; position:absolute; left:-42px; top:22px; width:12px; height:12px; border-radius:50%;
-  background:var(--red); box-shadow:0 0 0 5px rgba(255,51,0,.14), 0 0 28px rgba(255,51,0,.75);
-  transition:transform .4s, box-shadow .4s;
-}
-@media(max-width:640px){.tl-entry::before{left:-32px; top:18px; width:9px; height:9px;} .tl-entry{padding-bottom:56px;}}
-.tl-entry:hover::before{transform:scale(1.4); box-shadow:0 0 0 8px rgba(255,51,0,.08), 0 0 40px rgba(255,51,0,1);}
-.tl-entry .yr{
-  font-family:'Archivo Black',sans-serif; font-size:clamp(52px,9vw,116px); color:var(--red);
-  line-height:.82; margin-bottom:20px; letter-spacing:-.03em;
-  text-shadow:0 0 60px rgba(255,51,0,.25); display:block; font-variant-numeric:tabular-nums;
-}
-.tl-entry h3{font-size:clamp(15px,1.6vw,19px); text-transform:uppercase; letter-spacing:.02em; margin-bottom:12px; color:var(--paper);}
-.tl-entry p{color:var(--steel); max-width:480px; line-height:1.6; font-size:15px;}
+/* ============ 01 CONTEXTO ============ */
+#contexto{padding-bottom:60px;}
+.ctx-narr{max-width:640px; margin-top:32px; font-size:15.5px; line-height:1.85; color:var(--steel);}
+.ctx-narr b{color:var(--paper);}
+.ctx-narr em{font-style:normal; color:var(--red); font-family:'Archivo Black',sans-serif;}
+.ctx-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:1px; background:var(--line); margin-top:52px; border:1px solid var(--line);}
+.ctx-cell{background:var(--bg); padding:32px 24px; transition:background .25s, transform .25s;}
+.ctx-cell:hover{background:#111116; transform:translateY(-4px);}
+.ctx-cell .ctx-num{font-family:'Archivo Black',sans-serif; font-size:11px; letter-spacing:.3em; color:var(--red);}
+.ctx-cell h3{font-size:clamp(18px,2.4vw,24px); text-transform:uppercase; margin-top:14px; line-height:1.1;}
+.ctx-cell p{font-size:13.5px; color:var(--steel); margin-top:12px; line-height:1.7;}
+.ctx-cell .ctx-keys{margin-top:20px; display:flex; flex-wrap:wrap; gap:6px;}
+.ctx-cell .ctx-keys span{font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; border:1px solid var(--line); padding:5px 9px; color:var(--steel); transition:.2s;}
+.ctx-cell:hover .ctx-keys span{border-color:var(--red); color:var(--paper);}
 
-#manifesto{min-height:88vh; display:flex; align-items:center; justify-content:center; text-align:center; flex-direction:column;}
-.words{display:flex; flex-wrap:wrap; justify-content:center; gap:6px 18px; margin-top:34px;}
-.words span{
-  display:inline-block; font-family:'Archivo Black',sans-serif;
-  font-size:clamp(22px,5.6vw,58px); text-transform:uppercase;
-  transition:transform .18s cubic-bezier(.2,.8,.3,1.4), color .18s;
-  will-change:transform;
-}
-.words span:hover{color:var(--red); transform:scale(1.14) skewX(-8deg);}
-.words span:nth-child(even):hover{color:var(--yellow);}
+/* ============ INTERLÚDIO ============ */
+#manifesto{min-height:80vh; display:flex; align-items:center; justify-content:center; text-align:center; flex-direction:column;}
+#manifesto .words{display:flex; flex-wrap:wrap; justify-content:center; gap:6px 20px; margin-top:34px;}
+#manifesto .words span{display:inline-block; font-family:'Archivo Black',sans-serif; font-size:clamp(26px,6vw,64px); text-transform:uppercase; transition:transform .18s cubic-bezier(.2,.8,.3,1.4), color .18s; will-change:transform;}
+#manifesto .words span:hover{color:var(--red); transform:scale(1.14) skewX(-8deg);}
+#manifesto .words span:nth-child(even):hover{color:var(--yellow);}
 
-.grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:1px; background:var(--line); margin-top:40px; border:1px solid var(--line);}
-.cell{background:var(--bg); padding:32px 22px; min-height:200px; display:flex; flex-direction:column; justify-content:space-between; transition:background .25s, color .25s, transform .25s;}
-.cell:hover{background:var(--red); color:#000; transform:translateY(-4px);}
-.cell .num{font-family:'Archivo Black',sans-serif; font-size:12px; color:var(--red); letter-spacing:.2em;}
-.cell:hover .num{color:#000;}
-.cell h3{font-size:17px; margin-top:16px; text-transform:uppercase;}
-.cell p{font-size:13px; color:var(--steel); margin-top:12px; line-height:1.6;}
-.cell:hover p{color:rgba(0,0,0,.75);}
+/* ============ 02 EXPOSIÇÃO ============ */
+#exposicao{padding-bottom:80px;}
+.expo-lead{color:var(--steel); max-width:580px; margin-top:18px; font-size:14.5px; line-height:1.75;}
+.expo-legend{display:flex; justify-content:space-between; align-items:center; margin-top:52px; padding-bottom:12px; border-bottom:1px solid var(--line); font-size:10.5px; letter-spacing:.32em; text-transform:uppercase; color:var(--steel); flex-wrap:wrap; gap:12px;}
+.expo-legend b{color:var(--red); font-family:'Archivo Black',sans-serif;}
 
-.artists{display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:22px; margin-top:50px;}
+.artists{display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:22px; margin-top:36px;}
 .artist-card{perspective:1600px; cursor:pointer; aspect-ratio:3/4; outline:none; position:relative; -webkit-tap-highlight-color:transparent;}
 .artist-inner{position:relative; width:100%; height:100%; transform-style:preserve-3d; transition:transform 1s cubic-bezier(.45,.05,.2,1);}
 .artist-card.flipped .artist-inner{transform:rotateY(180deg);}
@@ -220,9 +121,8 @@ section{position:relative; z-index:1; padding:110px 22px 110px 34px; max-width:1
 .artist-front .frame canvas{position:absolute; inset:0; width:100%; height:100%; image-rendering:pixelated; transition:filter .4s, transform .8s cubic-bezier(.2,.7,.3,1); z-index:2;}
 .artist-card:hover .artist-front .frame canvas{filter:brightness(1.12) saturate(1.2); transform:scale(1.04);}
 .artist-front .frame::after{content:''; position:absolute; inset:0; z-index:3; pointer-events:none; background:linear-gradient(to top, rgba(10,10,12,.95) 0%, rgba(10,10,12,.2) 45%, transparent 70%);}
-.artist-front .initials{position:absolute; z-index:1; inset:0; display:flex; align-items:center; justify-content:center; font-family:'Archivo Black',sans-serif; font-size:clamp(60px,8vw,96px); color:rgba(237,237,228,.08); letter-spacing:-.05em;}
 .artist-front .caption{position:relative; z-index:4; padding:20px 18px 22px; margin-top:-84px;}
-.artist-front .an{font-family:'Archivo Black',sans-serif; font-size:15px; text-transform:uppercase; line-height:1.15; letter-spacing:.01em;}
+.artist-front .an{font-family:'Archivo Black',sans-serif; font-size:15px; text-transform:uppercase; line-height:1.15;}
 .artist-front .ay{color:var(--red); font-size:12px; margin-top:8px; letter-spacing:.12em; font-weight:500;}
 .flip-hint{position:absolute; top:14px; right:14px; z-index:5; font-size:9.5px; letter-spacing:.22em; text-transform:uppercase; color:var(--paper); background:rgba(10,10,12,.65); border:1px solid rgba(237,237,228,.18); padding:6px 9px; backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px); opacity:.75; transition:opacity .3s, border-color .3s, color .3s;}
 .artist-card:hover .flip-hint{opacity:1; border-color:var(--red); color:var(--red);}
@@ -236,43 +136,84 @@ section{position:relative; z-index:1; padding:110px 22px 110px 34px; max-width:1
 .artist-back .work-desc{padding:0 18px 22px; font-size:12.5px; color:var(--steel); line-height:1.6; position:relative; z-index:4;}
 .artist-back .flip-hint{color:var(--yellow); border-color:rgba(242,255,0,.3);}
 
-#velocity{min-height:100svh; display:flex; align-items:center; justify-content:center; flex-direction:column; text-align:center;}
-#vnum{font-family:'Archivo Black',sans-serif; font-size:clamp(56px,15vw,200px); color:var(--red); font-variant-numeric:tabular-nums; line-height:.85; text-shadow:0 0 80px rgba(255,51,0,.3);}
-#velocity .cap{color:var(--steel); font-size:14px; max-width:420px; margin-top:26px; line-height:1.7;}
-#velocity h3{font-size:clamp(18px,3.6vw,36px); margin-top:40px; text-transform:uppercase;}
-
+/* ============ 03 RUÍDO / MÚSICA ============ */
+#ruido{background:#000; border-top:1px solid var(--line); border-bottom:1px solid var(--line); max-width:none; padding-left:22px; padding-right:22px;}
+#ruido .inner{max-width:1120px; margin:0 auto;}
 .pads{display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:32px;}
 @media(max-width:520px){.pads{grid-template-columns:repeat(2,1fr);}}
 .pad{border:1px solid var(--line); padding:24px 10px; text-align:center; background:none; color:var(--paper); font-family:'Space Grotesk',sans-serif; font-size:12px; letter-spacing:.12em; cursor:pointer; transition:.18s; text-transform:uppercase; -webkit-tap-highlight-color:transparent;}
 .pad:hover{border-color:var(--red); color:var(--red);}
 .pad.active{background:var(--yellow); color:#000; border-color:var(--yellow);}
-.pad-war{border-color:var(--red); color:var(--red);}
-.pad-war:hover{background:var(--red); color:#000; border-color:var(--red);}
-.pad-war.active{background:var(--red); color:#000; border-color:var(--red); box-shadow:0 0 24px rgba(255,51,0,.7);}
 #noise-vis{width:100%; height:90px; margin-top:26px; border:1px solid var(--line);}
 
-#guerra{background:#000; border-top:1px solid var(--line); border-bottom:1px solid var(--line); max-width:none; padding-left:22px; padding-right:22px;}
-#guerra .inner{max-width:1120px; margin:0 auto;}
-.glitch{font-family:'Archivo Black',sans-serif; font-size:clamp(26px,6.4vw,68px); position:relative; color:var(--paper); text-transform:uppercase; line-height:1;}
-.glitch.on{animation:gl .16s infinite;}
-@keyframes gl{
-  0%{text-shadow:2px 0 var(--red), -2px 0 var(--cyan); transform:translate(0);}
-  25%{text-shadow:-3px 0 var(--red), 3px 0 var(--cyan); transform:translate(1px,-1px);}
-  50%{text-shadow:3px 0 var(--red), -3px 0 var(--cyan); transform:translate(-1px,1px);}
-  75%{text-shadow:-2px 0 var(--red), 2px 0 var(--cyan); transform:translate(1px,0);}
-  100%{text-shadow:2px 0 var(--red), -2px 0 var(--cyan); transform:translate(0);}
-}
-#guerra p{color:var(--steel); max-width:600px; margin-top:24px; font-size:15px; line-height:1.75;}
-.warn{margin-top:32px; border-left:2px solid var(--red); padding-left:18px; color:var(--paper); font-size:14px; line-height:1.7; max-width:600px;}
+/* ============ 04 ANIME ============ */
+#anime{padding-bottom:80px;}
+.anime-hero{display:grid; grid-template-columns:minmax(220px,380px) 1fr; gap:44px; margin-top:44px; align-items:center;}
+@media(max-width:760px){.anime-hero{grid-template-columns:1fr;}}
+.anime-poster{position:relative; aspect-ratio:2/3; overflow:hidden; background:#000; border:1px solid var(--line); box-shadow:0 0 70px rgba(0,234,255,.2);}
+.anime-poster img{width:100%; height:100%; object-fit:cover; display:block; transition:transform .9s cubic-bezier(.2,.7,.3,1), filter .4s;}
+.anime-poster:hover img{transform:scale(1.05); filter:brightness(1.1) saturate(1.2);}
+.anime-poster::after{content:''; position:absolute; inset:0; pointer-events:none; background:linear-gradient(to top, rgba(0,0,0,.6), transparent 40%);}
+.anime-info h3{font-size:clamp(32px,6.4vw,72px); text-transform:uppercase; line-height:1; margin-top:12px; text-shadow:2px 0 var(--red), -2px 0 var(--cyan);}
+.anime-meta{color:var(--steel); font-size:11.5px; letter-spacing:.18em; margin-top:16px; text-transform:uppercase;}
+.anime-info p{color:var(--steel); font-size:14.5px; line-height:1.75; margin-top:18px; max-width:520px;}
+.anime-info p b{color:var(--paper);}
+.anime-keys{display:flex; flex-wrap:wrap; gap:8px; margin-top:26px;}
+.anime-keys span{font-size:11px; letter-spacing:.16em; text-transform:uppercase; border:1px solid var(--line); padding:7px 12px; color:var(--paper); transition:.2s;}
+.anime-keys span:hover{border-color:var(--red); color:var(--red);}
+.trailer-btn{display:inline-block; margin-top:24px; border:1px solid var(--cyan); color:var(--cyan); padding:12px 28px; font-size:12px; letter-spacing:.25em; text-transform:uppercase; transition:.2s;}
+.trailer-btn:hover{background:var(--cyan); color:#000; box-shadow:0 0 24px rgba(0,234,255,.4);}
 
-.br-grid{display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--line); margin-top:44px; border:1px solid var(--line);}
-@media(max-width:700px){.br-grid{grid-template-columns:1fr;}}
-.br-cell{background:var(--bg); padding:30px 24px; transition:background .25s;}
-.br-cell:hover{background:#111116;}
-.br-cell .tag{font-size:11px; letter-spacing:.3em; text-transform:uppercase; color:var(--red);}
-.br-cell h3{font-size:19px; margin-top:14px; text-transform:uppercase;}
-.br-cell p{font-size:13.5px; color:var(--steel); margin-top:12px; line-height:1.7;}
+/* ============ 05 RELAÇÃO ============ */
+.rel-grid{display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--line); margin-top:44px; border:1px solid var(--line);}
+@media(max-width:640px){.rel-grid{grid-template-columns:1fr;}}
+.rel-item{background:var(--bg); padding:30px 24px; transition:background .25s;}
+.rel-item:hover{background:#111116;}
+.rel-item .rel-tag{font-size:11px; letter-spacing:.3em; text-transform:uppercase; color:var(--red); font-family:'Archivo Black',sans-serif;}
+.rel-item h4{font-size:17px; text-transform:uppercase; margin-top:12px; line-height:1.15;}
+.rel-item p{font-size:13.5px; color:var(--steel); margin-top:12px; line-height:1.7;}
+.rel-item p b{color:var(--paper);}
+.rel-note{margin-top:36px; border-left:2px solid var(--red); padding-left:18px; color:var(--paper); font-size:14.5px; line-height:1.75; max-width:640px;}
+.rel-note em{font-style:normal; color:var(--red); font-family:'Archivo Black',sans-serif;}
 
+/* ============ 06 PRÓS ============ */
+.pros-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:1px; background:var(--line); margin-top:44px; border:1px solid var(--line);}
+.pros-item{background:var(--bg); padding:30px 24px; transition:background .25s, color .25s, transform .25s; min-height:170px; display:flex; flex-direction:column; justify-content:space-between;}
+.pros-item:hover{background:var(--yellow); color:#000; transform:translateY(-4px);}
+.pros-item:hover p{color:rgba(0,0,0,.75);}
+.pros-item .pros-num{font-family:'Archivo Black',sans-serif; font-size:11px; letter-spacing:.3em; color:var(--yellow);}
+.pros-item:hover .pros-num{color:#000;}
+.pros-item h4{font-size:17px; text-transform:uppercase; margin-top:14px; line-height:1.15;}
+.pros-item p{font-size:13px; color:var(--steel); margin-top:10px; line-height:1.6;}
+
+/* ============ 07 BLACK MIRROR ============ */
+.bm-hero{display:grid; grid-template-columns:minmax(240px,420px) 1fr; gap:44px; margin-top:44px; align-items:center;}
+@media(max-width:760px){.bm-hero{grid-template-columns:1fr;}}
+.bm-cover{position:relative; aspect-ratio:2/3; overflow:hidden; background:#000; border:1px solid rgba(0,234,255,.35); box-shadow:0 0 90px rgba(0,234,255,.2), 0 0 0 6px #000, 0 0 0 7px rgba(0,234,255,.15);}
+.bm-cover img{width:100%; height:100%; object-fit:cover; display:block; transition:transform .9s cubic-bezier(.2,.7,.3,1), filter .4s;}
+.bm-cover:hover img{transform:scale(1.05); filter:brightness(1.1) saturate(1.2);}
+.bm-cover::after{content:''; position:absolute; inset:0; pointer-events:none; background:repeating-linear-gradient(0deg, rgba(0,234,255,.05) 0 1px, transparent 1px 3px), linear-gradient(to top, rgba(0,0,0,.5), transparent 40%);}
+.bm-info h3{font-size:clamp(36px,7.4vw,88px); text-transform:uppercase; margin-top:12px; text-shadow:3px 0 var(--red), -3px 0 var(--cyan);}
+.bm-q{font-family:'Archivo Black',sans-serif; font-size:clamp(16px,2.4vw,24px); line-height:1.25; margin-top:24px; text-transform:uppercase;}
+.bm-note{border-left:2px solid var(--cyan); padding-left:16px; color:var(--steel); font-size:13.5px; line-height:1.6; margin-top:22px; max-width:480px;}
+.bm-btn{margin-top:30px; padding:18px 36px; font-family:'Archivo Black',sans-serif; font-size:14px; background:var(--cyan); color:#000; box-shadow:0 0 34px rgba(0,234,255,.35);}
+.bm-btn:hover{background:var(--yellow); border-color:var(--yellow); box-shadow:0 0 50px rgba(242,255,0,.5); transform:scale(1.04);}
+
+.grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:1px; background:var(--line); margin-top:40px; border:1px solid var(--line);}
+.cell{background:var(--bg); padding:32px 22px; min-height:200px; display:flex; flex-direction:column; justify-content:space-between; transition:background .25s, color .25s, transform .25s;}
+.cell:hover{background:var(--red); color:#000; transform:translateY(-4px);}
+.cell .num{font-family:'Archivo Black',sans-serif; font-size:12px; color:var(--red); letter-spacing:.2em;}
+.cell:hover .num{color:#000;}
+.cell h3{font-size:17px; margin-top:16px; text-transform:uppercase;}
+.cell p{font-size:13px; color:var(--steel); margin-top:12px; line-height:1.6;}
+.cell:hover p{color:rgba(0,0,0,.75);}
+.grid.bm .cell .num{color:var(--cyan);}
+.grid.bm .cell:hover{background:var(--cyan);}
+.grid.bm .cell:hover .num{color:#000;}
+.bm-sub{margin-top:64px; font-size:clamp(20px,3.4vw,34px); text-transform:uppercase;}
+.bm-sub em{font-style:normal; color:var(--cyan);}
+
+/* ============ FECHAMENTO ============ */
 .pairs{display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--line); margin-top:44px; border:1px solid var(--line);}
 @media(max-width:640px){.pairs{grid-template-columns:1fr;}}
 .pair{display:contents;}
@@ -283,194 +224,31 @@ section{position:relative; z-index:1; padding:110px 22px 110px 34px; max-width:1
 .closing{margin-top:56px; font-size:clamp(22px,4.4vw,46px); text-transform:uppercase; line-height:1;}
 .closing em{font-style:normal; color:var(--cyan); text-shadow:0 0 30px rgba(0,234,255,.35);}
 
+/* ============ 08 JOGO ============ */
+#jogo{padding-bottom:120px;}
+#jogo .game-lead{color:var(--steel); max-width:680px; margin-top:22px; font-size:15px; line-height:1.82;}
+.game-preview{position:relative; margin-top:56px; border:1px solid var(--line); background:radial-gradient(circle at 50% 0%, rgba(0,234,255,.10) 0%, transparent 60%), linear-gradient(180deg, #0b0b14 0%, #060610 100%); padding:70px 30px 60px; text-align:center; overflow:hidden;}
+@media(max-width:640px){.game-preview{padding:50px 22px 44px;}}
+.game-preview::before{content:''; position:absolute; inset:0; background-image:repeating-linear-gradient(0deg, rgba(0,234,255,.04) 0 1px, transparent 1px 3px); pointer-events:none;}
+.game-preview-glow{position:absolute; left:50%; bottom:-120px; width:600px; height:240px; transform:translateX(-50%); background:radial-gradient(ellipse at center, rgba(0,234,255,.35) 0%, rgba(0,234,255,.08) 40%, transparent 70%); filter:blur(20px); pointer-events:none; animation:pulse 3.5s ease-in-out infinite;}
+.game-preview-inner{position:relative; z-index:2;}
+.gp-tag{font-size:11px; letter-spacing:.4em; text-transform:uppercase; color:var(--cyan); margin-bottom:22px; text-shadow:0 0 12px currentColor;}
+.gp-title{font-family:'Archivo Black',sans-serif; font-size:clamp(38px,8vw,96px); line-height:.9; letter-spacing:-.03em; text-transform:uppercase; color:var(--paper); text-shadow:3px 0 var(--red), -3px 0 var(--cyan); margin-bottom:24px;}
+.gp-meta{display:flex; justify-content:center; gap:12px; flex-wrap:wrap; font-size:11px; letter-spacing:.25em; text-transform:uppercase; color:var(--steel); margin-bottom:44px;}
+.gp-cta{display:inline-block; padding:20px 46px; background:var(--red); color:#000; font-family:'Archivo Black',sans-serif; font-size:14px; letter-spacing:.22em; text-transform:uppercase; transition:.25s; box-shadow:0 0 40px rgba(255,51,0,.35); cursor:pointer;}
+.gp-cta:hover{background:var(--yellow); transform:scale(1.04); box-shadow:0 0 60px rgba(242,255,0,.5);}
+.gp-hint{margin-top:28px; font-size:11px; letter-spacing:.22em; color:var(--steel); text-transform:uppercase; opacity:.8;}
+.game-controls{display:flex; gap:22px; flex-wrap:wrap; margin-top:32px; font-size:11px; letter-spacing:.22em; text-transform:uppercase; color:var(--steel);}
+.game-controls kbd{display:inline-block; padding:3px 8px; margin:0 4px; border:1px solid var(--line); background:#0e0e12; font-family:'Archivo Black',sans-serif; font-size:10px; letter-spacing:.05em; color:var(--paper);}
+
 footer{padding:70px 22px 90px 34px; text-align:center; color:var(--steel); font-size:12px; letter-spacing:.1em; border-top:1px solid var(--line);}
 footer b{color:var(--red); font-family:'Archivo Black',sans-serif;}
-
-/* ---------- 07 VARIANTES · retro-futurismos ---------- */
-.vp-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:1px; background:var(--line); margin-top:44px; border:1px solid var(--line);}
-.vp-cell{background:var(--bg); padding:30px 24px; transition:background .25s, transform .25s;}
-.vp-cell:hover{background:#111116; transform:translateY(-4px);}
-.vp-cell .vp-tag{font-size:11px; letter-spacing:.3em; text-transform:uppercase;}
-.vp-cell h3{font-size:19px; margin-top:14px; text-transform:uppercase;}
-.vp-cell p{font-size:13.5px; color:var(--steel); margin-top:12px; line-height:1.7;}
-
-/* ---------- 07 VARIANTES · cinema ---------- */
-.vp-screen{margin-top:16px; font-size:11px; letter-spacing:.2em; color:var(--cyan); text-transform:uppercase;}
-.cinema{display:grid; grid-template-columns:minmax(200px,300px) 1fr; gap:34px; margin-top:44px; border:1px solid var(--line); padding:30px; background:#0b0b0e; align-items:start;}
-@media(max-width:760px){.cinema{grid-template-columns:1fr; padding:22px;}}
-.cinema-frame{position:relative; border:1px solid var(--line); overflow:hidden;}
-.cinema-frame img{width:100%; display:block; filter:saturate(1.1); transition:transform .8s cubic-bezier(.2,.7,.3,1), filter .4s;}
-.cinema:hover .cinema-frame img{transform:scale(1.05); filter:saturate(1.3) brightness(1.1);}
-.cinema-frame::after{content:''; position:absolute; inset:0; pointer-events:none; box-shadow:inset 0 0 0 1px rgba(0,234,255,.18); background:linear-gradient(to top, rgba(10,10,12,.55) 0%, transparent 40%);}
-.cinema-info h3{font-size:clamp(20px,3vw,30px); text-transform:uppercase; margin-top:12px; line-height:1.05;}
-.cinema-meta{color:var(--steel); font-size:11.5px; letter-spacing:.15em; margin-top:10px; text-transform:uppercase;}
-.cinema-info p{color:var(--steel); font-size:14px; line-height:1.75; margin-top:16px;}
-.cinema-info .conn{border-left:2px solid var(--cyan); padding-left:16px; color:var(--paper);}
-.trailer-btn{display:inline-block; margin-top:24px; border:1px solid var(--cyan); color:var(--cyan); padding:12px 28px; font-size:12px; letter-spacing:.25em; text-transform:uppercase; transition:.2s;}
-.trailer-btn:hover{background:var(--cyan); color:#000; box-shadow:0 0 24px rgba(0,234,255,.4);}
-
-/* ============ TRANSIÇÃO · FUTURISMO × BLACK MIRROR ============ */
-#transicao{padding-bottom:70px;}
-.vs{display:grid; grid-template-columns:1fr auto 1fr; margin-top:48px; border:1px solid var(--line);}
-@media(max-width:760px){.vs{grid-template-columns:1fr;}}
-.vs-col{padding:36px 28px; background:var(--bg);}
-.vs-col.bm{background:#000;}
-.vs-col .lbl{font-size:10.5px; letter-spacing:.34em; text-transform:uppercase; color:var(--steel);}
-.vs-col h3{font-size:clamp(22px,3.6vw,38px); text-transform:uppercase; margin-top:10px;}
-.vs-col.fu h3{color:var(--red); text-shadow:0 0 30px rgba(255,51,0,.3);}
-.vs-col.bm h3{color:var(--cyan); text-shadow:0 0 30px rgba(0,234,255,.35);}
-.vs-col ul{list-style:none; margin-top:26px;}
-.vs-col li{
-  padding:13px 0; border-bottom:1px solid var(--line);
-  font-family:'Archivo Black',sans-serif; font-size:14px; text-transform:uppercase; letter-spacing:.02em;
-  opacity:0; transform:translateX(-18px);
-  transition:opacity .6s ease, transform .6s cubic-bezier(.2,.75,.25,1);
-  transition-delay:calc(var(--i) * .16s);
-}
-.vs-col.bm li{transform:translateX(18px);}
-.vs-col li::before{content:'→ '; color:var(--red);}
-.vs-col.bm li::before{color:var(--cyan);}
-.vs.in li{opacity:1; transform:none;}
-.vs-mid{
-  display:flex; align-items:center; justify-content:center; padding:0 16px;
-  font-family:'Archivo Black',sans-serif; font-size:11px; letter-spacing:.34em; text-transform:uppercase;
-  color:var(--steel); writing-mode:vertical-rl; background:var(--bg);
-  border-left:1px solid var(--line); border-right:1px solid var(--line);
-}
-@media(max-width:760px){.vs-mid{writing-mode:horizontal-tb; padding:14px; border:0; border-top:1px solid var(--line); border-bottom:1px solid var(--line);}}
-.vs-note{margin-top:28px; border-left:2px solid var(--cyan); padding-left:16px; color:var(--steel); font-size:13.5px; line-height:1.6; max-width:560px;}
-.vs-note b{color:var(--paper);}
-
-/* ============ 08 · BLACK MIRROR ============ */
-.bm-hero{display:grid; grid-template-columns:minmax(240px,420px) 1fr; gap:44px; margin-top:44px; align-items:center;}
-@media(max-width:760px){.bm-hero{grid-template-columns:1fr;}}
-.bm-cover{
-  position:relative; aspect-ratio:2/3; overflow:hidden; background:#000;
-  border:1px solid rgba(0,234,255,.35);
-  box-shadow:0 0 90px rgba(0,234,255,.2), 0 0 0 6px #000, 0 0 0 7px rgba(0,234,255,.15);
-}
-.bm-cover img{width:100%; height:100%; object-fit:cover; display:block; transition:transform .9s cubic-bezier(.2,.7,.3,1), filter .4s;}
-.bm-cover:hover img{transform:scale(1.05); filter:brightness(1.1) saturate(1.2);}
-.bm-cover::after{
-  content:''; position:absolute; inset:0; pointer-events:none;
-  background:repeating-linear-gradient(0deg, rgba(0,234,255,.05) 0 1px, transparent 1px 3px),
-             linear-gradient(to top, rgba(0,0,0,.5), transparent 40%);
-}
-.bm-info h3{font-size:clamp(36px,7.4vw,88px); text-transform:uppercase; margin-top:12px; text-shadow:3px 0 var(--red), -3px 0 var(--cyan);}
-.bm-q{font-family:'Archivo Black',sans-serif; font-size:clamp(16px,2.4vw,24px); line-height:1.25; margin-top:24px; text-transform:uppercase;}
-.bm-note{border-left:2px solid var(--cyan); padding-left:16px; color:var(--steel); font-size:13.5px; line-height:1.6; margin-top:22px; max-width:480px;}
-.bm-btn{
-  margin-top:30px; padding:18px 36px; font-family:'Archivo Black',sans-serif; font-size:14px;
-  background:var(--cyan); color:#000; box-shadow:0 0 34px rgba(0,234,255,.35);
-}
-.bm-btn:hover{background:var(--yellow); border-color:var(--yellow); box-shadow:0 0 50px rgba(242,255,0,.5); transform:scale(1.04);}
-.grid.bm .cell .num{color:var(--cyan);}
-.grid.bm .cell:hover{background:var(--cyan);}
-.grid.bm .cell:hover .num{color:#000;}
-.bm-sub{margin-top:64px; font-size:clamp(20px,3.4vw,34px); text-transform:uppercase;}
-.bm-sub em{font-style:normal; color:var(--cyan);}
-
-/* ============ 09 · CONVITE AO JOGO ============ */
-#jogo{padding-bottom:120px;}
-#jogo .game-lead{
-  color:var(--steel); max-width:680px; margin-top:22px;
-  font-size:15px; line-height:1.82;
-}
-.game-preview{
-  position:relative;
-  margin-top:56px;
-  border:1px solid var(--line);
-  background:
-    radial-gradient(circle at 50% 0%, rgba(0,234,255,.10) 0%, transparent 60%),
-    linear-gradient(180deg, #0b0b14 0%, #060610 100%);
-  padding:70px 30px 60px;
-  text-align:center;
-  overflow:hidden;
-}
-@media(max-width:640px){.game-preview{padding:50px 22px 44px;}}
-.game-preview::before{
-  content:'';
-  position:absolute; inset:0;
-  background-image:repeating-linear-gradient(0deg,
-    rgba(0,234,255,.04) 0 1px, transparent 1px 3px);
-  pointer-events:none;
-}
-.game-preview-glow{
-  position:absolute;
-  left:50%; bottom:-120px;
-  width:600px; height:240px;
-  transform:translateX(-50%);
-  background:radial-gradient(ellipse at center,
-    rgba(0,234,255,.35) 0%,
-    rgba(0,234,255,.08) 40%,
-    transparent 70%);
-  filter:blur(20px);
-  pointer-events:none;
-  animation:pulse 3.5s ease-in-out infinite;
-}
-.game-preview-inner{position:relative; z-index:2;}
-.gp-tag{
-  font-size:11px; letter-spacing:.4em; text-transform:uppercase;
-  color:var(--cyan); margin-bottom:22px;
-  text-shadow:0 0 12px currentColor;
-}
-.gp-title{
-  font-family:'Archivo Black',sans-serif;
-  font-size:clamp(38px,8vw,96px);
-  line-height:.9; letter-spacing:-.03em;
-  text-transform:uppercase;
-  color:var(--paper);
-  text-shadow:3px 0 var(--red), -3px 0 var(--cyan);
-  margin-bottom:24px;
-}
-.gp-meta{
-  display:flex; justify-content:center; gap:12px; flex-wrap:wrap;
-  font-size:11px; letter-spacing:.25em; text-transform:uppercase;
-  color:var(--steel); margin-bottom:44px;
-}
-.gp-cta{
-  display:inline-block;
-  padding:20px 46px;
-  background:var(--red); color:#000;
-  font-family:'Archivo Black',sans-serif;
-  font-size:14px; letter-spacing:.22em; text-transform:uppercase;
-  transition:.25s;
-  box-shadow:0 0 40px rgba(255,51,0,.35);
-  cursor:pointer;
-}
-.gp-cta:hover{
-  background:var(--yellow);
-  transform:scale(1.04);
-  box-shadow:0 0 60px rgba(242,255,0,.5);
-}
-.gp-hint{
-  margin-top:28px;
-  font-size:11px; letter-spacing:.22em;
-  color:var(--steel); text-transform:uppercase;
-  opacity:.8;
-}
-.game-controls{
-  display:flex; gap:22px; flex-wrap:wrap;
-  margin-top:32px;
-  font-size:11px; letter-spacing:.22em;
-  text-transform:uppercase; color:var(--steel);
-}
-.game-controls kbd{
-  display:inline-block;
-  padding:3px 8px; margin:0 4px;
-  border:1px solid var(--line);
-  background:#0e0e12;
-  font-family:'Archivo Black',sans-serif;
-  font-size:10px; letter-spacing:.05em;
-  color:var(--paper);
-}
 
 @media(prefers-reduced-motion:reduce){
   *{animation:none !important; transition:none !important;}
   html{scroll-behavior:auto;}
   .artist-inner{transition:none;}
   .artist-card.flipped .artist-inner{transform:rotateY(180deg);}
-  .vs-col li{opacity:1; transform:none;}
 }
 </style>
 </head>
@@ -495,13 +273,12 @@ footer b{color:var(--red); font-family:'Archivo Black',sans-serif;}
 <nav>
   <div class="brand">FUTURISMO</div>
   <div class="links">
-    <a href="#origem">origem</a>
-    <a href="#manifesto">ideias</a>
-    <a href="#caracteristicas">características</a>
-    <a href="#artistas">nomes</a>
-    <a href="#guerra">política</a>
-    <a href="#brasil">brasil</a>
-    <a href="#variantes">retrofuturismos</a>
+    <a href="#contexto">contexto</a>
+    <a href="#exposicao">exposição</a>
+    <a href="#ruido">ruído</a>
+    <a href="#anime">anime</a>
+    <a href="#relacao">relação</a>
+    <a href="#pros">prós</a>
     <a href="#blackmirror">black mirror</a>
     <a href="jogo.html" style="color:var(--red)">▶ jogar</a>
   </div>
@@ -511,9 +288,10 @@ footer b{color:var(--red); font-family:'Archivo Black',sans-serif;}
   </div>
 </nav>
 
+<!-- ============ HERO ============ -->
 <section id="hero">
   <svg id="heroLines" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice" aria-hidden="true"></svg>
-  <div class="eyebrow">Itália · 1909 — 1916</div>
+  <div class="eyebrow">Itália · 1909</div>
   <h1 class="display" id="heroH1">
     A arte que<br>queria <em>ultrapassar</em><br>o presente
   </h1>
@@ -523,175 +301,188 @@ footer b{color:var(--red); font-family:'Archivo Black',sans-serif;}
   </p>
   <div class="meta">
     <div><b>1909</b>Manifesto em Paris</div>
-    <div><b>9</b>Tópicos principais</div>
     <div><b>1ª</b>Vanguarda europeia</div>
-    <div><b>1922</b>Eco no Brasil</div>
+    <div><b>+</b>máquina · velocidade</div>
+    <div><b>→</b>anime · black mirror · jogo</div>
   </div>
   <div class="scroll-hint">↓ desça — o tempo vem junto</div>
 </section>
 
-<!-- ============ 01 — ORIGEM ============ -->
-<section id="origem">
-  <div class="eyebrow">01 — Origem</div>
-  <h2 class="display" style="font-size:clamp(28px,5vw,56px); text-transform:uppercase;">De onde surgiu<br>o futurismo</h2>
-  <p style="color:var(--steel); max-width:520px; margin-top:20px; font-size:15px; line-height:1.7;">
-    <b style="color:var(--paper)">20 de fevereiro de 1909.</b> Marinetti publica o manifesto
-    no <em>Le Figaro</em>. Uma vanguarda italiana contra o passado.
-  </p>
-  <div class="tl-v" id="tlV"></div>
-</section>
+<!-- ============ 01 — CONTEXTO ============ -->
+<section id="contexto">
+  <div class="eyebrow">01 — Contexto</div>
+  <h2 class="display" style="font-size:clamp(28px,5.4vw,60px); text-transform:uppercase;">O futuro<br>como <em style="font-style:normal;color:var(--red)">programa</em></h2>
 
-<!-- ============ 02 — PRINCIPAIS IDEIAS ============ -->
-<section id="manifesto">
-  <div class="eyebrow">02 — Principais ideias</div>
-  <h2 class="display" style="font-size:clamp(26px,4.6vw,48px); text-transform:uppercase;">Palavras em liberdade</h2>
-  <div class="words" id="words">
-    <span>Rompimento</span><span>Futuro</span><span>Modernidade</span>
-    <span>Velocidade</span><span>Movimento</span><span>Máquina</span>
-    <span>Tecnologia</span><span>Verso livre</span>
+  <p class="ctx-narr">
+    <b>1909.</b> A Itália industrial descobre a velocidade.
+    Marinetti publica o <em>Manifesto Futurista</em> em Paris e propõe
+    destruir o passado para inventar o futuro. Nasce a primeira vanguarda europeia —
+    um movimento que transforma <b>máquina, velocidade e modernidade</b> em arte.
+  </p>
+
+  <div class="ctx-grid">
+    <div class="ctx-cell">
+      <div class="ctx-num">ORIGEM</div>
+      <h3>Ruptura<br>com o passado</h3>
+      <p>Contra museus, academias e tradição. O presente é ponto de partida — o futuro, destino.</p>
+      <div class="ctx-keys">
+        <span>1909</span><span>Manifesto</span><span>vanguarda</span>
+      </div>
+    </div>
+
+    <div class="ctx-cell">
+      <div class="ctx-num">CONTEXTO</div>
+      <h3>Itália<br>industrial</h3>
+      <p>Fábricas, automóveis, eletricidade, multidões urbanas. O mundo mudou — a arte precisava mudar também.</p>
+      <div class="ctx-keys">
+        <span>cidade</span><span>fábrica</span><span>ruído</span>
+      </div>
+    </div>
+
+    <div class="ctx-cell">
+      <div class="ctx-num">CARACTERÍSTICAS</div>
+      <h3>Velocidade<br>e máquina</h3>
+      <p>Movimento, tecnologia e experimentação como linguagem. Pintura, escultura, música e literatura.</p>
+      <div class="ctx-keys">
+        <span>velocidade</span><span>máquina</span><span>movimento</span><span>experimento</span>
+      </div>
+    </div>
   </div>
-  <p style="color:var(--steel); max-width:520px; margin-top:44px; font-size:14.5px; line-height:1.7;">
-    Passe o mouse: cada palavra é uma ideia-força. <b style="color:var(--paper)">Romper com o passado</b>
-    e abraçar <b style="color:var(--paper)">velocidade, máquina e tecnologia</b>.
-  </p>
 </section>
 
-<!-- ============ 03 — CARACTERÍSTICAS ============ -->
-<section id="caracteristicas">
-  <div class="eyebrow">03 — Características</div>
-  <h2 class="display" style="font-size:clamp(26px,4.6vw,48px); text-transform:uppercase;">Como o futurismo<br>se parece</h2>
-  <div class="grid" id="charGrid"></div>
-  <p style="color:var(--steel); max-width:520px; margin-top:36px; font-size:14.5px; line-height:1.7;">
-    Influenciou <b style="color:var(--paper)">literatura</b>, <b style="color:var(--paper)">arquitetura</b>,
-    <b style="color:var(--paper)">música</b> e <b style="color:var(--paper)">design</b>.
-  </p>
+<!-- ============ INTERLÚDIO ============ -->
+<section id="manifesto">
+  <div class="eyebrow">— Ideias-força</div>
+  <h2 class="display" style="font-size:clamp(24px,4.4vw,44px); text-transform:uppercase;">Palavras em liberdade</h2>
+  <div class="words" id="words">
+    <span>Velocidade</span>
+    <span>Máquina</span>
+    <span>Ruptura</span>
+    <span>Futuro</span>
+  </div>
 </section>
 
-<!-- ============ 04 — PRINCIPAIS NOMES ============ -->
-<section id="artistas">
-  <div class="eyebrow">04 — Principais nomes</div>
-  <h2 class="display" style="font-size:clamp(26px,4.6vw,48px); text-transform:uppercase;">Os que assinaram<br>o futuro</h2>
-  <p style="color:var(--steel); max-width:520px; margin-top:18px; font-size:14.5px; line-height:1.7;">
-    Marinetti fundou o movimento; ao redor dele, pintores, escultores, arquitetos e músicos.
-    <b style="color:var(--paper)">Clique no card</b> para ver a obra.
+<!-- ============ 02 — EXPOSIÇÃO ============ -->
+<section id="exposicao">
+  <div class="eyebrow">02 — Exposição</div>
+  <h2 class="display" style="font-size:clamp(28px,5.4vw,60px); text-transform:uppercase;">Galeria<br>futurista</h2>
+  <p class="expo-lead">
+    As obras deixaram de ser tópicos separados. Agora são <b style="color:var(--paper)">exposição</b> —
+    clique em cada peça para virar a obra e ver o título, o ano e a ideia por trás.
   </p>
+
+  <div class="expo-legend">
+    <span>Peça <b>01</b> — <b>08</b></span>
+    <span>Clique → obra · Clique ← voltar</span>
+    <span>Pintura · Escultura · Arquitetura · Música</span>
+  </div>
+
   <div class="artists" id="artistGrid"></div>
 </section>
 
-<!-- ============ INTERLÚDIO — LINGUAGEM ============ -->
-<section id="velocity">
-  <div class="eyebrow">— Linguagem</div>
-  <div id="vnum">0837</div>
-  <div class="cap">Role a página. A velocidade não é ilustração — é linguagem.</div>
-  <h3>Velocidade não é apenas um tema.<br>É a própria linguagem.</h3>
-</section>
-
-<!-- ============ 04 (cont.) — RUSSOLO E O RUÍDO ============ -->
+<!-- ============ 03 — RUÍDO / MÚSICA ============ -->
 <section id="ruido">
-  <div class="eyebrow">04 — Principais nomes · Russolo e o ruído</div>
-  <h2 class="display" style="font-size:clamp(24px,4.4vw,46px); text-transform:uppercase;">Luigi Russolo e a arte do ruído</h2>
-  <p style="color:var(--steel); max-width:520px; margin-top:18px; font-size:14.5px; line-height:1.7;">
-    1913: a cidade industrial ganhou sua própria música. Em 1915, a <b style="color:var(--paper)">Primeira Guerra</b>
-    trouxe outra trilha — bombas, tiros e granadas. Toque os botões e combine ruídos.
-  </p>
-  <div class="pads" id="pads"></div>
-  <canvas id="noise-vis"></canvas>
-</section>
-
-<!-- ============ 05 — CONTEXTO POLÍTICO ============ -->
-<section id="guerra">
   <div class="inner">
-    <div class="eyebrow">05 — Contexto político</div>
-    <div class="glitch" id="glitchText">Velocidade, máquina, energia — também guerra</div>
-    <p>
-      O Futurismo exaltou a <b style="color:var(--paper)">guerra</b>, a agressividade e o
-      nacionalismo — “a única higiene do mundo”. Celebrou a tecnologia sem prever
-      o que ela poderia destruir.
+    <div class="eyebrow">03 — Russolo e a arte do ruído</div>
+    <h2 class="display" style="font-size:clamp(24px,4.4vw,46px); text-transform:uppercase;">A cidade como<br>instrumento</h2>
+    <p style="color:var(--steel); max-width:520px; margin-top:18px; font-size:14.5px; line-height:1.7;">
+      1913: a cidade industrial ganhou sua própria música. Em 1915, a <b style="color:var(--paper)">Primeira Guerra</b>
+      trouxe outra trilha — bombas, tiros e granadas. Toque os botões e combine ruídos.
     </p>
-    <div class="warn">
-      <b>Contexto histórico.</b><br>
-      Marinetti se aproximou do <b>fascismo</b>, o que tornou o movimento controverso.
-      Isso não se confunde com toda a produção artística futurista.
-    </div>
+    <div class="pads" id="pads"></div>
+    <canvas id="noise-vis"></canvas>
   </div>
 </section>
 
-<!-- ============ 06 — FUTURISMO NO BRASIL ============ -->
-<section id="brasil">
-  <div class="eyebrow">06 — Futurismo no Brasil</div>
-  <h2 class="display" style="font-size:clamp(26px,4.6vw,48px); text-transform:uppercase;">O futurismo<br>atravessa o Atlântico</h2>
-  <div class="br-grid" id="brGrid"></div>
-</section>
+<!-- ============ 04 — ANIME ============ -->
+<section id="anime">
+  <div class="eyebrow">04 — Anime</div>
+  <h2 class="display" style="font-size:clamp(28px,5.4vw,60px); text-transform:uppercase;">Do cavalo<br>à Night City</h2>
 
-<!-- ============ 07 — VARIANTES CONTEMPORÂNEAS ============ -->
-<section id="variantes">
-  <div class="eyebrow">07 — Variantes contemporâneas e culturais</div>
-  <h2 class="display" style="font-size:clamp(26px,4.6vw,48px); text-transform:uppercase;">Retro-futurismos:<br>o futuro depois do futurismo</h2>
-  <p style="color:var(--steel); max-width:520px; margin-top:20px; font-size:14.5px; line-height:1.7;">
-    O conceito transbordou a vanguarda e gerou <b style="color:var(--paper)">futuros imaginados</b>
-    na ficção e no design.
-  </p>
-  <div class="vp-grid" id="vpGrid"></div>
-
-  <div class="cinema">
-    <div class="cinema-frame">
+  <div class="anime-hero">
+    <div class="anime-poster">
       <img src="pixel/cyberpunk.png" alt="Cartaz de Cyberpunk: Edgerunners — David diante dos arranha-céus de Night City">
     </div>
-    <div class="cinema-info">
-      <div class="vp-tag" style="color:#00eaff">Cinema · Cyberpunk</div>
-      <h3>Cyberpunk: Edgerunners</h3>
-      <div class="cinema-meta">Série · 2022 · Netflix × CD PROJEKT RED × Studio Trigger · 10 episódios</div>
+    <div class="anime-info">
+      <div class="vp-tag" style="font-size:11px;letter-spacing:.32em;color:var(--cyan);text-transform:uppercase;font-family:'Archivo Black',sans-serif;">Série · 2022 · Netflix × Studio Trigger</div>
+      <h3>Cyberpunk:<br>Edgerunners</h3>
+      <div class="anime-meta">10 episódios · Night City · 2076</div>
       <p>
-        Em <b style="color:var(--paper)">Night City</b>, um garoto vira <b style="color:var(--paper)">edgerunner</b>.
-        Quanto mais implantes, mais perto da <em>cyberpsicose</em>.
+        Em uma cidade dominada por megacorporações, um jovem vira
+        <b>edgerunner</b> — e descobre que o corpo pode ser modificado
+        até virar quase-máquina. Quanto mais implantes, mais perto da
+        <em style="font-style:normal;color:var(--cyan)">cyberpsicose</em>.
       </p>
-      <p class="conn">
-        <b>Conexão:</b> Night City é a <em>Città Nuova</em> levada ao limite — a máquina celebrada
-        virou prisão. <b>E as pessoas que a máquina esmaga?</b>
-      </p>
-      <a class="trailer-btn" href="https://www.youtube.com/watch?v=ax5YUmkWf_Y" target="_blank" rel="noopener">▶ assistir trailer oficial</a>
+      <div class="anime-keys">
+        <span>Night City</span>
+        <span>Corpo + máquina</span>
+        <span>Velocidade</span>
+        <span>Progresso sem freio</span>
+      </div>
+      <a class="trailer-btn" href="https://www.youtube.com/watch?v=ax5YUmkWf_Y" target="_blank" rel="noopener" style="margin-top:32px;">▶ ASSISTIR AO TRAILER</a>
     </div>
   </div>
 </section>
 
-<!-- ============ TRANSIÇÃO — FUTURISMO × BLACK MIRROR ============ -->
-<section id="transicao">
-  <div class="eyebrow">— Transição</div>
-  <h2 class="display" style="font-size:clamp(28px,5.2vw,60px); text-transform:uppercase;">Do entusiasmo<br>à pergunta</h2>
-  <div class="vs" id="vs">
-    <div class="vs-col fu">
-      <div class="lbl">1909 · otimismo</div>
-      <h3>Futurismo</h3>
-      <ul>
-        <li style="--i:0">Entusiasmo pelo futuro</li>
-        <li style="--i:1">Velocidade</li>
-        <li style="--i:2">Máquinas</li>
-        <li style="--i:3">Tecnologia</li>
-        <li style="--i:4">Progresso</li>
-      </ul>
+<!-- ============ 05 — RELAÇÃO ============ -->
+<section id="relacao">
+  <div class="eyebrow">05 — Relação com o Futurismo</div>
+  <h2 class="display" style="font-size:clamp(28px,5.4vw,60px); text-transform:uppercase;">Mesmo impulso,<br>outras máquinas</h2>
+
+  <div class="rel-grid">
+    <div class="rel-item">
+      <div class="rel-tag">FUTURISMO · 1909</div>
+      <h4>Velocidade como beleza</h4>
+      <p>O automóvel e o aeroplano eram a nova estética. <b>Mais rápido = mais belo.</b></p>
     </div>
-    <div class="vs-mid">e se…?</div>
-    <div class="vs-col bm">
-      <div class="lbl">hoje · reflexão</div>
-      <h3>Black Mirror</h3>
-      <ul>
-        <li style="--i:5">Consequências</li>
-        <li style="--i:6">Dependência tecnológica</li>
-        <li style="--i:7">Controle</li>
-        <li style="--i:8">Impactos sociais</li>
-        <li style="--i:9">Lado obscuro do progresso</li>
-      </ul>
+    <div class="rel-item">
+      <div class="rel-tag">ANIME · 2076</div>
+      <h4>Velocidade como implante</h4>
+      <p>O Sandevistan acelera o próprio corpo. <b>Mais rápido = mais perto do colapso.</b></p>
+    </div>
+
+    <div class="rel-item">
+      <div class="rel-tag">FUTURISMO · 1909</div>
+      <h4>Máquina celebrada</h4>
+      <p>A fábrica, o aço, o ruído industrial viram matéria-prima da arte.</p>
+    </div>
+    <div class="rel-item">
+      <div class="rel-tag">ANIME · 2076</div>
+      <h4>Máquina internalizada</h4>
+      <p>A máquina entra no corpo. A cidade e o chip se confundem com a pessoa.</p>
+    </div>
+
+    <div class="rel-item">
+      <div class="rel-tag">FUTURISMO · 1909</div>
+      <h4>Ruptura e experimento</h4>
+      <p>Destruir o passado para criar o novo. A arte como ato de violência criativa.</p>
+    </div>
+    <div class="rel-item">
+      <div class="rel-tag">ANIME · 2076</div>
+      <h4>Ruptura do corpo</h4>
+      <p>O limite do humano é rompido — e a pergunta é o que resta depois.</p>
     </div>
   </div>
-  <p class="vs-note">
-    <b>Black Mirror não faz parte do Futurismo.</b> Aparece aqui como
-    <b>contraponto contemporâneo</b>, para provocar uma reflexão sobre a visão de futuro de 1909.
+
+  <p class="rel-note">
+    Night City é a <em>Città Nuova</em> levada ao limite.
+    O que os futuristas sonharam como beleza, o anime mostra como preço.
+    <br><br>
+    <b>E as pessoas que a máquina esmaga?</b>
   </p>
 </section>
 
-<!-- ============ 08 — BLACK MIRROR ============ -->
+<!-- ============ 06 — PRÓS ============ -->
+<section id="pros">
+  <div class="eyebrow">06 — Prós e aspectos positivos</div>
+  <h2 class="display" style="font-size:clamp(28px,5.4vw,60px); text-transform:uppercase;">O que o<br>Futurismo abriu</h2>
+
+  <div class="pros-grid" id="prosGrid"></div>
+</section>
+
+<!-- ============ 07 — BLACK MIRROR ============ -->
 <section id="blackmirror">
-  <div class="eyebrow" style="color:var(--cyan)">08 — Contraponto · Black Mirror</div>
+  <div class="eyebrow" style="color:var(--cyan)">07 — Contraponto · Black Mirror</div>
   <h2 class="display" style="font-size:clamp(28px,5.2vw,60px); text-transform:uppercase;">O outro lado<br>do espelho</h2>
 
   <div class="bm-hero">
@@ -699,13 +490,14 @@ footer b{color:var(--red); font-family:'Archivo Black',sans-serif;}
       <img id="bmCover" src="pixel/blackmirror.png" alt="Capa oficial de Black Mirror">
     </div>
     <div class="bm-info">
-      <div class="vp-tag" style="color:var(--cyan)">Série · Charlie Brooker · Netflix</div>
+      <div class="vp-tag" style="font-size:11px;letter-spacing:.32em;color:var(--cyan);text-transform:uppercase;font-family:'Archivo Black',sans-serif;">Série · Charlie Brooker · Netflix</div>
       <h3>Black<br>Mirror</h3>
       <p class="bm-q">O que acontece quando buscamos o progresso sem pensar nas consequências?</p>
       <p class="bm-note">
-        O Futurismo celebrava velocidade, máquinas e futuro. Black Mirror mostra o preço.
+        O Futurismo celebrava velocidade, máquinas e futuro.
+        Black Mirror mostra o preço.
       </p>
-      <a class="trailer-btn bm-btn" href="https://www.youtube.com/watch?v=k7uFcpF0pXk" target="_blank" rel="noopener">▶ ASSISTIR AO TRAILER</a>
+      <a class="trailer-btn" href="https://youtu.be/M8qG0vS2zWM?si=-cCpnb_z1hX5AoPr" target="_blank" rel="noopener">▶ ASSISTIR AO TRAILER</a>
     </div>
   </div>
 
@@ -713,7 +505,7 @@ footer b{color:var(--red); font-family:'Archivo Black',sans-serif;}
   <div class="grid bm" id="bmGrid"></div>
 </section>
 
-<!-- ============ FECHAMENTO — 1909 × AGORA ============ -->
+<!-- ============ FECHAMENTO ============ -->
 <section id="presente">
   <div class="eyebrow">— 1909 × agora</div>
   <h2 class="display" style="font-size:clamp(26px,4.6vw,48px); text-transform:uppercase;">Mesmo impulso,<br>outras máquinas</h2>
@@ -721,9 +513,9 @@ footer b{color:var(--red); font-family:'Archivo Black',sans-serif;}
   <p class="display closing">O futuro não é só velocidade.<br>É <em>direção</em>.</p>
 </section>
 
-<!-- ============ 09 — CONVITE AO JOGO ============ -->
+<!-- ============ 08 — JOGO ============ -->
 <section id="jogo">
-  <div class="eyebrow">09 — Jogo · A Cidade do Amanhã</div>
+  <div class="eyebrow">08 — Jogo · A Cidade do Amanhã</div>
   <h2 class="display" style="font-size:clamp(28px,5.2vw,60px); text-transform:uppercase;">
     Você viu a história.<br>agora entre nela.
   </h2>
@@ -762,21 +554,12 @@ footer b{color:var(--red); font-family:'Archivo Black',sans-serif;}
 
 <footer>
   <b>FUTURISMO</b><br>
-  Trabalho sobre Futurismo — a interface como conteúdo, não como moldura.
+  Contexto → características → exposição → ruído → anime → relação → prós → Black Mirror → jogo.
 </footer>
 
 <script>
 const $ = s => document.querySelector(s);
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-function mulberry32(a){
-  return function(){
-    a |= 0; a = a + 0x6D2B79F5 | 0;
-    let t = Math.imul(a ^ a >>> 15, 1 | a);
-    t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
-    return ((t ^ t >>> 14) >>> 0) / 4294967296;
-  };
-}
 
 /* ---------- shatter ---------- */
 function shatter({cols=7, rows=5, dur=800}={}) {
@@ -891,6 +674,7 @@ function shatter({cols=7, rows=5, dur=800}={}) {
 /* ---------- linhas do hero ---------- */
 (function heroParallax(){
   const svg=$('#heroLines'), h1=$('#heroH1');
+  if(!svg) return;
   let frags=[];
   for(let i=0;i<26;i++){
     const y=Math.random()*800, len=200+Math.random()*700, x=Math.random()*1200;
@@ -902,71 +686,34 @@ function shatter({cols=7, rows=5, dur=800}={}) {
   addEventListener('mousemove', e=>{
     const dx=(e.clientX/innerWidth-.5), dy=(e.clientY/innerHeight-.5);
     svg.style.transform = `translate(${dx*-18}px,${dy*-10}px)`;
-    h1.style.transform = `translate(${dx*8}px,${dy*5}px)`;
+    if(h1) h1.style.transform = `translate(${dx*8}px,${dy*5}px)`;
   });
 })();
 
 /* ---------- HUD ---------- */
 (function hud(){
-  const yearEl=$('#hudYear'), rail=$('#railFill'), hudEl=$('#hud'), guerra=$('#guerra');
+  const yearEl=$('#hudYear'), rail=$('#railFill');
   function update(){
     const max=document.documentElement.scrollHeight-innerHeight;
     const p = max>0 ? Math.min(1,Math.max(0,scrollY/max)) : 0;
     yearEl.textContent = Math.round(1909+p*(2026-1909));
     rail.style.height = (p*100)+'%';
-    const g=guerra.getBoundingClientRect();
-    hudEl.classList.toggle('war-mode', g.top<innerHeight*.5 && g.bottom>innerHeight*.5);
   }
   addEventListener('scroll',update,{passive:true});
   addEventListener('resize',update);
   update();
 })();
 
-/* ---------- 01 ORIGEM · timeline ---------- */
-(function timeline(){
-  const data=[
-    ['1909','Fundação e Manifesto','Marinetti publica o Manifesto no Le Figaro. Nasce a vanguarda.'],
-    ['1910','Manifesto dos Pintores','Boccioni, Balla, Carrà, Russolo e Severini levam a velocidade para a tela.'],
-    ['1912','Formas Únicas','Boccioni esculpe o corpo humano como máquina em movimento.'],
-    ['1913','A Arte dos Ruídos','Russolo transforma o barulho industrial em música.'],
-    ['1914','Arquitetura Futurista','Sant’Elia desenha a Città Nuova: arranha-céus, usinas, elevadores.'],
-    ['1915','Guerra','A Itália entra na Primeira Guerra. Futuristas vão como voluntários.'],
-    ['1916','Fim de um núcleo','Boccioni e Sant’Elia morrem em treinamento militar.'],
-    ['1919','Deriva política','Marinetti participa da fundação dos Fasci di Combattimento.'],
-  ];
-  const wrap=$('#tlV');
-  data.forEach(([yr,title,body])=>{
-    const el=document.createElement('article'); el.className='tl-entry';
-    el.innerHTML=`<div class="yr">${yr}</div><h3>${title}</h3><p>${body}</p>`;
-    wrap.appendChild(el);
-  });
-  const revealables = [...wrap.querySelectorAll('.tl-entry'), ...document.querySelectorAll('.eyebrow'), ...document.querySelectorAll('.vs')];
+/* ---------- reveal dos eyebrows ---------- */
+(function reveal(){
   const io=new IntersectionObserver(entries=>{
     entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
   },{threshold:.18, rootMargin:'0px 0px -12% 0px'});
-  revealables.forEach(el=>io.observe(el));
+  document.querySelectorAll('.eyebrow').forEach(el=>io.observe(el));
 })();
 
-/* ---------- 03 CARACTERÍSTICAS ---------- */
-(function characteristics(){
-  const items=[
-    ['01','Velocidade e aceleração','Automóvel, aeroplano, cidade elétrica: a nova beleza.'],
-    ['02','Movimento e repetição','Linhas de força: a tela captura o deslocamento, não o instante.'],
-    ['03','Máquinas e tecnologia','Aço, energia e ruído urbano viram matéria de arte.'],
-    ['04','Modernidade industrial','Fábricas, avenidas e multidões como tema e forma.'],
-    ['05','Ruptura com o passado','Museus e academias tratados como peso morto.'],
-    ['06','Experimentação','Palavras em liberdade, verso livre, novas formas.'],
-  ];
-  const grid=$('#charGrid');
-  items.forEach(([n,t,d])=>{
-    const el=document.createElement('div'); el.className='cell';
-    el.innerHTML=`<div class="num">${n}</div><div><h3>${t}</h3><p>${d}</p></div>`;
-    grid.appendChild(el);
-  });
-})();
-
-/* ---------- 04 PRINCIPAIS NOMES · cards pixel art ---------- */
-(function pixelArtists(){
+/* ---------- EXPOSIÇÃO ---------- */
+(function exposicao(){
   const GW = 130, GH = 170;
 
   const ARQUIVOS = {
@@ -1100,6 +847,7 @@ function shatter({cols=7, rows=5, dur=800}={}) {
   ];
 
   const grid = document.querySelector('#artistGrid');
+  if(!grid) return;
 
   (async () => {
     for (const a of artists){
@@ -1107,7 +855,7 @@ function shatter({cols=7, rows=5, dur=800}={}) {
       card.className = 'artist-card';
       card.setAttribute('tabindex', '0');
       card.setAttribute('role', 'button');
-      card.setAttribute('aria-label', `Virar card de ${a.n}`);
+      card.setAttribute('aria-label', `Virar peça de ${a.n}`);
       card.innerHTML = `
         <div class="artist-inner">
           <div class="artist-face artist-front">
@@ -1160,18 +908,7 @@ function shatter({cols=7, rows=5, dur=800}={}) {
   })();
 })();
 
-/* ---------- velocidade ---------- */
-(function velocity(){
-  const vnum=$('#vnum');
-  addEventListener('scroll',()=>{
-    const max=document.documentElement.scrollHeight-innerHeight;
-    const p = max>0 ? scrollY/max : 0;
-    const v = Math.min(9999, Math.round(Math.abs(p)*9999*(1+Math.sin(scrollY/400))));
-    vnum.textContent = String(Math.abs(v)).padStart(4,'0');
-  },{passive:true});
-})();
-
-/* ---------- ruído + sons de guerra ---------- */
+/* ---------- 03 RUÍDO + MÚSICA (GUERRA) ---------- */
 (function noise(){
   const AC = window.AudioContext || window.webkitAudioContext;
   if(!AC) return;
@@ -1197,7 +934,6 @@ function shatter({cols=7, rows=5, dur=800}={}) {
     const out = ac.createGain(); out.gain.value = 0.9;
     out.connect(ac.destination);
 
-    // 1) BOOM grave
     const boom = ac.createOscillator();
     boom.type = 'sine';
     boom.frequency.setValueAtTime(140, now);
@@ -1209,7 +945,6 @@ function shatter({cols=7, rows=5, dur=800}={}) {
     boom.connect(boomG).connect(out);
     boom.start(now); boom.stop(now + 1.4);
 
-    // 2) CRACK agudo
     const crack = ac.createBufferSource();
     crack.buffer = noiseBuffer;
     const ckF = ac.createBiquadFilter();
@@ -1220,7 +955,6 @@ function shatter({cols=7, rows=5, dur=800}={}) {
     crack.connect(ckF).connect(ckG).connect(out);
     crack.start(now); crack.stop(now + 0.1);
 
-    // 3) RUMBLE
     const rumble = ac.createBufferSource();
     rumble.buffer = noiseBuffer;
     const rF = ac.createBiquadFilter();
@@ -1310,13 +1044,6 @@ function shatter({cols=7, rows=5, dur=800}={}) {
     'ELETRICIDADE': {src:'osc', type:'sawtooth', f:1800, filter:'highpass', fc:2200, q:6, g:0.06},
   };
 
-  /* ============ PADS DE GUERRA (one-shot) ============ */
-  const warPads = {
-    '💥 BOMBA':    playExplosion,
-    '🔫 TIROTEIO': playGunfire,
-    '💣 GRANADA':  playGrenade,
-  };
-
   const active = {}, padsEl = $('#pads'), vis = $('#noise-vis'), vctx = vis.getContext('2d');
 
   // Pads contínuos
@@ -1351,19 +1078,37 @@ function shatter({cols=7, rows=5, dur=800}={}) {
     padsEl.appendChild(btn);
   });
 
-  // Pads de guerra (one-shot)
-  Object.entries(warPads).forEach(([key, playFn]) => {
-    const btn = document.createElement('button');
-    btn.type = 'button'; btn.className = 'pad pad-war'; btn.textContent = key;
-    btn.addEventListener('click', async () => {
-      const ac = ensureContext();
-      if(ac.state !== 'running'){ try{ await ac.resume(); }catch(e){} }
-      playFn(ac);
-      btn.classList.add('active');
-      setTimeout(() => btn.classList.remove('active'), 180);
-    });
-    padsEl.appendChild(btn);
+  // Pad GUERRA — toggle que mistura explosão, tiroteio e granada em loop
+  const guerraBtn = document.createElement('button');
+  guerraBtn.type = 'button';
+  guerraBtn.className = 'pad';
+  guerraBtn.textContent = 'GUERRA';
+  guerraBtn.addEventListener('click', async () => {
+    const ac = ensureContext();
+    if(ac.state !== 'running'){ try{ await ac.resume(); }catch(e){} }
+
+    if(active['GUERRA']){
+      clearTimeout(active['GUERRA'].timer);
+      delete active['GUERRA'];
+      guerraBtn.classList.remove('active');
+      return;
+    }
+
+    const fire = () => {
+      const r = Math.random();
+      if(r < 0.4)       playExplosion(ac);
+      else if(r < 0.75) playGunfire(ac);
+      else              playGrenade(ac);
+
+      const next = 600 + Math.random() * 900;
+      active['GUERRA'].timer = setTimeout(fire, next);
+    };
+
+    active['GUERRA'] = { timer: null };
+    guerraBtn.classList.add('active');
+    fire();
   });
+  padsEl.appendChild(guerraBtn);
 
   function sizeVis(){ vis.width = vis.clientWidth; vis.height = 90; }
   sizeVis(); addEventListener('resize', sizeVis);
@@ -1385,54 +1130,26 @@ function shatter({cols=7, rows=5, dur=800}={}) {
   draw();
 })();
 
-/* ---------- 05 CONTEXTO POLÍTICO · glitch ---------- */
-(function war(){
-  const text=$('#glitchText'), sec=$('#guerra');
-  let fired=false;
-  const io=new IntersectionObserver(entries=>{
-    entries.forEach(e=>{
-      text.classList.toggle('on', e.isIntersecting);
-      if(e.isIntersecting && !fired && !reduce){ fired=true; shatter({cols:6,rows:4,dur:700}); }
-    });
-  },{threshold:.55});
-  io.observe(sec);
-})();
-
-/* ---------- 06 FUTURISMO NO BRASIL ---------- */
-(function brasil(){
-  const data=[
-    ['Influência, não cópia','Oswald de Andrade (1912)','Viaja à Europa e volta tocado pelas vanguardas.'],
-    ['1922','Semana de Arte Moderna','A energia futurista alimenta a ruptura modernista.'],
-    ['Ruptura','Provocação e renovação','Contra o academismo, pela liberdade de criação.'],
-    ['Recusa ideológica','Sem fascismo','Estética aproveitada; culto à guerra recusado.'],
-    ['1926','Marinetti em São Paulo','Sua ligação com o fascismo já era conhecida e afastou intelectuais como Mário de Andrade.'],
-    ['Legado','Liberdade de criação','Romper com a tradição para criar livremente.'],
+/* ---------- PRÓS ---------- */
+(function pros(){
+  const data = [
+    ['01','Renovação estética','Quebra dos modelos acadêmicos e abertura para o novo.'],
+    ['02','Arte + tecnologia','Aproximou a arte da indústria, do design e da máquina.'],
+    ['03','Novas linguagens','Palavras em liberdade, verso livre, colagem, ruído musical.'],
+    ['04','Influência duradoura','Abriu caminho para outras vanguardas — dadá, surrealismo, modernismo.'],
+    ['05','Antecipação','Viu o futuro industrial antes que ele chegasse.'],
+    ['06','Coragem experimental','Transformou o risco em método de criação.'],
   ];
-  const grid=$('#brGrid');
-  data.forEach(([tag,title,body])=>{
-    const el=document.createElement('div'); el.className='br-cell';
-    el.innerHTML=`<div class="tag">${tag}</div><h3>${title}</h3><p>${body}</p>`;
+  const grid = document.getElementById('prosGrid');
+  if(!grid) return;
+  data.forEach(([n,t,d])=>{
+    const el = document.createElement('div'); el.className='pros-item';
+    el.innerHTML = `<div class="pros-num">${n}</div><div><h4>${t}</h4><p>${d}</p></div>`;
     grid.appendChild(el);
   });
 })();
 
-/* ---------- 07 VARIANTES · retro-futurismos ---------- */
-(function variants(){
-  const data=[
-    ['CYBERPUNK','Alta tecnologia, baixa qualidade de vida','#00eaff','IA, megacorporações e cibernética. A velocidade das máquinas virou a dos dados.','→ na tela: Cyberpunk: Edgerunners (2022)'],
-    ['AFROFUTURISMO','O futuro reescrito pela diáspora','#f2ff00','Ficção científica e cosmologias africanas reescrevem o futuro pela diáspora.'],
-    ['SOLARPUNK','Um futuro verde e possível','#7dff8a','Um futuro otimista: energia renovável, biotecnologia e harmonia com a natureza.'],
-    ['STEAMPUNK & DIESELPUNK','Máquinas do passado, futuros alternativos','#d9a05b','Tecnologias que evoluíram além do seu tempo: vapor (Steampunk) e diesel (Dieselpunk).'],
-  ];
-  const grid=$('#vpGrid');
-  data.forEach(([tag,title,color,body,screen])=>{
-    const el=document.createElement('div'); el.className='vp-cell';
-    el.innerHTML=`<div class="vp-tag" style="color:${color}">${tag}</div><h3>${title}</h3><p>${body}</p>${screen?`<div class="vp-screen">${screen}</div>`:''}`;
-    grid.appendChild(el);
-  });
-})();
-
-/* ---------- 08 BLACK MIRROR · consequências + capa provisória ---------- */
+/* ---------- BLACK MIRROR ---------- */
 (function blackMirror(){
   const items=[
     ['01','Dependência','A tela vira extensão do corpo.'],
@@ -1441,13 +1158,14 @@ function shatter({cols=7, rows=5, dur=800}={}) {
     ['04','Lado obscuro','A velocidade sem freio cobra seu preço.'],
   ];
   const grid=$('#bmGrid');
-  items.forEach(([n,t,d])=>{
-    const el=document.createElement('div'); el.className='cell';
-    el.innerHTML=`<div class="num">${n}</div><div><h3>${t}</h3><p>${d}</p></div>`;
-    grid.appendChild(el);
-  });
+  if(grid){
+    items.forEach(([n,t,d])=>{
+      const el=document.createElement('div'); el.className='cell';
+      el.innerHTML=`<div class="num">${n}</div><div><h3>${t}</h3><p>${d}</p></div>`;
+      grid.appendChild(el);
+    });
+  }
 
-  // Se "blackmirror.png" não existir, mostra uma capa provisória no lugar
   const img=$('#bmCover');
   if(!img) return;
   const svg=`<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 450'><rect width='300' height='450' fill='#050508'/><path d='M150 225 L40 0 M150 225 L300 80 M150 225 L210 450 M150 225 L0 340 M150 225 L120 450' stroke='#00eaff' stroke-opacity='.4' fill='none'/><text x='150' y='215' fill='#edede4' font-family='Arial Black,Arial,sans-serif' font-size='34' text-anchor='middle'>BLACK</text><text x='150' y='255' fill='#00eaff' font-family='Arial Black,Arial,sans-serif' font-size='34' text-anchor='middle'>MIRROR</text></svg>`;
@@ -1456,19 +1174,20 @@ function shatter({cols=7, rows=5, dur=800}={}) {
   if(img.complete && img.naturalWidth===0) fallback();
 })();
 
-/* ---------- fechamento ---------- */
+/* ---------- fechamento 1909 × agora ---------- */
 (function present(){
   const pairs=[
     ['1909','Aeroplano — velocidade como espetáculo público'],
     ['2026','Carros autônomos — velocidade delegada a algoritmos'],
     ['1913','Intonarumori — máquinas geram música'],
     ['2026','IA generativa — algoritmos geram imagem e som'],
-    ['1909','Manifesto publicado em jornal impresso, em Paris'],
-    ['2026','Manifestos publicados em redes sociais, em tempo real'],
+    ['1909','Manifesto impresso em jornal, em Paris'],
+    ['2026','Manifesto publicado em rede, em tempo real'],
     ['1916','Tecnologia industrial aplicada à destruição em massa'],
     ['2026','Tecnologia digital aplicada à vigilância e à atenção'],
   ];
   const wrap=$('#pairs');
+  if(!wrap) return;
   for(let i=0;i<pairs.length;i+=2){
     const row=document.createElement('div'); row.className='pair';
     [pairs[i],pairs[i+1]].forEach(([a,b])=>{
@@ -1479,9 +1198,11 @@ function shatter({cols=7, rows=5, dur=800}={}) {
   }
 })();
 
-/* ---------- manifesto: clique ---------- */
+/* ---------- manifesto · clique nas palavras ---------- */
 (function manifestoClick(){
-  $('#words').addEventListener('click', e=>{
+  const wrap = document.getElementById('words');
+  if(!wrap) return;
+  wrap.addEventListener('click', e=>{
     const s=e.target.closest('span');
     if(!s || reduce) return;
     s.style.transition='transform .35s cubic-bezier(.2,.8,.3,1.5), color .35s';
@@ -1490,14 +1211,13 @@ function shatter({cols=7, rows=5, dur=800}={}) {
   });
 })();
 
-/* ---------- 09 · transição para o jogo ---------- */
+/* ---------- 08 · transição para o jogo ---------- */
 (function enterGame(){
   const link = document.getElementById('enterGame');
   if (!link) return;
 
   link.addEventListener('click', e => {
     if (reduce) return;
-
     e.preventDefault();
     const destino = link.href;
 
