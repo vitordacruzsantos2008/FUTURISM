@@ -41,10 +41,12 @@ canvas#game{display:block;width:100vw;height:100vh;image-rendering:pixelated;ima
 #dialogue.crossing .continue{background:var(--yellow);}
 #codexBtn{position:fixed;bottom:calc(env(safe-area-inset-bottom,0px) + 22px);right:22px;z-index:15;width:48px;height:48px;border-radius:4px;background:rgba(5,3,23,.9);border:1px solid var(--cyan);color:var(--cyan);cursor:pointer;font-family:'Archivo Black',sans-serif;font-size:16px;transition:.2s;box-shadow:0 0 14px rgba(47,228,255,.4);}
 #codexBtn:hover{background:var(--cyan);color:#000;box-shadow:0 0 24px rgba(47,228,255,.8);}
-/* NEW: mute button */
 #muteBtn{position:fixed;bottom:calc(env(safe-area-inset-bottom,0px) + 22px);left:22px;z-index:15;width:48px;height:48px;border-radius:4px;background:rgba(5,3,23,.9);border:1px solid var(--yellow);color:var(--yellow);cursor:pointer;font-family:'Archivo Black',sans-serif;font-size:18px;transition:.2s;box-shadow:0 0 14px rgba(255,204,51,.4);display:none;}
 #muteBtn.on{display:block;}
 #muteBtn:hover{background:var(--yellow);color:#000;box-shadow:0 0 24px rgba(255,204,51,.8);}
+#nowPlaying{position:fixed;bottom:calc(env(safe-area-inset-bottom,0px) + 82px);left:22px;z-index:15;display:none;padding:8px 14px;background:rgba(5,3,23,.92);border:1px solid var(--cyan);border-radius:2px;font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--cyan);pointer-events:none;box-shadow:0 0 14px rgba(47,228,255,.35);max-width:60vw;}
+#nowPlaying .lbl{opacity:.55;color:var(--steel);display:block;}
+#nowPlaying b{display:block;font-family:'Archivo Black',sans-serif;font-size:13px;letter-spacing:.02em;color:var(--yellow);margin-top:3px;text-shadow:0 0 8px currentColor;}
 #codex{position:fixed;top:0;right:0;bottom:0;z-index:30;width:min(420px,92vw);background:rgba(5,3,23,.98);border-left:1px solid var(--cyan);padding:28px 24px calc(28px + env(safe-area-inset-bottom,0px));transform:translateX(100%);transition:transform .35s cubic-bezier(.3,.7,.3,1);overflow-y:auto;box-shadow:-10px 0 40px rgba(47,228,255,.15);}
 #codex.on{transform:translateX(0);}
 #codex h2{font-family:'Archivo Black',sans-serif;font-size:18px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px;color:var(--cyan);text-shadow:0 0 12px currentColor;}
@@ -66,6 +68,7 @@ canvas#game{display:block;width:100vw;height:100vh;image-rendering:pixelated;ima
 #title .begin{margin-top:40px;padding:16px 38px;background:var(--magenta);color:#000;border:none;font-family:'Archivo Black',sans-serif;font-size:12px;letter-spacing:.25em;text-transform:uppercase;cursor:pointer;transition:.2s;box-shadow:0 0 24px rgba(255,47,160,.5);}
 #title .begin:hover{background:var(--yellow);box-shadow:0 0 36px rgba(255,204,51,.6);transform:scale(1.04);}
 #title .keys{margin-top:32px;font-size:10px;letter-spacing:.3em;color:var(--steel);text-transform:uppercase;}
+#title .quote{max-width:520px;margin-top:26px;font-family:'Archivo Black',sans-serif;font-size:13px;letter-spacing:.02em;color:var(--cyan);line-height:1.5;text-transform:uppercase;}
 #transform{position:fixed;inset:0;z-index:60;background:#000;display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:30px;opacity:0;pointer-events:none;transition:opacity .6s;}
 #transform.on{opacity:1;pointer-events:auto;}
 #transform .eyebrow{font-size:11px;letter-spacing:.5em;color:var(--magenta);text-transform:uppercase;margin-bottom:22px;}
@@ -88,13 +91,15 @@ canvas#game{display:block;width:100vw;height:100vh;image-rendering:pixelated;ima
 <div id="dialogue"><div class="speaker" id="dlgSpeaker"></div><div class="text" id="dlgText"></div><div id="dlgBody"></div></div>
 <button id="codexBtn" title="Codex (C)">C</button>
 <button id="muteBtn" title="Som ligado/desligado (M)">🔊</button>
+<div id="nowPlaying"><span class="lbl">agora ouve</span><b id="nowPlayingName">—</b></div>
 <div id="codex"><button class="close" id="codexClose">×</button><h2>Codex</h2><div class="sub">Conhecimento desbloqueado</div><div id="codexList"></div></div>
 <div id="title">
   <div class="year">1909</div>
   <h1>A Cidade do <em>Amanhã</em></h1>
   <p>Uma avenida. Prédios que repetem o passado. Nada se move — ainda. Corra sem parar e a própria cidade acelera com você. Atravesse as ruas com cuidado. Encontre os futuristas, responda, e o mundo vai mudar.</p>
+  <div class="quote">"A cidade sempre teve uma música. Nós apenas aprendemos a ignorá-la."</div>
   <button class="begin" id="beginBtn">Entrar na cidade</button>
-  <div class="keys">WASD ou setas · correr sem parar aumenta a Velocità · E interagir/atravessar · Enter continuar · C codex · M som</div>
+  <div class="keys">WASD ou setas · correr aumenta a Velocità · E interagir · Enter continuar · C codex · M som</div>
 </div>
 <div id="transform">
   <div class="eyebrow">A cidade responde</div>
@@ -105,15 +110,23 @@ canvas#game{display:block;width:100vw;height:100vh;image-rendering:pixelated;ima
 
 <script>
 /* ============================================================
-   RUSSOLO SOUND ENGINE — ruídos futuristas para o jogo
-   Baseado nos Intonarumori de Luigi Russolo (1913)
+   RUSSOLO SOUND ENGINE — v3 "Orquestra Urbana"
+   Os ruídos da cidade atual como matéria musical.
+   Baseado no princípio dos Intonarumori (Russolo, 1913).
    ============================================================ */
 (function Russolo(){
   const AC = window.AudioContext || window.webkitAudioContext;
   if(!AC) return;
+
   let ctx = null, noiseBuf = null;
+  let master = null, compressor = null;
   let ambientNodes = null;
+  let soundscapeTimer = null;
+  let soundscapeOn = false;
   let enabled = true;
+  let currentSoundName = '';
+  let onSoundName = null;
+  const VOLUME = 0.9;
 
   function ensure(){
     if(!ctx){
@@ -122,160 +135,568 @@ canvas#game{display:block;width:100vw;height:100vh;image-rendering:pixelated;ima
       noiseBuf = ctx.createBuffer(1, size, ctx.sampleRate);
       const d = noiseBuf.getChannelData(0);
       for(let i = 0; i < size; i++) d[i] = Math.random() * 2 - 1;
+      compressor = ctx.createDynamicsCompressor();
+      compressor.threshold.value = -10;
+      compressor.knee.value = 8;
+      compressor.ratio.value = 3;
+      compressor.attack.value = 0.003;
+      compressor.release.value = 0.2;
+      master = ctx.createGain();
+      master.gain.value = VOLUME;
+      compressor.connect(master);
+      master.connect(ctx.destination);
     }
-    if(ctx.state === 'suspended') ctx.resume();
+    if(ctx.state === 'suspended') ctx.resume().catch(()=>{});
     return ctx;
   }
-
-  function noise(dur, filterType, freq, q, gain, when=0){
-    const ac = ensure(), t = ac.currentTime + when;
-    const src = ac.createBufferSource(); src.buffer = noiseBuf;
-    const f = ac.createBiquadFilter(); f.type = filterType; f.frequency.value = freq; f.Q.value = q;
-    const g = ac.createGain();
-    g.gain.setValueAtTime(gain, t);
-    g.gain.exponentialRampToValueAtTime(0.001, t + dur);
-    src.connect(f).connect(g).connect(ac.destination);
-    src.start(t); src.stop(t + dur);
+  function dest(){ ensure(); return compressor; }
+  function setSoundName(name){
+    currentSoundName = name;
+    if(onSoundName) onSoundName(name);
   }
+
+  /* ---------- primitivas ---------- */
   function tone(type, f0, f1, dur, gain, when=0){
     const ac = ensure(), t = ac.currentTime + when;
     const osc = ac.createOscillator(); osc.type = type;
     osc.frequency.setValueAtTime(f0, t);
-    osc.frequency.exponentialRampToValueAtTime(f1, t + dur);
+    if(f1 !== f0) osc.frequency.exponentialRampToValueAtTime(f1, t + dur);
     const g = ac.createGain();
     g.gain.setValueAtTime(0, t);
     g.gain.linearRampToValueAtTime(gain, t + 0.01);
     g.gain.exponentialRampToValueAtTime(0.001, t + dur);
-    osc.connect(g).connect(ac.destination);
+    osc.connect(g).connect(dest());
     osc.start(t); osc.stop(t + dur + 0.05);
   }
-
-  // 👣 Passo — thud grave + clank metálico (Intonarumori: Crepitatore)
-  function step(){
-    tone('sine', 90 + Math.random()*20, 40, 0.10, 0.12);
-    noise(0.04, 'highpass', 2200 + Math.random()*600, 1, 0.05);
+  function bufferNoise(dur, filterType, freq, q, gain, when=0, sweepTo=null){
+    const ac = ensure(), t = ac.currentTime + when;
+    const src = ac.createBufferSource(); src.buffer = noiseBuf;
+    const f = ac.createBiquadFilter(); f.type = filterType; f.frequency.value = freq; f.Q.value = q;
+    if(sweepTo){
+      f.frequency.setValueAtTime(freq, t);
+      f.frequency.exponentialRampToValueAtTime(sweepTo, t + dur);
+    }
+    const g = ac.createGain();
+    g.gain.setValueAtTime(0, t);
+    g.gain.linearRampToValueAtTime(gain, t + 0.005);
+    g.gain.exponentialRampToValueAtTime(0.001, t + dur);
+    src.connect(f).connect(g).connect(dest());
+    src.start(t); src.stop(t + dur);
   }
 
-  // 🎯 Interação (E) — ping metálico futurista
-  function interact(){
-    tone('square', 880, 660, 0.14, 0.09);
-    tone('square', 1320, 880, 0.10, 0.05, 0.02);
-    noise(0.07, 'bandpass', 1800, 6, 0.05);
+  /* ============================================================
+     A ORQUESTRA URBANA — cada função é um "instrumento"
+     ============================================================ */
+
+  /* 🚗 MOTOR — acelerando e passando (drone grave modulado) */
+  function motor(){
+    setSoundName('Motor de carro');
+    const ac = ensure(), t = ac.currentTime;
+    const osc = ac.createOscillator(); osc.type='sawtooth';
+    osc.frequency.setValueAtTime(55, t);
+    osc.frequency.linearRampToValueAtTime(100, t + 0.6);
+    osc.frequency.linearRampToValueAtTime(70, t + 1.4);
+    osc.frequency.linearRampToValueAtTime(40, t + 2.0);
+    const lp = ac.createBiquadFilter(); lp.type='lowpass'; lp.frequency.value=800; lp.Q.value=2;
+    const g = ac.createGain();
+    g.gain.setValueAtTime(0, t);
+    g.gain.linearRampToValueAtTime(0.75, t + 0.3);
+    g.gain.linearRampToValueAtTime(0.001, t + 2.1);
+    const lfo = ac.createOscillator(); lfo.frequency.value=22;
+    const lfoG = ac.createGain(); lfoG.gain.value=10;
+    lfo.connect(lfoG).connect(osc.frequency); lfo.start();
+    osc.connect(lp).connect(g).connect(dest());
+    osc.start(t); osc.stop(t + 2.2); lfo.stop(t + 2.2);
+    bufferNoise(1.6, 'lowpass', 220, 1.2, 0.35, 0.15);
   }
 
-  // 📖 Codex (C) — whoosh + click mecânico
-  function codex(){
-    noise(0.22, 'lowpass', 800, 1, 0.12);
-    tone('sawtooth', 220, 880, 0.16, 0.07);
-    setTimeout(() => noise(0.05, 'highpass', 3000, 1, 0.08), 110);
+  /* 🚌 ÔNIBUS FREANDO — chiado de ar + squeal + rumble */
+  function bus(){
+    setSoundName('Ônibus freando');
+    const ac = ensure(), t = ac.currentTime;
+    // Chiado do freio pneumático
+    bufferNoise(1.3, 'highpass', 4000, 1, 0.6);
+    // Squeal do freio
+    const squeal = ac.createOscillator(); squeal.type='sawtooth';
+    squeal.frequency.setValueAtTime(2200, t);
+    squeal.frequency.linearRampToValueAtTime(1700, t + 1.0);
+    const sq = ac.createBiquadFilter(); sq.type='bandpass'; sq.frequency.value=2000; sq.Q.value=8;
+    const sg = ac.createGain();
+    sg.gain.setValueAtTime(0, t);
+    sg.gain.linearRampToValueAtTime(0.3, t + 0.1);
+    sg.gain.linearRampToValueAtTime(0.001, t + 1.15);
+    squeal.connect(sq).connect(sg).connect(dest());
+    squeal.start(t); squeal.stop(t + 1.2);
+    // Rumble grave desacelerando
+    tone('sine', 85, 35, 0.9, 0.55);
   }
 
-  // ✅ Acerto — burst de intonarumori
-  function success(){
-    tone('sine', 440, 880, 0.14, 0.13);
-    tone('sine', 660, 1320, 0.14, 0.09, 0.07);
-    noise(0.28, 'bandpass', 1600, 4, 0.10, 0.05);
-    tone('square', 880, 1760, 0.18, 0.07, 0.15);
+  /* 🚦 SEMÁFORO SONORO — pulso eletrônico para pedestres */
+  function trafficLight(){
+    setSoundName('Semáforo de pedestres');
+    for(let i = 0; i < 4; i++){
+      tone('square', 2200, 2200, 0.06, 0.4, i * 0.22);
+    }
+    tone('square', 1800, 1800, 0.08, 0.3, 0.9);
   }
 
-  // ❌ Erro — buzz industrial
-  function error(){
-    tone('sawtooth', 180, 60, 0.36, 0.16);
-    noise(0.32, 'lowpass', 400, 2, 0.13);
-    tone('square', 120, 80, 0.32, 0.10, 0.05);
+  /* 🛞 PNEU NO ASFALTO — banda de ruído deslizante */
+  function tire(){
+    setSoundName('Pneu no asfalto');
+    bufferNoise(1.0, 'bandpass', 1800, 1.5, 0.45, 0, 600);
+    bufferNoise(1.0, 'lowpass', 400, 1, 0.35, 0, 200);
   }
 
-  // 🚦 Faixa liberada — chime verde + whoosh
-  function trafficOpen(){
-    tone('sine', 523, 1046, 0.15, 0.12);
-    tone('sine', 659, 1318, 0.15, 0.09, 0.08);
-    noise(0.2, 'bandpass', 1400, 5, 0.08, 0.05);
+  /* 🚇 METRÔ — chegada, frenagem e arranque */
+  function subway(){
+    setSoundName('Metrô');
+    const ac = ensure(), t = ac.currentTime;
+    // Rumble profundo de chegada
+    bufferNoise(1.4, 'lowpass', 300, 1.5, 0.7, 0, 120);
+    // Screech metálico ao frear
+    const screech = ac.createOscillator(); screech.type='sawtooth';
+    screech.frequency.setValueAtTime(3200, t + 0.9);
+    screech.frequency.linearRampToValueAtTime(2400, t + 1.6);
+    const sf = ac.createBiquadFilter(); sf.type='bandpass'; sf.frequency.value=2800; sf.Q.value=12;
+    const sg = ac.createGain();
+    sg.gain.setValueAtTime(0, t + 0.85);
+    sg.gain.linearRampToValueAtTime(0.4, t + 1.0);
+    sg.gain.linearRampToValueAtTime(0.001, t + 1.7);
+    screech.connect(sf).connect(sg).connect(dest());
+    screech.start(t + 0.85); screech.stop(t + 1.8);
+    // Arranque (acelera)
+    tone('sawtooth', 80, 260, 1.2, 0.35, 1.8);
   }
 
-  // 🏆 Travessia completa — fanfarra de ruídos
-  function victory(){
-    const notes = [220, 330, 440, 660, 880];
-    notes.forEach((f, i) => {
-      tone('square', f, f * 1.5, 0.25, 0.11, i * 0.12);
-      noise(0.15, 'bandpass', 1200 + i * 400, 5, 0.05, i * 0.12);
+  /* 🔊 BUZINA — dois tons; distância muda o volume */
+  function horn(){
+    const near = Math.random() < 0.5;
+    const vol = near ? 0.6 : 0.25;
+    setSoundName(near ? 'Buzina (perto)' : 'Buzina (longe)');
+    const ac = ensure(), t = ac.currentTime;
+    [440, 554].forEach(freq => {
+      const osc = ac.createOscillator(); osc.type='square'; osc.frequency.value=freq;
+      const g = ac.createGain();
+      g.gain.setValueAtTime(0, t);
+      g.gain.linearRampToValueAtTime(vol, t + 0.02);
+      g.gain.linearRampToValueAtTime(vol, t + 0.3);
+      g.gain.exponentialRampToValueAtTime(0.001, t + 0.5);
+      osc.connect(g).connect(dest());
+      osc.start(t); osc.stop(t + 0.55);
     });
   }
 
-  // 🚪 Atravessar / mudar de tela
+  /* 🏗️ BRITADEIRA — percussão industrial repetida */
+  function jackhammer(){
+    setSoundName('Britadeira');
+    for(let i = 0; i < 8; i++){
+      const w = i * 0.11;
+      tone('square', 180, 90, 0.05, 0.5, w);
+      bufferNoise(0.05, 'highpass', 2500, 1, 0.35, w);
+      bufferNoise(0.06, 'lowpass', 400, 2, 0.3, w + 0.01);
+    }
+  }
+
+  /* 🛠️ FURADEIRA — zumbido agudo com vibrato rápido */
+  function drill(){
+    setSoundName('Furadeira');
+    const ac = ensure(), t = ac.currentTime;
+    const osc = ac.createOscillator(); osc.type='sawtooth'; osc.frequency.value=280;
+    const lfo = ac.createOscillator(); lfo.frequency.value=45;
+    const lfoG = ac.createGain(); lfoG.gain.value=60;
+    lfo.connect(lfoG).connect(osc.frequency); lfo.start();
+    const bp = ac.createBiquadFilter(); bp.type='bandpass'; bp.frequency.value=2200; bp.Q.value=3;
+    const g = ac.createGain();
+    g.gain.setValueAtTime(0, t);
+    g.gain.linearRampToValueAtTime(0.4, t + 0.05);
+    g.gain.linearRampToValueAtTime(0.4, t + 1.4);
+    g.gain.linearRampToValueAtTime(0.001, t + 1.6);
+    osc.connect(bp).connect(g).connect(dest());
+    osc.start(t); osc.stop(t + 1.7); lfo.stop(t + 1.7);
+    bufferNoise(1.4, 'highpass', 3000, 1, 0.15);
+  }
+
+  /* ❄️ AR-CONDICIONADO — zumbido frio + compressor */
+  function aircon(){
+    setSoundName('Ar-condicionado');
+    bufferNoise(2.4, 'lowpass', 500, 1, 0.45);
+    tone('sine', 65, 65, 2.4, 0.18);
+    // Ciclo do compressor
+    setTimeout(() => tone('sine', 130, 90, 0.35, 0.2), 1200);
+  }
+
+  /* 🏪 PORTA AUTOMÁTICA — whoosh + click */
+  function autoDoor(){
+    setSoundName('Porta automática');
+    bufferNoise(0.5, 'bandpass', 1200, 1.5, 0.4, 0, 400);
+    tone('square', 1400, 800, 0.06, 0.25, 0.5);
+  }
+
+  /* 🛗 ELEVADOR — sino + porta */
+  function elevator(){
+    setSoundName('Elevador chegando');
+    tone('sine', 880, 880, 0.14, 0.45);
+    tone('sine', 660, 660, 0.28, 0.35, 0.18);
+    bufferNoise(0.4, 'lowpass', 800, 1, 0.25, 0.5);
+  }
+
+  /* 📱 NOTIFICAÇÃO DE CELULAR */
+  function notification(){
+    setSoundName('Notificação de celular');
+    tone('sine', 880, 1320, 0.14, 0.5);
+    tone('sine', 1320, 1760, 0.14, 0.35, 0.1);
+    tone('sine', 1760, 2200, 0.16, 0.25, 0.2);
+  }
+
+  /* 💳 MÁQUINA DE CARTÃO — beep de confirmação */
+  function cardMachine(){
+    setSoundName('Máquina de cartão');
+    tone('square', 1600, 1600, 0.06, 0.35);
+    tone('square', 2000, 2000, 0.08, 0.4, 0.1);
+  }
+
+  /* 🚪 PORTA METÁLICA fechando — clang + ranger */
+  function metalDoor(){
+    setSoundName('Porta metálica');
+    bufferNoise(0.25, 'lowpass', 400, 2, 0.7);
+    tone('sine', 140, 55, 0.35, 0.55);
+    tone('square', 900, 400, 0.08, 0.3, 0.03);
+    // Ranger
+    const ac = ensure(), t = ac.currentTime;
+    const creak = ac.createOscillator(); creak.type='sawtooth';
+    creak.frequency.setValueAtTime(180, t + 0.05);
+    creak.frequency.linearRampToValueAtTime(320, t + 0.3);
+    const cf = ac.createBiquadFilter(); cf.type='bandpass'; cf.frequency.value=800; cf.Q.value=6;
+    const cg = ac.createGain();
+    cg.gain.setValueAtTime(0, t + 0.05);
+    cg.gain.linearRampToValueAtTime(0.25, t + 0.1);
+    cg.gain.linearRampToValueAtTime(0.001, t + 0.35);
+    creak.connect(cf).connect(cg).connect(dest());
+    creak.start(t + 0.05); creak.stop(t + 0.4);
+  }
+
+  /* 🛒 CARRINHO DE SUPERMERCADO — roda rangendo */
+  function shoppingCart(){
+    setSoundName('Carrinho de supermercado');
+    const ac = ensure(), t = ac.currentTime;
+    const squeak = ac.createOscillator(); squeak.type='sawtooth';
+    squeak.frequency.setValueAtTime(1800, t);
+    squeak.frequency.linearRampToValueAtTime(2400, t + 0.5);
+    squeak.frequency.linearRampToValueAtTime(1900, t + 1.0);
+    const sq = ac.createBiquadFilter(); sq.type='bandpass'; sq.frequency.value=2000; sq.Q.value=15;
+    const sg = ac.createGain();
+    sg.gain.setValueAtTime(0, t);
+    sg.gain.linearRampToValueAtTime(0.25, t + 0.1);
+    sg.gain.linearRampToValueAtTime(0.001, t + 1.1);
+    squeak.connect(sq).connect(sg).connect(dest());
+    squeak.start(t); squeak.stop(t + 1.15);
+    bufferNoise(1.0, 'lowpass', 300, 1, 0.3);
+  }
+
+  /* 🚶 PASSOS EM AZULEJO — clack seco */
+  function footstepsTile(){
+    setSoundName('Passos em azulejo');
+    for(let i = 0; i < 5; i++){
+      const w = i * 0.4;
+      bufferNoise(0.03, 'highpass', 2200, 1, 0.35, w);
+      tone('sine', 100, 45, 0.06, 0.3, w);
+    }
+  }
+
+  /* 🗣️ MULTIDÃO — murmurinho indistinto */
+  function crowd(){
+    setSoundName('Conversas ao longe');
+    bufferNoise(2.5, 'bandpass', 700, 0.9, 0.4);
+    bufferNoise(2.5, 'bandpass', 1200, 0.9, 0.25, 0.2);
+    bufferNoise(2.5, 'bandpass', 2000, 0.9, 0.15, 0.4);
+  }
+
+  /* ☕ MÁQUINA DE CAFÉ — moedor + vapor + pingar */
+  function coffeeMachine(){
+    setSoundName('Máquina de café');
+    const ac = ensure(), t = ac.currentTime;
+    // Moedor
+    const grinder = ac.createOscillator(); grinder.type='sawtooth'; grinder.frequency.value=180;
+    const gf = ac.createBiquadFilter(); gf.type='bandpass'; gf.frequency.value=800; gf.Q.value=2;
+    const gg = ac.createGain();
+    gg.gain.setValueAtTime(0, t);
+    gg.gain.linearRampToValueAtTime(0.4, t + 0.1);
+    gg.gain.linearRampToValueAtTime(0.4, t + 0.9);
+    gg.gain.linearRampToValueAtTime(0.001, t + 1.1);
+    grinder.connect(gf).connect(gg).connect(dest());
+    grinder.start(t); grinder.stop(t + 1.2);
+    // Vapor
+    bufferNoise(0.9, 'highpass', 3000, 1, 0.3, 1.0);
+    // Pingar
+    for(let i = 0; i < 4; i++) tone('sine', 900, 700, 0.04, 0.2, 1.3 + i*0.15);
+  }
+
+  /* 🖨️ IMPRESSORA / SCANNER */
+  function printer(){
+    setSoundName('Impressora');
+    for(let i = 0; i < 14; i++){
+      bufferNoise(0.02, 'highpass', 3200, 1, 0.3, i * 0.06);
+      tone('square', 1800 + Math.random()*600, 1400, 0.02, 0.2, i * 0.06);
+    }
+    tone('sawtooth', 220, 160, 0.6, 0.25);
+  }
+
+  /* ⚡ ZUMBIDO ELÉTRICO — poste / transformador */
+  function electricHum(){
+    setSoundName('Zumbido elétrico');
+    tone('sine', 60, 60, 2.5, 0.35);
+    tone('sine', 120, 120, 2.5, 0.2);
+    tone('sine', 180, 180, 2.5, 0.1);
+    bufferNoise(2.5, 'highpass', 5000, 1, 0.08);
+  }
+
+  /* 🏠 VENTILADOR / EXAUSTOR */
+  function fan(){
+    setSoundName('Ventilador');
+    bufferNoise(2.2, 'lowpass', 700, 1, 0.4);
+    tone('sine', 90, 90, 2.2, 0.15);
+    // Pás girando
+    const ac = ensure(), t = ac.currentTime;
+    const lfo = ac.createOscillator(); lfo.frequency.value=12;
+    const lfoG = ac.createGain(); lfoG.gain.value=0.08;
+    const g = ac.createGain(); g.gain.value=0.35;
+    bufferNoise.call(null); // noop
+    // Modulação do ruído via gain node — aproximação:
+    for(let i = 0; i < 12; i++){
+      bufferNoise(0.02, 'bandpass', 600, 2, 0.15, i * 0.18);
+    }
+  }
+
+  /* 🚿 ÁGUA CORRENDO — fonte / torneira */
+  function water(){
+    setSoundName('Água correndo');
+    bufferNoise(2.4, 'bandpass', 1500, 1.2, 0.35);
+    bufferNoise(2.4, 'highpass', 3500, 1, 0.2);
+    // Gotas
+    for(let i = 0; i < 5; i++){
+      tone('sine', 1200 + Math.random()*400, 800, 0.03, 0.18, 0.3 + i*0.35);
+    }
+  }
+
+  /* 🐦 PÁSSARO URBANO — chilreio misturado ao trânsito */
+  function bird(){
+    setSoundName('Pássaro urbano');
+    const ac = ensure(), t = ac.currentTime;
+    for(let i = 0; i < 3; i++){
+      const osc = ac.createOscillator(); osc.type='sine';
+      osc.frequency.setValueAtTime(2400, t + i*0.13);
+      osc.frequency.exponentialRampToValueAtTime(3400, t + i*0.13 + 0.06);
+      osc.frequency.exponentialRampToValueAtTime(2700, t + i*0.13 + 0.1);
+      const g = ac.createGain();
+      g.gain.setValueAtTime(0, t + i*0.13);
+      g.gain.linearRampToValueAtTime(0.28, t + i*0.13 + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.001, t + i*0.13 + 0.12);
+      osc.connect(g).connect(dest());
+      osc.start(t + i*0.13); osc.stop(t + i*0.13 + 0.14);
+    }
+  }
+
+  /* 🔔 AVISO ELETRÔNICO — loja / estação */
+  function chime(){
+    setSoundName('Aviso eletrônico');
+    tone('sine', 523, 523, 0.2, 0.4);
+    tone('sine', 784, 784, 0.35, 0.35, 0.15);
+  }
+
+  /* 🎯 INTERAÇÃO — ping metálico futurista */
+  function interact(){
+    setSoundName('Interação');
+    tone('square', 880, 660, 0.14, 0.35);
+    tone('square', 1320, 880, 0.1, 0.25, 0.02);
+    bufferNoise(0.07, 'bandpass', 1800, 6, 0.2);
+  }
+  /* 📖 CODEX */
+  function codex(){
+    setSoundName('Codex');
+    bufferNoise(0.22, 'lowpass', 800, 1, 0.35);
+    tone('sawtooth', 220, 880, 0.16, 0.25);
+    setTimeout(()=>bufferNoise(0.05, 'highpass', 3000, 1, 0.25), 110);
+  }
+  /* ✅ ACERTO */
+  function success(){
+    setSoundName('Acerto!');
+    tone('sine', 440, 880, 0.14, 0.5);
+    tone('sine', 660, 1320, 0.14, 0.35, 0.07);
+    bufferNoise(0.28, 'bandpass', 1600, 4, 0.3, 0.05);
+    tone('square', 880, 1760, 0.18, 0.25, 0.15);
+  }
+  /* ❌ ERRO */
+  function error(){
+    setSoundName('Erro');
+    tone('sawtooth', 180, 60, 0.36, 0.45);
+    bufferNoise(0.32, 'lowpass', 400, 2, 0.4);
+    tone('square', 120, 80, 0.32, 0.3, 0.05);
+  }
+  /* 🚦 FAIXA LIBERADA */
+  function trafficOpen(){
+    setSoundName('Faixa liberada');
+    tone('sine', 523, 1046, 0.15, 0.45);
+    tone('sine', 659, 1318, 0.15, 0.35, 0.08);
+    bufferNoise(0.2, 'bandpass', 1400, 5, 0.25, 0.05);
+  }
+  /* 🏆 VITÓRIA */
+  function victory(){
+    setSoundName('Vitória!');
+    const notes = [220, 330, 440, 660, 880];
+    notes.forEach((f, i) => {
+      tone('square', f, f * 1.5, 0.25, 0.35, i * 0.12);
+      bufferNoise(0.15, 'bandpass', 1200 + i * 400, 5, 0.15, i * 0.12);
+    });
+  }
+  /* 🚪 TRANSIÇÃO */
   function transition(){
-    noise(0.45, 'highpass', 200, 2, 0.18);
-    tone('sawtooth', 80, 1400, 0.38, 0.10);
+    setSoundName('Transição');
+    bufferNoise(0.45, 'highpass', 200, 2, 0.45);
+    tone('sawtooth', 80, 1400, 0.38, 0.3);
   }
-
-  // 🚗 Motor de carro ao passar (near-miss)
-  function carWhoosh(){
-    tone('sawtooth', 60, 140, 0.35, 0.10);
-    noise(0.3, 'bandpass', 600, 1.5, 0.08);
-  }
-
-  // 💥 Impacto (atropelamento)
+  /* 💥 IMPACTO */
   function hit(){
-    tone('sine', 160, 30, 0.6, 0.22);
-    noise(0.4, 'lowpass', 500, 2, 0.18);
-    tone('square', 90, 60, 0.4, 0.12, 0.05);
+    setSoundName('Impacto!');
+    tone('sine', 160, 30, 0.6, 0.6);
+    bufferNoise(0.4, 'lowpass', 500, 2, 0.5);
+    tone('square', 90, 60, 0.4, 0.35, 0.05);
+  }
+  /* 🛞 WHOOSH de carro passando perto */
+  function carWhoosh(){
+    setSoundName('Carro passando perto');
+    tone('sawtooth', 60, 140, 0.35, 0.35);
+    bufferNoise(0.3, 'bandpass', 600, 1.5, 0.3);
+  }
+  /* 👣 PASSO do jogador (asfalto) */
+  function step(){
+    tone('sine', 100 + Math.random()*20, 45, 0.07, 0.32);
+    bufferNoise(0.03, 'highpass', 2400 + Math.random()*600, 1, 0.15);
   }
 
-  /* ---------- AMBIENTE (loop contínuo da cidade) ---------- */
+  /* ============================================================
+     AMBIENTE CONTÍNUO — o "drone" da cidade tecnológica
+     ============================================================ */
   function startAmbient(){
     if(ambientNodes) return;
     const ac = ensure();
-    const master = ac.createGain();
-    master.gain.setValueAtTime(0, ac.currentTime);
-    master.gain.linearRampToValueAtTime(0.06, ac.currentTime + 2);
-    master.connect(ac.destination);
+    const bus = ac.createGain();
+    bus.gain.setValueAtTime(0, ac.currentTime);
+    bus.gain.linearRampToValueAtTime(0.45, ac.currentTime + 2);
+    bus.connect(dest());
 
-    // Motor grave de fundo
-    const motor = ac.createOscillator(); motor.type = 'sawtooth'; motor.frequency.value = 40;
-    const mf = ac.createBiquadFilter(); mf.type = 'lowpass'; mf.frequency.value = 180; mf.Q.value = 4;
-    const mg = ac.createGain(); mg.gain.value = 0.5;
-    motor.connect(mf).connect(mg).connect(master);
+    // Drone de tráfego distante (motor contínuo)
+    const motor = ac.createOscillator(); motor.type='sawtooth'; motor.frequency.value=95;
+    const mf = ac.createBiquadFilter(); mf.type='lowpass'; mf.frequency.value=450; mf.Q.value=3;
+    const mg = ac.createGain(); mg.gain.value=0.55;
+    motor.connect(mf).connect(mg).connect(bus);
     motor.start();
 
-    // Ruído urbano filtrado
-    const city = ac.createBufferSource(); city.buffer = noiseBuf; city.loop = true;
-    const cf = ac.createBiquadFilter(); cf.type = 'bandpass'; cf.frequency.value = 700; cf.Q.value = 1.5;
-    const cg = ac.createGain(); cg.gain.value = 0.35;
-    city.connect(cf).connect(cg).connect(master);
+    // Ruído urbano (banda de tráfego)
+    const city = ac.createBufferSource(); city.buffer=noiseBuf; city.loop=true;
+    const cf = ac.createBiquadFilter(); cf.type='bandpass'; cf.frequency.value=750; cf.Q.value=1.3;
+    const cg = ac.createGain(); cg.gain.value=0.4;
+    city.connect(cf).connect(cg).connect(bus);
     city.start();
 
-    // LFO pulsando o motor (respiração industrial)
-    const lfo = ac.createOscillator(); lfo.frequency.value = 0.35;
-    const lfoGain = ac.createGain(); lfoGain.gain.value = 25;
-    lfo.connect(lfoGain).connect(mf.frequency);
+    // Zumbido elétrico de fundo (60 Hz + harmônicos)
+    const hum1 = ac.createOscillator(); hum1.type='sine'; hum1.frequency.value=60;
+    const hg1 = ac.createGain(); hg1.gain.value=0.06;
+    hum1.connect(hg1).connect(bus); hum1.start();
+    const hum2 = ac.createOscillator(); hum2.type='sine'; hum2.frequency.value=120;
+    const hg2 = ac.createGain(); hg2.gain.value=0.03;
+    hum2.connect(hg2).connect(bus); hum2.start();
+
+    // LFO respirando o motor
+    const lfo = ac.createOscillator(); lfo.frequency.value=0.35;
+    const lfoG = ac.createGain(); lfoG.gain.value=25;
+    lfo.connect(lfoG).connect(mf.frequency);
     lfo.start();
 
-    ambientNodes = { motor, city, master, lfo };
+    ambientNodes = { motor, city, hum1, hum2, bus, lfo };
   }
-
   function stopAmbient(){
     if(!ambientNodes) return;
     const ac = ctx;
-    const { master } = ambientNodes;
-    master.gain.cancelScheduledValues(ac.currentTime);
-    master.gain.setValueAtTime(master.gain.value, ac.currentTime);
-    master.gain.linearRampToValueAtTime(0, ac.currentTime + 0.6);
+    const { bus, motor, city, hum1, hum2, lfo } = ambientNodes;
+    bus.gain.cancelScheduledValues(ac.currentTime);
+    bus.gain.setValueAtTime(bus.gain.value, ac.currentTime);
+    bus.gain.linearRampToValueAtTime(0, ac.currentTime + 0.6);
     setTimeout(() => {
-      try { ambientNodes.motor.stop(); ambientNodes.city.stop(); ambientNodes.lfo.stop(); } catch(e){}
+      try { motor.stop(); city.stop(); hum1.stop(); hum2.stop(); lfo.stop(); } catch(e){}
       ambientNodes = null;
     }, 700);
   }
 
+  /* ============================================================
+     SOUNDSCAPE — orquestra urbana em rotação
+     ============================================================ */
+  const SCAPE_BANK = [
+    // Transporte
+    [motor, 5], [bus, 3], [tire, 3], [subway, 2], [horn, 2], [carWhoosh, 3],
+    // Semáforo e avisos
+    [trafficLight, 2], [chime, 1],
+    // Obras / construção
+    [jackhammer, 2], [drill, 2],
+    // Edifícios / comércio
+    [aircon, 2], [autoDoor, 2], [elevator, 1], [metalDoor, 1], [fan, 2],
+    // Cotidiano / comercial
+    [notification, 3], [cardMachine, 2], [shoppingCart, 2], [coffeeMachine, 2], [printer, 2],
+    // Pessoa / rua
+    [footstepsTile, 2], [crowd, 2], [bird, 2],
+    // Infra / natureza
+    [electricHum, 1], [water, 1],
+  ];
+  const SCAPE_TOTAL = SCAPE_BANK.reduce((s,[,w])=>s+w, 0);
+
+  function pickScape(){
+    let r = Math.random() * SCAPE_TOTAL;
+    for(const [fn, w] of SCAPE_BANK){
+      r -= w;
+      if(r <= 0) return fn;
+    }
+    return motor;
+  }
+
+  function startSoundscape(){
+    if(soundscapeOn) return;
+    soundscapeOn = true;
+    const tick = () => {
+      if(!soundscapeOn || !enabled) return;
+      const fn = pickScape();
+      try { fn(); } catch(e){}
+      const delay = 1100 + Math.random() * 2400;
+      soundscapeTimer = setTimeout(tick, delay);
+    };
+    setTimeout(tick, 400);
+  }
+  function stopSoundscape(){
+    soundscapeOn = false;
+    clearTimeout(soundscapeTimer);
+  }
+
   function toggle(){
     enabled = !enabled;
-    if(enabled){ ensure(); startAmbient(); }
-    else stopAmbient();
+    if(enabled){ ensure(); startAmbient(); startSoundscape(); }
+    else { stopAmbient(); stopSoundscape(); }
     return enabled;
+  }
+  function setVolume(v){
+    ensure();
+    master.gain.setTargetAtTime(Math.max(0, Math.min(1, v)), ctx.currentTime, 0.1);
   }
 
   window.Russolo = {
-    step, interact, codex, success, error, victory, transition,
-    trafficOpen, carWhoosh, hit,
-    startAmbient, stopAmbient, toggle, ensure,
+    // jogo
+    step, interact, codex, success, error, victory, transition, trafficOpen, hit, carWhoosh,
+    // orquestra urbana (chamável manualmente)
+    motor, bus, trafficLight, tire, subway, horn, jackhammer, drill, aircon, autoDoor,
+    elevator, notification, cardMachine, metalDoor, shoppingCart, footstepsTile, crowd,
+    coffeeMachine, printer, electricHum, fan, water, bird, chime,
+    // ambiente
+    startAmbient, stopAmbient, startSoundscape, stopSoundscape,
+    toggle, ensure, setVolume,
+    onSound(cb){ onSoundName = cb; },
+    get current(){ return currentSoundName; },
     get enabled(){ return enabled; }
   };
 
@@ -403,16 +824,13 @@ function update(dt){
   p.speedMul = 1+Math.min(2,p.speedTime/5);
   document.getElementById('hudVel').textContent='×'+p.speedMul.toFixed(1);
 
-  // 👣 SOM DE PASSO — ritmo acompanha a Velocità
   if(p.walking && window.Russolo && Russolo.enabled){
     p.stepTimer += dt * (4 + p.speedMul * 2.5);
     if(p.stepTimer >= 1){
       p.stepTimer -= 1;
       Russolo.step();
     }
-  } else {
-    p.stepTimer = 0;
-  }
+  } else { p.stepTimer = 0; }
 
   const speed=90*p.speedMul;
   const tryX=p.x+ax*speed*dt, tryY=p.y+ay*speed*dt;
@@ -449,7 +867,6 @@ function update(dt){
     if(Math.abs(c.vx)>vmax)c.vx=s*vmax;
     const prevX=c.x; c.x+=c.vx*dt; c.trail=Math.min(c.trail+dt*200,90);
 
-    // 🚗 WHOOSH de carro próximo ao jogador
     if(!c.soundPlayed && Math.abs(c.x - state.player.x) < 90 && Math.abs(c.y - state.player.y) < 24){
       c.soundPlayed = true;
       if(window.Russolo && Russolo.enabled) Russolo.carWhoosh();
@@ -460,7 +877,6 @@ function update(dt){
       if(state.player.x>lo && state.player.x<hi && dy<c.h/2+6){
         state.player.invuln=1.6; state.camera.shake=14; state.player.speedTime=0;
         state.xp=Math.max(0,state.xp-30);
-        // 💥 Som de impacto
         if(window.Russolo && Russolo.enabled) Russolo.hit();
         document.getElementById('hitflash').classList.add('on');
         setTimeout(()=>document.getElementById('hitflash').classList.remove('on'),180);
@@ -710,14 +1126,12 @@ function chooseOption(opt,optsEl,body,s){
   [...optsEl.children].forEach(b=>b.disabled=true);
   const idx=s.options.indexOf(opt); optsEl.children[idx].classList.add(opt.ok?'correct':'wrong');
   if(!opt.ok){
-    // ❌ Som de erro
     if(window.Russolo && Russolo.enabled) Russolo.error();
     const fb=document.createElement('div'); fb.className='feedback'; fb.textContent=opt.fb; body.appendChild(fb);
     const retry=document.createElement('button'); retry.className='continue'; retry.textContent='Tentar de novo';
     retry.onclick=()=>{fb.remove();retry.remove();[...optsEl.children].forEach(b=>{b.disabled=false;b.classList.remove('wrong');});};
     body.appendChild(retry);
   } else {
-    // ✅ Som de acerto
     if(window.Russolo && Russolo.enabled) Russolo.success();
     const mul=state.player.speedMul;
     const fb=document.createElement('div'); fb.className='feedback ok';
@@ -737,14 +1151,12 @@ function openCrosswalk(cw){
     b.onclick=()=>{
       [...opts.children].forEach(x=>x.disabled=true); opts.children[i].classList.add(opt.ok?'correct':'wrong');
       if(opt.ok){
-        // 🚦 Chime verde — faixa liberada
         if(window.Russolo && Russolo.enabled) Russolo.trafficOpen();
         const fb=document.createElement('div'); fb.className='feedback ok'; fb.innerHTML=`<b style="color:var(--green)">Atravessia liberada por 10s.</b> ${wordsInFreedom(opt.fb)}`; body.appendChild(fb);
         cw.answered=true; cw.open=10; state.traffic[cw.road].stopped=10; state.xp+=40; updateHUD();
         if(!state.codex.find(c=>c.title===`Travessia ${cw.tx},${cw.ty}`)){state.codex.push({cat:'Travessias',title:`Travessia ${cw.tx},${cw.ty}`,desc:opt.fb});renderCodex();}
         const close=document.createElement('button'); close.className='continue'; close.textContent='Atravessar · Enter'; close.onclick=closeDialogue; continueHandler=closeDialogue; body.appendChild(close);
       } else {
-        // ❌ Erro
         if(window.Russolo && Russolo.enabled) Russolo.error();
         const fb=document.createElement('div'); fb.className='feedback'; fb.textContent=opt.fb; body.appendChild(fb);
         const retry=document.createElement('button'); retry.className='continue'; retry.textContent='Tentar de novo';
@@ -764,7 +1176,6 @@ function openArtwork(a){
   const fb=document.createElement('div'); fb.className='feedback ok'; fb.innerHTML=`Novo conceito desbloqueado: <b style="color:var(--yellow)">${a.concept}</b>`; body.appendChild(fb);
   if(!a.unlocked){
     a.unlocked=true;state.codex.push({cat:a.cat||'Obras',title:a.title,desc:a.desc+' — '+a.concept});state.xp+=60;updateHUD();renderCodex();
-    // ✅ Som de descoberta
     if(window.Russolo && Russolo.enabled) Russolo.success();
   }
   const close=document.createElement('button'); close.className='continue'; close.textContent='Fechar'; close.onclick=closeDialogue; body.appendChild(close);
@@ -781,7 +1192,6 @@ function burstXP(wx,wy,amount){
 }
 function updateHUD(){document.getElementById('hudXp').textContent=state.xp;const total=state.stations.length+state.artworks.length;document.getElementById('hudCodex').textContent=`${state.codex.length} / ${total}`;}
 document.getElementById('transformContinue').onclick=()=>{
-  // 🏆 Fanfarra final
   if(window.Russolo && Russolo.enabled) Russolo.victory();
   document.getElementById('transform').classList.remove('on'); state.era=1;
   document.getElementById('hudYear').textContent='1912'; document.getElementById('hudYear').style.color='var(--magenta)';
@@ -805,7 +1215,6 @@ function renderCodex(){
   }
 }
 
-/* ---------- BOTÃO DE MUDO ---------- */
 function toggleMute(){
   if(!window.Russolo) return;
   const on = Russolo.toggle();
@@ -817,19 +1226,42 @@ function toggleMute(){
 }
 document.getElementById('muteBtn').onclick = toggleMute;
 
-/* ---------- BOTÃO DE INÍCIO ---------- */
-document.getElementById('beginBtn').onclick=()=>{
+document.getElementById('beginBtn').onclick = async () => {
   document.getElementById('title').classList.add('hidden');
-  paused=false;
+  paused = false;
   renderCodex();
   updateHUD();
-  // 🎵 Ligar ambiente industrial e mostrar botão de mudo
-  if(window.Russolo){
-    Russolo.ensure();
-    Russolo.startAmbient();
-    Russolo.transition();
-    document.getElementById('muteBtn').classList.add('on');
-  }
+
+  if(!window.Russolo){ console.warn('Russolo ausente'); return; }
+
+  const ac = Russolo.ensure();
+  if(ac.state === 'suspended'){ try { await ac.resume(); } catch(e){} }
+
+  Russolo.setVolume(0.9);
+  if(!Russolo.enabled) Russolo.toggle();
+
+  const np = document.getElementById('nowPlaying');
+  const npName = document.getElementById('nowPlayingName');
+  np.style.display = 'block';
+  Russolo.onSound(name => {
+    npName.textContent = name || '—';
+    np.animate(
+      [{ boxShadow: '0 0 24px rgba(255,204,51,.8)' },
+       { boxShadow: '0 0 14px rgba(47,228,255,.35)' }],
+      { duration: 400 }
+    );
+  });
+
+  // Fanfarra inicial
+  setTimeout(() => Russolo.transition(), 100);
+  setTimeout(() => Russolo.chime(), 500);
+
+  Russolo.startAmbient();
+  setTimeout(() => Russolo.startSoundscape(), 1500);
+
+  const mb = document.getElementById('muteBtn');
+  mb.classList.add('on');
+  mb.textContent = '🔊';
 };
 </script>
 </body>
